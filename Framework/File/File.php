@@ -8,7 +8,7 @@
  *
  * GNU General Public License
  *
- * This file is part of HOA Open Accessibility.
+ * This file is part of Hoa Open Accessibility.
  * Copyright (c) 2007, 2008 Ivan ENDERLIN. All rights reserved.
  *
  * HOA Open Accessibility is free software; you can redistribute it and/or
@@ -42,563 +42,531 @@ require_once 'Framework.php';
 import('File.Exception');
 
 /**
- * Hoa_File_Util
+ * Hoa_File_Exception_FileDoesNotExist
  */
-import('File.Util');
+import('File.Exception.FileDoesNotExist');
 
 /**
- * Hoa_File_Dir
+ * Hoa_File_Abstract
  */
-import('File.Dir');
+import('File.Abstract');
 
 /**
- * Hoa_File_Upload
+ * Hoa_Stream_Io
  */
-import('File.Upload');
+import('Stream.Io');
+
+/**
+ * Hoa_Stream_Io_Bufferable
+ */
+import('Stream.Io.Bufferable');
+
+/**
+ * Hoa_Stream_Io_Lockable
+ */
+import('Stream.Io.Lockable');
+
+/**
+ * Hoa_Stream_Io_Pointable
+ */
+import('Stream.Io.Pointable');
 
 /**
  * Class Hoa_File.
  *
- * Manage files (read, write etc.).
+ * File handler.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2008 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
  * @since       PHP 5
- * @version     0.2
+ * @version     0.3
  * @package     Hoa_File
  */
 
-class Hoa_File {
+class          Hoa_File
+    extends    Hoa_File_Abstract
+    implements Hoa_Stream_Io,
+               Hoa_Stream_Io_Bufferable,
+               Hoa_Stream_Io_Lockable,
+               Hoa_Stream_Io_Pointable {
 
     /**
-     * File parameters.
-     *
-     * @const int
-     */
-    const DEFAULT_READSIZE  =  1024;
-    const MAX_LINE_READSIZE = 40960;
-
-    /**
-     * File open mode.
+     * Open for reading only; place the file pointer at the beginning of the
+     * file.
      *
      * @const string
      */
-    const MODE_CREATE       = 'xb';
-    const MODE_READ         = 'rb';
-    const MODE_WRITE        = 'wb';
-    const MODE_APPEND       = 'ab';
+    const MODE_READ                = 'rb';
 
     /**
-     * Lock or unlock file.
+     * Open for reading and writing; place the file pointer at the beginning of
+     * the file.
      *
-     * @const bool
+     * @const string
      */
-    const LOCK              = true;
-    const DONOT_LOCK        = false;
+    const MODE_READ_WRITE          = 'r+b';
 
     /**
-     * File lock mode.
+     * Open for writing only; place the file pointer at the beginning of the
+     * file and truncate the file to zero length. If the file does not exist,
+     * attempt to create it.
      *
-     * @const mixed
+     * @const string
      */
-    const LOCK_BLOCK        = true;
-    const LOCK_SHARED       = LOCK_SH; // | (LOCK_BLOCK ? 0 : LOCK_NB);
-    const LOCK_EXCLUSIVE    = LOCK_EX; // | (LOCK_BLOCK ? 0 : LOCK_NB);
+    const MODE_TRUNCATE_WRITE      = 'wb';
 
     /**
-     * File seek position.
+     * Open for reading and writing; place the file pointer at the beginning of
+     * the file and truncate the file to zero length. If the file does not
+     * exist, attempt to create it.
      *
-     * @const int
+     * @const string
      */
-    const SEEK_SET          = SEEK_SET;
-    const SEEK_CUR          = SEEK_CUR;
-    const SEEK_END          = SEEK_END;
+    const MODE_TRUNCATE_READ_WRITE = 'w+b';
 
     /**
-     * Overwrite or not.
+     * Open for writing only; place the file pointer at the end of the file. If
+     * the file does not exist, attempt to create it.
      *
-     * @const bool
+     * @const string
      */
-    const OVERWRITE         = true;
-    const DONOT_OVERWRITE   = false;
+    const MODE_APPEND_WRITE        = 'ab';
 
     /**
-     * List of files pointers.
+     * Open the reading and writing; place the file pointer at the end of the
+     * file. If the file does not exist, attempt to create it.
      *
-     * @var Hoa_File array
+     * @const string
      */
-    private static $filePointer = array();
+    const MODE_APPEND_READ_WRITE   = 'a+b';
+
+    /**
+     * Create and open for writing only; place the file pointer at the beginning
+     * of the file. If the file already exits, the fopen() call with fail by
+     * returning false and generating an error of level E_WARNING. If the file
+     * does not exist, attempt to create it. This is equivalent to specifying
+     * O_EXCL | O_CREAT flags for the underlying open(2) system call.
+     *
+     * @const string
+     */
+    const MODE_CREATE_WRITE        = 'xb';
+
+    /**
+     * Create and open for reading and writing; place the file pointer at the
+     * beginning of the file. If the file already exists, the fopen() call with
+     * fail by returning false and generating an error of level E_WARNING. If
+     * the file does not exist, attempt to create it. This is equivalent to
+     * specifying O_EXCL | O_CREAT flags for the underlying open(2) system call.
+     *
+     * @const string
+     */
+    const MODE_CREATE_READ_WRITE   = 'x+b';
 
 
 
     /**
-     * Handle file pointer.
+     * Open a file.
      *
-     * @access  private
-     * @param   string   $filename    File to read from.
-     * @param   string   $mode        File open mode.
-     * @param   mixed    $lock        Lock type to use.
+     * @access  public
+     * @param   string  $streamName    Stream name.
+     * @param   string  $mode          Open mode, see the self::MODE_* constants.
+     * @param   string  $context       Context ID (please, see the
+     *                                 Hoa_Stream_Context class).
+     * @return  void
+     * @throw   Hoa_Stream_Exception
+     */
+    public function __construct ( $streamName, $mode = self::MODE_READ,
+                                  $context = null ) {
+
+        $this->setMode($mode);
+        parent::__construct($streamName, $context);
+    }
+
+    /**
+     * Open the stream and return the associated resource.
+     *
+     * @access  protected
+     * @param   string              $streamName    Stream name (e.g. path or URL).
+     * @param   Hoa_Stream_Context  $context       Context.
      * @return  resource
+     * @throw   Hoa_File_Exception_FileDoesNotExist
      * @throw   Hoa_File_Exception
      */
-    final private static function &_getPointer ( $filename = '',
-                                                 $mode = self::MODE_READ,
-                                                 $lock = self::DONOT_LOCK ) {
+    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
 
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 0);
+        static $createModes = array(
+            self::MODE_TRUNCATE_WRITE,
+            self::MODE_TRUNCATE_READ_WRITE,
+            self::MODE_APPEND_WRITE,
+            self::MODE_APPEND_READ_WRITE,
+            self::MODE_CREATE_WRITE,
+            self::MODE_CREATE_READ_WRITE,
+        );
 
-        if(!isset(self::$filePointer[$filename][$mode])
-           || !is_resource(self::$filePointer[$filename][$mode])) {
+        if(   !in_array($this->getMode(), $createModes)
+           && !file_exists($streamName))
+            throw new Hoa_File_Exception_FileDoesNotExist(
+                'File %s does not exist.', 0, $streamName);
 
-            switch($mode) {
+        if(null === $context) {
 
-                case self::MODE_READ:
-                    if(!file_exists($filename)
-                       && !preg_match('#^.+(?<!file):\/\/#i', $filename))
-                        throw new Hoa_File_Exception(
-                            'File does not exist : %s.', 1, $filename);
-                  break;
+            if(false === $out = @fopen($streamName, $this->getMode()))
+                throw new Hoa_File_Exception(
+                    'Failed to open stream %s.', 1, $streamName);
 
-                case self::MODE_APPEND:
-                case self::MODE_WRITE :
-                    if(file_exists($filename)) {
-
-                        if(!is_writable($filename))
-                            throw new Hoa_File_Exception(
-                                'File is not writable : %s.', 2, $filename);
-                    }
-                    elseif(!is_writable($foo = dirname($filename)))
-                        throw new Hoa_File_Exception(
-                            'Cannot create file in directory : %s.',
-                            3, $foo);
-                  break;
-
-                default:
-                    throw new Hoa_File_Exception(
-                        'Invalid access mode : %s in %s.', 4, array($mode, $filename));
-            }
-
-            self::$filePointer[$filename][$mode] = @fopen($filename, $mode);
-
-            if(!is_resource(self::$filePointer[$filename][$mode]))
-                throw new Hoa_File_Exception('Failed to open file %s, in mode %s',
-                    5, array($filename, $mode));
+            return $out;
         }
 
-        if($lock === self::LOCK) {
+        if(false === $out = @fopen($streamName, $this->getMode(), $context->getContext()))
+            throw new Hoa_File_Exception(
+                'Failed to open stream %s.', 2, $streamName);
 
-            $lock = $mode == self::MODE_READ
-                        ? self::LOCK_SHARED
-                        : self::LOCK_EXCLUSIVE;
-
-            if (!@flock(self::$filePointer[$filename][$mode], $lock))
-                throw new Hoa_File_Exception('Could not lock file %s : %s',
-                    6, array($filename, $lock));
-        }
-
-        return self::$filePointer[$filename][$mode];
+        return $out;
     }
 
     /**
-     * Read n bytes from a file.
+     * Close the current stream.
      *
      * @access  public
-     * @param   string  $filename    File to read from.
-     * @param   int     $size        Number of bytes to read.
-     * @param   mixed   $lock        Lock type to use.
+     * @return  bool
+     */
+    public function close ( ) {
+
+        return fclose($this->getStream());
+    }
+
+    /**
+     * Test for end-of-file.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function eof ( ) {
+
+        return feof($this->getStream());
+    }
+
+    /**
+     * Get filename component of path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBasename ( ) {
+
+        return basename($this->getStreamName());
+    }
+
+    /**
+     * Get directory name component of path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getDirname ( ) {
+
+        return dirname($this->getStreamName());
+    }
+
+    /**
+     * Get size.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        return filesize($this->getStreamName());
+    }
+
+    /**
+     * Read n characters.
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  string
+     */
+    public function read ( $length ) {
+
+        return fread($this->getStream(), $length);
+    }
+
+    /**
+     * Alias of $this->read().
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  string
+     */
+    public function readString ( $length ) {
+
+        return $this->read($length);
+    }
+
+    /**
+     * Read a char.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readChar ( ) {
+
+        return fgetc($this->getStream());
+    }
+
+    /**
+     * Read an integer.
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  int
+     */
+    public function readInteger ( $length = 1 ) {
+
+        return (int) $this->read($length);
+    }
+
+    /**
+     * Read a float.
+     *
+     * @access  public
+     * @param   int     $length    Length.
+     * @return  float
+     */
+    public function readFloat ( $length = 1 ) {
+
+        return (float) $this->read($length);
+    }
+
+    /**
+     * Read a line.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readLine ( ) {
+
+        return fgets($this->getStream());
+    }
+
+    /**
+     * Read all, i.e. read as much as possible.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function readAll ( ) {
+
+        if(version_compare(phpversion(), '6', '<'))
+            $second = true;
+        else
+            $second = 0;
+
+        if(null === $this->getStreamContext())
+            $third  = null;
+        else
+            $third  = $this->getStreamContext()->getContext();
+
+        return file_get_contents(
+            $this->getStreamName(),
+            $second,
+            $third,
+            $this->tell()
+        );
+    }
+
+    /**
+     * Parse input from a stream according to a format.
+     *
+     * @access  public
+     * @param   string  $format    Format (see printf's formats).
+     * @return  array
+     */
+    public function scanf ( $format ) {
+
+        return fscanf($this->getStream(), $format);
+    }
+
+    /**
+     * Write n characters.
+     *
+     * @access  public
+     * @param   string  $string    String.
+     * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_File_Exception
      */
-    public static function read ( $filename = '',
-                                  $size = self::DEFAULT_READSIZE,
-                                  $lock = self::DONOT_LOCK ) {
+    public function write ( $string, $length ) {
 
-        $filePointer = &self::_getPointer($filename, self::MODE_READ, $lock);
-
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 7);
-
-        if($size <= 0)
-            return self::readAll($filename, $lock);
-
-        if(   !isset($filePointer[$filename])
-           || !is_resource($filePointer[$filename]))
-            $fp = &self::_getPointer($filename, self::MODE_READ, $lock);
-        else
-            $fp = &$filePointer[$filename][self::MODE_READ];
-
-        return !feof($fp) ? fread($fp, $size) : false;
+        return fwrite($this->getStream(), $string, $length);
     }
 
     /**
-     * Read only first char from a file.
+     * Write a string.
      *
      * @access  public
-     * @param   string  $filename    File to read from.
-     * @param   mixed   $lock        Lock type to use.
-     * @return  string
+     * @param   string  $string    String.
+     * @return  mixed
      */
-    public static function readChar ( $filename = '', $lock = self::DONOT_LOCK ) {
+    public function writeString ( $string ) {
 
-        return self::read($filename, 1, $lock);
+        $string = (string) $string;
+
+        return $this->write($string, strlen($string));
     }
 
     /**
-     * Read all bytes from a file.
+     * Write a character.
      *
      * @access  public
-     * @param   string  $filename    File to read from.
-     * @param   mixed   $lock        Lock type to use.
-     * @param   bool    $func        Force to use file_get_contents.
-     * @return  string
-     * @throw   Hoa_File_Exception
+     * @param   string  $char    Character.
+     * @return  mixed
      */
-    public static function readAll ( $filename = '', $lock = self::DONOT_LOCK, $func = true ) {
+    public function writeCharacter ( $char ) {
 
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 8);
-
-        if(true === $func && function_exists('file_get_contents')) {
-
-            if(false === $file = @file_get_contents($filename))
-                throw new Hoa_File_Exception('Cannot read file : %s',
-                    9, $filename);
-            return $file;
-        }
-
-        $file = '';
-        while(false !== $handle = self::read($filename, self::DEFAULT_READSIZE, $lock))
-            $file .= $handle;
-
-        self::close($filename, self::MODE_READ);
-
-        return $file;
+        return $this->write((string) $char[0], 1);
     }
 
     /**
-     * Write data into a file.
+     * Write an integer.
      *
      * @access  public
-     * @param   string  $filename    File to write in.
-     * @param   string  $data        Data to write.
-     * @param   string  $mode        File open mode.
-     * @param   mixed   $lock        Lock type to use.
-     * @param   int     $length      Data length.
-     * @return  int
-     * @throw   Hoa_File_Exception
+     * @param   int     $integer    Integer.
+     * @return  mixed
      */
-    public static function write ( $filename = '', $data = '',
-                                   $mode = self::MODE_APPEND,
-                                   $lock = self::DONOT_LOCK, $length = 0 ) {
+    public function writeInteger ( $integer ) {
 
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 10);
+        $integer = (string) (int) $integer;
 
-        if(empty($data))
-            throw new Hoa_File_Exception('Data could not be empty.', 11);
-
-        if($mode === self::MODE_READ)
-            throw new Hoa_File_Exception(
-                'Cannot write in a file if its mode is MODE_READ.', 12);
-
-        if($length <= 0)
-            $length = strlen($data);
-
-        $fp = &self::_getPointer($filename, $mode, $lock);
-
-        if(false === $out = @fwrite($fp, $data, $length))
-            throw new Hoa_File_Exception('Cannot write data : %s, into file : %s',
-                12, array($data, $filename));
-
-        return $out;
+        return $this->write($integer, strlen($integer));
     }
 
     /**
-     * Write only one char into a file.
+     * Write a float.
      *
      * @access  public
-     * @param   string  $filename    File to write in.
-     * @param   char    $data        Char to write.
-     * @param   string  $mode        File open mode.
-     * @param   mixed   $lock        Lock type to use.
-     * @return  int
+     * @param   float   $float    Float.
+     * @return  mixed
      */
-    public static function writeChar ( $filename = '', $data = '',
-                                       $mode = self::MODE_APPEND,
-                                       $lock = self::DONOT_LOCK ) {
+    public function writeFloat ( $float ) {
 
-        return self::write($filename, $data, $mode, $lock, 1);
+        $float = (string) (float) $float;
+
+        return $this->write($float, strlen($float));
     }
 
     /**
-     * Seek on a file pointer.
+     * Write a line.
      *
      * @access  public
-     * @param   string  $filename    File to seek.
-     * @param   int     $offset      Offset.
-     * @param   int     $whence      The new position, measured in bytes from
-     *                               the beginning of the file, is obtained by
-     *                               adding offset to the position specified by
-     *                               whence.
-     * @param   string  $mode        File open mode.
-     * @param   mixed   $lock        Lock type to use.
-     * @return  int
-     * @throw   Hoa_File_Exception
+     * @param   string  $line    Line.
+     * @return  mixed
      */
-    public static function seek ( $filename = '',           $offset = 0,
-                                  $whence = self::SEEK_SET, $mode = self::MODE_READ,
-                                  $lock = self::DONOT_LOCK ) {
+    public function writeLine ( $line ) {
 
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 13);
+        if(false === $n = strpos($line, "\n"))
+            return $this->write($line, strlen($line));
 
-        if(   $whence != self::SEEK_SET
-           && $whence != self::SEEK_CUR
-           && $whence != self::SEEK_END)
-            throw new Hoa_File_Exception('Whence option must be equal to ' .
-                'SEEK_SET, SEEK_CUR or SEEK_END.', 14);
-
-        $fp = &self::_getPointer($filename, $mode, $lock);
-
-        if(-1 === $out = fseek($fp, $offset, $whence))
-            throw new Hoa_File_Exception('Cannot seek pointer to %d offset in %s file.',
-                15, array($offset, $filename));
-
-        return $out;
+        return $this->write(substr($line, 0, $n), $n);
     }
 
     /**
-     * Rewind the position of a file pointer.
+     * Write all, i.e. as much as possible.
      *
      * @access  public
-     * @param   string  $filename    File to rewind.
-     * @param   string  $mode        File open mode.
-     * @param   bool    $lock        Lock type to use.
-     * @return  int
-     * @throw   Hoa_File_Exception
+     * @param   string  $string    String.
+     * @return  mixed
      */
-    public static function rewind ( $filename = '',
-                                    $mode     = self::MODE_READ,
-                                    $lock     = self::DONOT_LOCK ) {
+    public function writeAll ( $string ) {
 
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 14);
-
-        $fp = &self::_getPointer($filename, $mode);
-
-        if(is_resource($fp))
-            return self::seek($filename, 0, SEEK_SET, $mode, $lock);
-        else
-            throw new Hoa_File_Exception(
-                'Could not rewind %s pointer in mode %s',
-                16, array($filename, $mode));
+        return $this->write($string, strlen($string));
     }
 
     /**
-     * Close an opened file pointer.
+     * Truncate a file to a given length.
      *
      * @access  public
-     * @param   string  $filename    File to close.
-     * @param   string  $mode        File open mode.
-     * @param   mixed   $lock        Lock type to use.
+     * @param   int     $size    Size.
      * @return  bool
-     * @throw   Hoa_File_Exception
      */
-    public static function close ( $filename = '',
-                                   $mode     = self::MODE_READ,
-                                   $lock     = self::DONOT_LOCK ) {
+    public function truncate ( $size ) {
 
-        if(empty($filename))
-            throw new Hoa_File_Exception('Filename could not be empty.', 17);
+        return ftruncate($this->getStream(), $size);
+    }
 
-        $filePointer = &self::_getPointer($filename, $mode, $lock);
+    /**
+     * Flush the output to a stream.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function flush ( ) {
 
-        if(!isset($filePointer[$filename][$mode]))
+        return fflush($this->getStream());
+    }
+
+    /**
+     * Portable advisory locking.
+     *
+     * @access  public
+     * @param   int     $operation    Operation, use the
+     *                                Hoa_Stream_Io_Lockable::LOCK_* constants.
+     * @return  bool
+     */
+    public function lock ( $operation ) {
+
+        return flock($this->getStream(), $operation);
+    }
+
+    /**
+     * Rewind the position of a stream pointer.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function rewind ( ) {
+
+        return rewind($this->getStream());
+    }
+
+    /**
+     * Seek on a stream pointer.
+     *
+     * @access  public
+     * @param   int     $offset    Offset (negative value should be supported).
+     * @param   int     $whence    Whence, use the
+     *                             Hoa_Stream_Io_Pointable::SEEK_* constants.
+     * @return  int
+     */
+    public function seek ( $offset, $whence = Hoa_Stream_Io_Pointable::SEEK_SET ) {
+
+        return fseek($this->getStream(), $offset, $whence);
+    }
+
+    /**
+     * Get the current position of the stream pointer.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function tell ( ) {
+
+        return ftell($this->getStream());
+    }
+
+    /**
+     * Create a file.
+     *
+     * @access  public
+     * @param   string  $name     File name.
+     * @param   mixed   $dummy    To be compatible with childs.
+     * @return  bool
+     */
+    public static function create ( $name, $dummy ) {
+
+        if(file_exists($name))
             return true;
 
-        $fp = $filePointer[$filename][$mode];
-        unset($filePointer[$filename][$mode]);
-
-        if(is_resource($fp)) {
-
-            @flock($fp, LOCK_UN);
-
-            if(!@fclose($fp))
-                throw new Hoa_File_Exception('Cannot close file pointer : %s.',
-                    18, $filename);
-        }
-
-        return true;
-    }
-
-    /**
-     * Close all opened files pointers.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public static function closeAll ( ) {
-
-        if(!isset(self::$filePointer))
-            return false;
-
-        foreach(self::$filePointer as $filename => $mode) {
-
-            foreach(array_keys($mode) as $mod) {
-
-                $fp = self::$filePointer[$filename][$mod];
-                unset(self::$filePointer[$filename][$mod]);
-
-                if(is_resource($fp)) {
-
-                    @flock ($fp, LOCK_UN);
-                    @fclose($fp);
-                }
-            }
-        }
-
-        self::$filePointer = array();
-
-        return true;
-    }
-
-    /**
-     * Make a copy of a file.
-     *
-     * @access  public
-     * @param   string  $source       File source.
-     * @param   string  $dest         File destination.
-     * @param   bool    $overwrite    Overwrite file or not.
-     * @return  string
-     * @throw   Hoa_File_Exception
-     */
-    public static function copy ( $source    = '', $dest = '',
-                                  $overwrite = self::DONOT_OVERWRITE ) {
-
-        if(empty($source))
-            throw new Hoa_File_Exception('Source could not be empty.', 19);
-
-        if(empty($dest))
-            throw new Hoa_File_Exception('Destination could not be empty.', 20);
-
-        $source   = Hoa_File_Util::realPath($source, DS, false);
-        $dest     = Hoa_File_Util::realPath($dest  , DS, false);
-
-        if(!file_exists($source))
-            throw new Hoa_File_Exception('Source file does not exist (%s).',
-                21, $source);
-
-        $destFile = Hoa_File_Util::skipExt($dest  , false);
-        $destExt  = Hoa_File_Util::getExt ($dest         );
-
-        if(!$overwrite && file_exists($dest)) {
-
-            $i = 1;
-            while(file_exists($destFile . '_copy' . $i . '.' . $destExt))
-                $i++;
-
-            $dest = $destFile . '_copy' . $i . '.' . $destExt;
-        }
-
-        if(false === copy($source, $dest))
-            throw new Hoa_File_Exception('File copy failed (%s to %s)',
-                22, array($source, $dest));
-
-        return $dest;
-    }
-
-    /**
-     * Delete file(s).
-     *
-     * @access  public
-     * @param   mixed  $files     List of files to delete.
-     *                            Use dir/* for cleaning a directory.
-     * @param   bool   $silent    Silent unlink error.
-     * @return  bool
-     * @throw   Hoa_File_Exception
-     */
-    public static function delete ( $files = array(), $silent = true ) {
-
-        if(empty($files))
-            return true;
-
-        $fileStack = array();
-
-        if(is_string($files)) {
-
-            if(basename($files) == '*') {
-
-                $dir = substr($files, 0, -1);
-                $dirStack = Hoa_File_Dir::scan($dir, Hoa_File_Dir::LIST_FILE);
-
-                foreach($dirStack as $i => $file)
-                    $fileStack[] = Hoa_File_Util::realPath($dir . DS . $file['name'],
-                                                           DS, false);
-            }
-            else
-                $fileStack[0] = $files;
-        }
-
-        if(empty($fileStack))
-            foreach($files as $i => $file)
-                $fileStack[] = Hoa_File_Util::realPath($file, DS, false);
-
-        foreach($fileStack as $i => $file) {
-
-            if(is_file($file)) {
-
-                if(false === @unlink($file)) {
-
-                    if(!$silent)
-                        throw new Hoa_File_Exception('Could not delete %s.',
-                            23, $file);
-                }
-                else
-                    unset($fileStack[$i]);
-            }
-        }
-
-        return empty($fileStack) ? true : $fileStack;
-    }
-
-   /**
-     * Move a file to.
-     *
-     * @access  public
-     * @param   string  $source    File source.
-     * @param   string  $dest      File destination.
-     * @param   bool    $mkdir     Force to make directory if does not exist.
-     * @return  bool
-     * @throw   Hoa_File_Exception
-     */
-    public static function move ( $source = '', $dest = '', $mkdir = true ) {
-
-        if(empty($source))
-            throw new Hoa_File_Exception('Source could not be empty.', 24);
-
-        if(empty($dest))
-            throw new Hoa_File_Exception('Destination could not be empty.', 25);
-
-        Hoa_File_Dir::create(substr($dest, 0, strrpos($dest, '/') + 1), $mkdir);
-
-        if(false === @rename($source, $dest))
-            throw new Hoa_File_Exception('Could not move %s to %s.',
-                26, array($source, $dest));
-        else
-            return true;
-    }
-
-    /**
-     * Close all opened files.
-     *
-     * @access  public
-     */
-    public static function _Hoa_File ( ) {
-
-        self::closeAll();
+        return touch($name);
     }
 }
-
-Hoa_Framework::registerShutDownFunction('Hoa_File', '_Hoa_File');

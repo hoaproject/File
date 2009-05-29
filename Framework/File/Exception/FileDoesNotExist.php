@@ -28,7 +28,7 @@
  *
  * @category    Framework
  * @package     Hoa_File
- * @subpackage  Hoa_File_Upload_Extension_Exception
+ * @subpackage  Hoa_File_Exception_FileDoesNotExist
  *
  */
 
@@ -43,7 +43,7 @@ require_once 'Framework.php';
 import('File.Exception');
 
 /**
- * Class Hoa_File_Upload_Extension_Exception.
+ * Class Hoa_File_Exception_FileDoesNotExist.
  *
  * Extending the Hoa_File_Exception class.
  *
@@ -53,7 +53,7 @@ import('File.Exception');
  * @since       PHP 5
  * @version     0.1
  * @package     Hoa_File
- * @subpackage  Hoa_File_Upload_Extension_Exception
+ * @subpackage  Hoa_File_Exception_FileDoesNotExist
  */
 
-class Hoa_File_Upload_Extension_Exception extends Hoa_File_Exception { }
+class Hoa_File_Exception_FileDoesNotExist extends Hoa_File_Exception { }
