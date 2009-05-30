@@ -289,7 +289,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
 
         if(false === file_exists($path))
             throw new Hoa_File_Exception_FileDoesNotExist(
-                'Path %s does not exist.', 0);
+                'Path %s does not exist.', 0, $path);
 
         if(false === is_dir($path))
             throw new Hoa_File_Exception(
