@@ -461,6 +461,61 @@ abstract class Hoa_File_Abstract
     }
 
     /**
+     * Check if it is a socket.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isSocket ( ) {
+
+        return filetype($this->getStreamName()) == 'socket';
+    }
+
+    /**
+     * Check if it is a FIFO pipe.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isFIFOPipe ( ) {
+
+        return filetype($this->getStreamName()) == 'fifo';
+    }
+
+    /**
+     * Check if it is character special file.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isCharacterSpecial ( ) {
+
+        return filetype($this->getStreamName()) == 'char';
+    }
+
+    /**
+     * Check if it is block special.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isBlockSpecial ( ) {
+
+        return filetype($this->getStreamName()) == 'block';
+    }
+
+    /**
+     * Check if it is an unknown type.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function isUnknown ( ) {
+
+        return filetype($this->getStreamName()) == 'unknown';
+    }
+
+    /**
      * Set the open mode.
      *
      * @access  protected
