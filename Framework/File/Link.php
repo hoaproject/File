@@ -131,6 +131,17 @@ class Hoa_File_Link extends Hoa_File {
     }
 
     /**
+     * Get file permissions.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getPermissions ( ) {
+
+        return 41453; // i.e. lrwxr-xr-x
+    }
+
+    /**
      * Get the target of a symbolic link.
      *
      * @access  public
@@ -145,19 +156,25 @@ class Hoa_File_Link extends Hoa_File {
                        ? $this->getStreamContext()->getCurrentId()
                        : null;
 
-        if(true === $this->isLink())
-            return new Hoa_File_Link($target, Hoa_File::MODE_READ, $context);
+        switch(filetype($target)) {
 
-        elseif(true === $this->isFile())
-            return new Hoa_File($target, Hoa_File::MODE_READ, $context);
+            case 'link':
+                return new Hoa_File_Link($target, Hoa_File::MODE_READ, $context);
+              break;
 
-        elseif(true === $this->isDirectory())
-            return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
+            case 'file':
+                return new Hoa_File($target, Hoa_File::MODE_READ, $context);
+              break;
 
-        else
-            throw new Hoa_File_Exception(
-                'Cannot find an appropriated object that matches with ' .
-                'the symbolic link target %s.', 1, $target);
+            case 'dir':
+                return new Hoa_File_Directory($target, Hoa_File::MODE_READ, $context);
+              break;
+
+            default:
+                throw new Hoa_File_Exception(
+                    'Cannot find an appropriated object that matches with ' .
+                    'the symbolic link target %s.', 1, $target);
+        }
     }
 
     /**
