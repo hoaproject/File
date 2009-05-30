@@ -129,38 +129,22 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
     public function define ( ) {
 
         $path    = $this->getStreamName();
-        $context = $this->getStreamContext();
+        $context = null !== $this->getStreamContext()
+                       ? $this->getStreamContext()->getCurrentId()
+                       : null;
 
         if(true === $this->isLink())
-            return new Hoa_File_Link(
-                $path,
-                Hoa_File::MODE_READ,
-                null !== $context
-                    ? $this->getStreamContext()->getCurrentId()
-                    : null
-            );
+            return new Hoa_File_Link($path, Hoa_File::MODE_READ, $context);
 
         elseif(true === $this->isFile())
-            return new Hoa_File(
-                $path,
-                Hoa_File::MODE_READ,
-                null !== $context
-                    ? $this->getStreamContext()->getCurrentId()
-                    : null
-            );
+            return new Hoa_File($path, Hoa_File::MODE_READ, $context);
 
         elseif(true === $this->isDirectory())
-            return new Hoa_File_Directory(
-                $path,
-                Hoa_File::MODE_READ,
-                null !== $context
-                    ? $this->getStreamContext()->getCurrentId()
-                    : null
-            );
+            return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
 
         else
             throw new Hoa_File_Exception(
-                'Cannot find an appropriate object that matches with ' .
+                'Cannot find an appropriated object that matches with ' .
                 'path %s.', 0, $path);
     }
 }
