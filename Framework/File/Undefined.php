@@ -58,6 +58,16 @@ import('File.Link');
 import('File.Directory');
 
 /**
+ * Hoa_File_Socket
+ */
+import('File.Socket');
+
+/**
+ * Hoa_Socket_Connection_Client
+ */
+import('Socket.Connection.Client');
+
+/**
  * Class Hoa_File_Undefined.
  *
  * Undefined file handler, i.e. accede to all abstract (super) file method even
@@ -141,6 +151,14 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
 
         elseif(true === $this->isDirectory())
             return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
+
+        elseif(true === $this->isSocket())
+            return new Hoa_File_Socket(
+                $path,
+                30,
+                Hoa_Socket_Connection_Client::CONNECT,
+                $context
+            );
 
         else
             throw new Hoa_File_Exception(
