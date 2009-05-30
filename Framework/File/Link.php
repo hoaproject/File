@@ -53,11 +53,6 @@ import('File.~');
 import('File.Directory');
 
 /**
- * Hoa_File_Link
- */
-import('File.Link');
-
-/**
  * Class Hoa_File_Link.
  *
  * Link handler.
