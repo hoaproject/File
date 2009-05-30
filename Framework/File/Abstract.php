@@ -611,10 +611,7 @@ abstract class Hoa_File_Abstract
      */
     public function getFilename ( ) {
 
-        static $file = null;
-        
-        if(null === $file)
-            $file = basename($this->getStreamName());
+        $file = basename($this->getStreamName());
 
         if(defined('PATHINFO_FILENAME'))
             return pathinfo($file, PATHINFO_FILENAME);
