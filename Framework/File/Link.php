@@ -48,9 +48,9 @@ import('File.Exception');
 import('File.~');
 
 /**
- * Hoa_File_Directory
+ * Hoa_File_Undefined
  */
-import('File.Directory');
+import('File.Undefined');
 
 /**
  * Class Hoa_File_Link.
@@ -145,31 +145,17 @@ class Hoa_File_Link extends Hoa_File {
      */
     public function getTarget ( ) {
 
-        $target  = dirname($this->getStreamName()) . DS .
-                   $this->getTargetName();
-        $context = null !== $this->getStreamContext()
-                       ? $this->getStreamContext()->getCurrentId()
-                       : null;
+        $target    = dirname($this->getStreamName()) . DS .
+                     $this->getTargetName();
+        $context   = null !== $this->getStreamContext()
+                         ? $this->getStreamContext()->getCurrentId()
+                         : null;
+        $undefined = new Hoa_File_Undefined($target, $context);
+        $defined   = $undefined->define();
 
-        switch(filetype($target)) {
+        unset($undefined);
 
-            case 'link':
-                return new Hoa_File_Link($target, Hoa_File::MODE_READ, $context);
-              break;
-
-            case 'file':
-                return new Hoa_File($target, Hoa_File::MODE_READ, $context);
-              break;
-
-            case 'dir':
-                return new Hoa_File_Directory($target, Hoa_File::MODE_READ, $context);
-              break;
-
-            default:
-                throw new Hoa_File_Exception(
-                    'Cannot find an appropriated object that matches with ' .
-                    'the symbolic link target %s.', 1, $target);
-        }
+        return $defined;
     }
 
     /**
