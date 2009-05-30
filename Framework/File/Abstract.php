@@ -63,6 +63,11 @@ import('Stream.Io.Touchable');
 import('File.Abstract');
 
 /**
+ * Hoa_File_Directory
+ */
+import('File.Directory');
+
+/**
  * Class Hoa_File_Abstract.
  *
  * Describe a super-file.
@@ -351,6 +356,12 @@ abstract class Hoa_File_Abstract
         if(   $force === Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($name))
             return false;
+
+        if(Hoa_Stream_Io_Touchable::MAKE_DIRECTORY === $mkdir)
+            Hoa_File_Directory::create(
+                dirname($name),
+                Hoa_File_Directory::MODE_CREATE_RECURSIVE
+            );
 
         if(null === $this->getStreamContext())
             return @rename($from, $name);
