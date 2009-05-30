@@ -48,6 +48,16 @@ import('File.Exception');
 import('File.~');
 
 /**
+ * Hoa_File_Directory
+ */
+import('File.Directory');
+
+/**
+ * Hoa_File_Link
+ */
+import('File.Link');
+
+/**
  * Class Hoa_File_Link.
  *
  * Link handler.
@@ -124,9 +134,39 @@ class Hoa_File_Link extends Hoa_File {
      * Get the target of a symbolic link.
      *
      * @access  public
-     * @return  string
+     * @return  Hoa_File_Abstract
+     * @throw   Hoa_File_Exception
      */
     public function getTarget ( ) {
+
+        $target  = dirname($this->getStreamName()) . DS .
+                   $this->getTargetName();
+        $context = null !== $this->getStreamContext()
+                       ? $this->getStreamContext()->getCurrentId()
+                       : null;
+
+        if(true === $this->isLink())
+            return new Hoa_File_Link($target, Hoa_File::MODE_READ, $context);
+
+        elseif(true === $this->isFile())
+            return new Hoa_File($target, Hoa_File::MODE_READ, $context);
+
+        elseif(true === $this->isDirectory())
+            return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
+
+        else
+            throw new Hoa_File_Exception(
+                'Cannot find an appropriated object that matches with ' .
+                'the symbolic link target %s.', 1, $target);
+    }
+
+    /**
+     * Get the target name of a symbolic link.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getTargetName ( ) {
 
         return readlink($this->getStreamName());
     }
