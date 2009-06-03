@@ -398,7 +398,7 @@ class          Hoa_File
      */
     public function write ( $string, $length ) {
 
-        return fwrite($this->getStream(), $string, $length);
+        return @fwrite($this->getStream(), $string, $length);
     }
 
     /**
@@ -551,7 +551,7 @@ class          Hoa_File
      */
     public function tell ( ) {
 
-        return ftell($this->getStream());
+        return @ftell($this->getStream());
     }
 
     /**
