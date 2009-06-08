@@ -233,7 +233,7 @@ class          Hoa_File
      */
     public function close ( ) {
 
-        return fclose($this->getStream());
+        return @fclose($this->getStream());
     }
 
     /**
@@ -305,12 +305,12 @@ class          Hoa_File
     }
 
     /**
-     * Read a char.
+     * Read a character.
      *
      * @access  public
      * @return  string
      */
-    public function readChar ( ) {
+    public function readCharacter ( ) {
 
         return fgetc($this->getStream());
     }
@@ -358,6 +358,16 @@ class          Hoa_File
      */
     public function readAll ( ) {
 
+        if(true === $this->isStreamResourceMustBeUsed()) {
+
+            $current = $this->tell();
+            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
+            $end     = $this->tell();
+            $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
+
+            return $this->read($end - $current);
+        }
+
         if(version_compare(phpversion(), '6', '<'))
             $second = true;
         else
@@ -398,7 +408,7 @@ class          Hoa_File
      */
     public function write ( $string, $length ) {
 
-        return @fwrite($this->getStream(), $string, $length);
+        return fwrite($this->getStream(), $string, $length);
     }
 
     /**
@@ -551,7 +561,7 @@ class          Hoa_File
      */
     public function tell ( ) {
 
-        return @ftell($this->getStream());
+        return ftell($this->getStream());
     }
 
     /**
