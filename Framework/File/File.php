@@ -340,6 +340,19 @@ class          Hoa_File
     }
 
     /**
+     * Read an array.
+     * Alias of the $this->scanf() method.
+     *
+     * @access  public
+     * @param   string  $format    Format (see printf's formats).
+     * @return  array
+     */
+    public function readArray ( $format ) {
+
+        return $this->scanf($format);
+    }
+
+    /**
      * Read a line.
      *
      * @access  public
@@ -463,6 +476,20 @@ class          Hoa_File
         $float = (string) (float) $float;
 
         return $this->write($float, strlen($float));
+    }
+
+    /**
+     * Write an array.
+     *
+     * @access  public
+     * @param   array   $array    Array.
+     * @return  mixed
+     */
+    public function writeArray ( Array $array ) {
+
+        $array = serialize($array);
+
+        return $this->write($array, strlen($array));
     }
 
     /**
