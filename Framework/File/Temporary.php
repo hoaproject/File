@@ -124,7 +124,7 @@ class Hoa_File_Temporary extends Hoa_File {
      */
     public static function getTemporaryDirectory ( ) {
 
-        if(version_compare(phpversion(), '5.2.1', '>='))
+        if(PHP_VERSION_ID >= 50201)
             return sys_get_temp_dir();
 
         if(OS_WIN) {

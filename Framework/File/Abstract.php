@@ -268,7 +268,7 @@ abstract class Hoa_File_Abstract
      */
     public function clearStatisticCache ( ) {
 
-        if(version_compare(phpversion(), '5.3.0', '>='))
+        if(PHP_VERSION_ID >= 50300)
             clearstatcache(true, $this->getStreamName());
         else
             clearstatcache();

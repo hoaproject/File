@@ -381,7 +381,7 @@ class          Hoa_File
             return $this->read($end - $current);
         }
 
-        if(version_compare(phpversion(), '6', '<'))
+        if(PHP_VERSION_ID < 60000)
             $second = true;
         else
             $second = 0;

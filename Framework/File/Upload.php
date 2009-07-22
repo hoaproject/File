@@ -308,7 +308,7 @@ class Hoa_File_Upload extends Hoa_File {
      */
     public static function globalVariable ( ) {
 
-        return version_compare(phpversion(), '4.1.0', '>') ? '_FILES' : 'HTTP_POST_FILES';
+        return PHP_VERSION_ID > 40100 ? '_FILES' : 'HTTP_POST_FILES';
     }
 
     /**
@@ -393,7 +393,7 @@ class Hoa_File_Upload extends Hoa_File {
         if(empty($id))
             throw new Hoa_File_Exception('Id could not be empty.', 14);
 
-        if(version_compare(phpversion(), '4.2.0', '>'))
+        if(PHP_VERSION_ID > 40200)
             return $_FILES[$id]['error'];
 
         return false;
