@@ -286,8 +286,13 @@ class          Hoa_File
      * @access  public
      * @param   int     $length    Length.
      * @return  string
+     * @throw   Hoa_File_Exception
      */
     public function read ( $length ) {
+
+        if($length <= 0)
+            throw new Hoa_File_Exception(
+                'Length must be greather than 0, given %d.', 3, $length);
 
         return fread($this->getStream(), $length);
     }
