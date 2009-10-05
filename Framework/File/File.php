@@ -204,7 +204,11 @@ class          Hoa_File
             self::MODE_CREATE_READ_WRITE,
         );
 
-        if(   !in_array($this->getMode(), $createModes)
+        preg_match('#^(\w+)://#', $streamName, $match);
+
+        if(   isset($match[1])
+           && $match[1] == 'file'
+           && !in_array($this->getMode(), $createModes)
            && !file_exists($streamName))
             throw new Hoa_File_Exception_FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
@@ -218,7 +222,7 @@ class          Hoa_File
             return $out;
         }
 
-        if(false === $out = @fopen($streamName, $this->getMode(), $context->getContext()))
+        if(false === $out = @fopen($streamName, $this->getMode(), true, $context->getContext()))
             throw new Hoa_File_Exception(
                 'Failed to open stream %s.', 2, $streamName);
 
