@@ -43,9 +43,9 @@ require_once 'Framework.php';
 import('File.Exception');
 
 /**
- * Hoa_File
+ * Hoa_File_ReadWrite
  */
-import('File.~');
+import('File.ReadWrite');
 
 /**
  * Hoa_Socket_Connection_Client
@@ -71,7 +71,7 @@ import('Socket.Unix');
  * @subpackage  Hoa_File_Socket
  */
 
-class Hoa_File_Socket extends Hoa_File {
+class Hoa_File_Socket extends Hoa_File_ReadWrite {
 
     /**
      * Wrapped socket.
