@@ -48,6 +48,11 @@ import('File.Exception');
 import('Stream.~');
 
 /**
+ * Hoa_Stream_Io_Pathable
+ */
+import('Stream.Io.Pathable');
+
+/**
  * Hoa_Stream_Io_Statable
  */
 import('Stream.Io.Statable');
@@ -83,7 +88,8 @@ import('File.Directory');
 
 abstract class Hoa_File_Abstract
     extends    Hoa_Stream
-    implements Hoa_Stream_Io_Statable,
+    implements Hoa_Stream_Io_Pathable,
+               Hoa_Stream_Io_Statable,
                Hoa_Stream_Io_Touchable {
 
     /**
@@ -94,6 +100,39 @@ abstract class Hoa_File_Abstract
     protected $_mode = null;
 
 
+
+    /**
+     * Get filename component of path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getBasename ( ) {
+
+        return basename($this->getStreamName());
+    }
+
+    /**
+     * Get directory name component of path.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getDirname ( ) {
+
+        return dirname($this->getStreamName());
+    }
+
+    /**
+     * Get size.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getSize ( ) {
+
+        return filesize($this->getStreamName());
+    }
 
     /**
      * Get informations about a file.

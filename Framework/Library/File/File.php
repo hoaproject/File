@@ -84,11 +84,11 @@ import('Stream.Io.Pointable');
  * @package     Hoa_File
  */
 
-class          Hoa_File
+abstract class Hoa_File
     extends    Hoa_File_Abstract
-    implements Hoa_Stream_Io,
-               Hoa_Stream_Io_Bufferable,
+    implements Hoa_Stream_Io_Bufferable,
                Hoa_Stream_Io_Lockable,
+               Hoa_Stream_Io_Pathable,
                Hoa_Stream_Io_Pointable {
 
     /**
@@ -176,8 +176,7 @@ class          Hoa_File
      * @return  void
      * @throw   Hoa_Stream_Exception
      */
-    public function __construct ( $streamName, $mode = self::MODE_READ,
-                                  $context = null ) {
+    public function __construct ( $streamName, $mode, $context = null ) {
 
         $this->setMode($mode);
         parent::__construct($streamName, $context);
@@ -195,36 +194,18 @@ class          Hoa_File
      */
     protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
 
-        static $createModes = array(
-            self::MODE_TRUNCATE_WRITE,
-            self::MODE_TRUNCATE_READ_WRITE,
-            self::MODE_APPEND_WRITE,
-            self::MODE_APPEND_READ_WRITE,
-            self::MODE_CREATE_WRITE,
-            self::MODE_CREATE_READ_WRITE,
-        );
-
-        preg_match('#^(\w+)://#', $streamName, $match);
-
-        if(   isset($match[1])
-           && $match[1] == 'file'
-           && !in_array($this->getMode(), $createModes)
-           && !file_exists($streamName))
-            throw new Hoa_File_Exception_FileDoesNotExist(
-                'File %s does not exist.', 0, $streamName);
-
         if(null === $context) {
 
             if(false === $out = @fopen($streamName, $this->getMode()))
                 throw new Hoa_File_Exception(
-                    'Failed to open stream %s.', 1, $streamName);
+                    'Failed to open stream %s.', 0, $streamName);
 
             return $out;
         }
 
         if(false === $out = @fopen($streamName, $this->getMode(), true, $context->getContext()))
             throw new Hoa_File_Exception(
-                'Failed to open stream %s.', 2, $streamName);
+                'Failed to open stream %s.', 1, $streamName);
 
         return $out;
     }
@@ -238,306 +219,6 @@ class          Hoa_File
     public function close ( ) {
 
         return @fclose($this->getStream());
-    }
-
-    /**
-     * Test for end-of-file.
-     *
-     * @access  public
-     * @return  bool
-     */
-    public function eof ( ) {
-
-        return feof($this->getStream());
-    }
-
-    /**
-     * Get filename component of path.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getBasename ( ) {
-
-        return basename($this->getStreamName());
-    }
-
-    /**
-     * Get directory name component of path.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getDirname ( ) {
-
-        return dirname($this->getStreamName());
-    }
-
-    /**
-     * Get size.
-     *
-     * @access  public
-     * @return  int
-     */
-    public function getSize ( ) {
-
-        return filesize($this->getStreamName());
-    }
-
-    /**
-     * Read n characters.
-     *
-     * @access  public
-     * @param   int     $length    Length.
-     * @return  string
-     * @throw   Hoa_File_Exception
-     */
-    public function read ( $length ) {
-
-        if($length <= 0)
-            throw new Hoa_File_Exception(
-                'Length must be greather than 0, given %d.', 3, $length);
-
-        return fread($this->getStream(), $length);
-    }
-
-    /**
-     * Alias of $this->read().
-     *
-     * @access  public
-     * @param   int     $length    Length.
-     * @return  string
-     */
-    public function readString ( $length ) {
-
-        return $this->read($length);
-    }
-
-    /**
-     * Read a character.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readCharacter ( ) {
-
-        return fgetc($this->getStream());
-    }
-
-    /**
-     * Read an integer.
-     *
-     * @access  public
-     * @param   int     $length    Length.
-     * @return  int
-     */
-    public function readInteger ( $length = 1 ) {
-
-        return (int) $this->read($length);
-    }
-
-    /**
-     * Read a float.
-     *
-     * @access  public
-     * @param   int     $length    Length.
-     * @return  float
-     */
-    public function readFloat ( $length = 1 ) {
-
-        return (float) $this->read($length);
-    }
-
-    /**
-     * Read an array.
-     * Alias of the $this->scanf() method.
-     *
-     * @access  public
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
-     */
-    public function readArray ( $format ) {
-
-        return $this->scanf($format);
-    }
-
-    /**
-     * Read a line.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readLine ( ) {
-
-        return fgets($this->getStream());
-    }
-
-    /**
-     * Read all, i.e. read as much as possible.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function readAll ( ) {
-
-        if(true === $this->isStreamResourceMustBeUsed()) {
-
-            $current = $this->tell();
-            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
-            $end     = $this->tell();
-            $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
-
-            return $this->read($end - $current);
-        }
-
-        if(PHP_VERSION_ID < 60000)
-            $second = true;
-        else
-            $second = 0;
-
-        if(null === $this->getStreamContext())
-            $third  = null;
-        else
-            $third  = $this->getStreamContext()->getContext();
-
-        return file_get_contents(
-            $this->getStreamName(),
-            $second,
-            $third,
-            $this->tell()
-        );
-    }
-
-    /**
-     * Parse input from a stream according to a format.
-     *
-     * @access  public
-     * @param   string  $format    Format (see printf's formats).
-     * @return  array
-     */
-    public function scanf ( $format ) {
-
-        return fscanf($this->getStream(), $format);
-    }
-
-    /**
-     * Write n characters.
-     *
-     * @access  public
-     * @param   string  $string    String.
-     * @param   int     $length    Length.
-     * @return  mixed
-     */
-    public function write ( $string, $length ) {
-
-        return fwrite($this->getStream(), $string, $length);
-    }
-
-    /**
-     * Write a string.
-     *
-     * @access  public
-     * @param   string  $string    String.
-     * @return  mixed
-     */
-    public function writeString ( $string ) {
-
-        $string = (string) $string;
-
-        return $this->write($string, strlen($string));
-    }
-
-    /**
-     * Write a character.
-     *
-     * @access  public
-     * @param   string  $char    Character.
-     * @return  mixed
-     */
-    public function writeCharacter ( $char ) {
-
-        return $this->write((string) $char[0], 1);
-    }
-
-    /**
-     * Write an integer.
-     *
-     * @access  public
-     * @param   int     $integer    Integer.
-     * @return  mixed
-     */
-    public function writeInteger ( $integer ) {
-
-        $integer = (string) (int) $integer;
-
-        return $this->write($integer, strlen($integer));
-    }
-
-    /**
-     * Write a float.
-     *
-     * @access  public
-     * @param   float   $float    Float.
-     * @return  mixed
-     */
-    public function writeFloat ( $float ) {
-
-        $float = (string) (float) $float;
-
-        return $this->write($float, strlen($float));
-    }
-
-    /**
-     * Write an array.
-     *
-     * @access  public
-     * @param   array   $array    Array.
-     * @return  mixed
-     */
-    public function writeArray ( Array $array ) {
-
-        $array = serialize($array);
-
-        return $this->write($array, strlen($array));
-    }
-
-    /**
-     * Write a line.
-     *
-     * @access  public
-     * @param   string  $line    Line.
-     * @return  mixed
-     */
-    public function writeLine ( $line ) {
-
-        if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
-
-        return $this->write(substr($line, 0, $n), $n);
-    }
-
-    /**
-     * Write all, i.e. as much as possible.
-     *
-     * @access  public
-     * @param   string  $string    String.
-     * @return  mixed
-     */
-    public function writeAll ( $string ) {
-
-        return $this->write($string, strlen($string));
-    }
-
-    /**
-     * Truncate a file to a given length.
-     *
-     * @access  public
-     * @param   int     $size    Size.
-     * @return  bool
-     */
-    public function truncate ( $size ) {
-
-        return ftruncate($this->getStream(), $size);
     }
 
     /**

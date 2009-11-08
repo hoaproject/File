@@ -43,14 +43,14 @@ require_once 'Framework.php';
 import('File.Abstract');
 
 /**
- * Hoa_File
+ * Hoa_File_Read
  */
-import('File.~');
+import('File.Read');
 
 /**
- * Hoa_File_Link
+ * Hoa_File_Link_Read
  */
-import('File.Link');
+import('File.Link.Read');
 
 /**
  * Hoa_File_Directory
@@ -144,10 +144,10 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
                        : null;
 
         if(true === $this->isLink())
-            return new Hoa_File_Link($path, Hoa_File::MODE_READ, $context);
+            return new Hoa_File_Link_Read($path, Hoa_File::MODE_READ, $context);
 
         elseif(true === $this->isFile())
-            return new Hoa_File($path, Hoa_File::MODE_READ, $context);
+            return new Hoa_File_Read($path, Hoa_File::MODE_READ, $context);
 
         elseif(true === $this->isDirectory())
             return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
@@ -163,6 +163,6 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
         else
             throw new Hoa_File_Exception(
                 'Cannot find an appropriated object that matches with ' .
-                'path %s.', 0, $path);
+                'path %s when defining it.', 0, $path);
     }
 }
