@@ -354,7 +354,7 @@ class          Hoa_File_ReadWrite
      */
     public function writeArray ( Array $array ) {
 
-        $array = serialize($array);
+        $array = var_export($array, true);
 
         return $this->write($array, strlen($array));
     }

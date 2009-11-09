@@ -200,7 +200,7 @@ class          Hoa_File_Link_Write
      */
     public function writeArray ( Array $array ) {
 
-        $array = serialize($array);
+        $array = var_export($array, true);
 
         return $this->write($array, strlen($array));
     }
