@@ -43,6 +43,11 @@ require_once 'Framework.php';
 import('File.Abstract');
 
 /**
+ * Hoa_File
+ */
+import('File.~');
+
+/**
  * Hoa_File_Read
  */
 import('File.Read');
