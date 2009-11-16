@@ -178,7 +178,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
     const SORT_OWNER       =   16;
 
     /**
-     * Sort by permision.
+     * Sort by permisions.
      *
      * @const int
      */
@@ -199,7 +199,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
     const SORT_INAME       =  128;
 
     /**
-     * Reverse to sort.
+     * Reverse the sort.
      *
      * @const int
      */
@@ -382,7 +382,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
         if($sort == self::SORT_NONE)
             return $data;
 
-        if($sort == self::SORT_RANDOM) {
+        if($sort & self::SORT_RANDOM) {
 
             shuffle($data);
             return $data;
@@ -422,7 +422,8 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
 
         if(!isset($sortFlags[$sort & ~self::SORT_REVERSE]))
             throw new Hoa_File_Exception(
-                'Constant sort combination is not supported. ' .
+                'Constants sort combination is not supported, ' .
+                'excepted for reversing the sort. ' .
                 'Please, look the %s::SORT_* constants.', 0, __CLASS__);
         else
             asort($r, $sortFlags[$sort & ~self::SORT_REVERSE]);
