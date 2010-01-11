@@ -65,7 +65,8 @@ import('Iterator.Interface.Aggregate');
 /**
  * Class Hoa_File_Finder.
  *
- * .
+ * Propose a finder to scan directory. It returns a neutral (undefined) file
+ * that should be infered to a real file object.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2009 Ivan ENDERLIN.
@@ -324,7 +325,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
 
         while(false !== $handle = readdir($this->getDirectory())) {
 
-            $dot      = $handle == '.'  || $handle == '..';
+            $dot      = $handle == '.' || $handle == '..';
             $visible  = $handle[0] != '.';
             $complete = $this->getPath() . DS . $handle;
 
@@ -348,8 +349,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
 
         rewinddir($this->getDirectory());
 
-        $out = $this->sort($out);
-
+        $out             = $this->sort($out);
         $old             = $this->_iterator;
         $this->_iterator = new Hoa_Iterator($out);
 
