@@ -134,7 +134,7 @@ abstract class Hoa_File
     const MODE_APPEND_WRITE        = 'ab';
 
     /**
-     * Open the reading and writing; place the file pointer at the end of the
+     * Open for reading and writing; place the file pointer at the end of the
      * file. If the file does not exist, attempt to create it.
      *
      * @const string
