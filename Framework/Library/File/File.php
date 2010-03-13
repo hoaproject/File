@@ -278,7 +278,12 @@ abstract class Hoa_File
      */
     public function tell ( ) {
 
-        return ftell($this->getStream());
+        $stream = $this->getStream();
+
+        if(null === $stream)
+            return 0;
+
+        return ftell($stream);
     }
 
     /**
