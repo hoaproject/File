@@ -194,7 +194,8 @@ abstract class Hoa_File
      */
     protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
 
-        if(false === is_dir(dirname($streamName)))
+        if(   substr($streamName, 0, 4) == 'file'
+           && false === is_dir(dirname($streamName)))
             throw new Hoa_File_Exception(
                 'Directory %s does not exist. Could not open file %s.',
                 0, array(dirname($streamName), basename($streamName)));
