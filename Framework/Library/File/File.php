@@ -194,18 +194,23 @@ abstract class Hoa_File
      */
     protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
 
+        if(false === is_dir(dirname($streamName)))
+            throw new Hoa_File_Exception(
+                'Directory %s does not exist. Could not open file %s.',
+                0, array(dirname($streamName), basename($streamName)));
+
         if(null === $context) {
 
             if(false === $out = @fopen($streamName, $this->getMode()))
                 throw new Hoa_File_Exception(
-                    'Failed to open stream %s.', 0, $streamName);
+                    'Failed to open stream %s.', 1, $streamName);
 
             return $out;
         }
 
         if(false === $out = @fopen($streamName, $this->getMode(), true, $context->getContext()))
             throw new Hoa_File_Exception(
-                'Failed to open stream %s.', 1, $streamName);
+                'Failed to open stream %s.', 2, $streamName);
 
         return $out;
     }
