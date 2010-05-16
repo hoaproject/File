@@ -119,10 +119,9 @@ class          Hoa_File_ReadWrite
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
-        if((( isset($match[1])
-           && $match[1] == 'file')
-           || !isset($match[1]))
-           && !file_exists($streamName))
+        if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
+            && !file_exists($streamName)
+            && parent::MODE_READ_WRITE == $this->getMode())
             throw new Hoa_File_Exception_FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
 
