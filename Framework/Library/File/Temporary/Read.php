@@ -172,6 +172,17 @@ class          Hoa_File_Temporary_Read
     }
 
     /**
+     * Read a boolean.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function readBoolean ( ) {
+
+        return (bool) $this->read(1);
+    }
+
+    /**
      * Read an integer.
      *
      * @access  public
