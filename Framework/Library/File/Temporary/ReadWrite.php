@@ -328,6 +328,18 @@ class          Hoa_File_Temporary_ReadWrite
     }
 
     /**
+     * Write a boolean.
+     *
+     * @access  public
+     * @param   bool    $boolean    Boolean.
+     * @return  mixed
+     */
+    public function writeBoolean ( $boolean ) {
+
+        return $this->write((string) (bool) $boolean, 1);
+    }
+
+    /**
      * Write an integer.
      *
      * @access  public
