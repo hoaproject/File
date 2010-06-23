@@ -91,6 +91,8 @@ class          Hoa_File_Link_ReadWrite
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**
@@ -251,11 +253,16 @@ class          Hoa_File_Link_ReadWrite
         if(true === $this->isStreamResourceMustBeUsed()) {
 
             $current = $this->tell();
+
             $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
             $end     = $this->tell();
+
+            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $handle  = $this->read($end);
+
             $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
 
-            return $this->read($end - $current);
+            return $handle;
         }
 
         if(PHP_VERSION_ID < 60000)
@@ -272,7 +279,7 @@ class          Hoa_File_Link_ReadWrite
             $this->getStreamName(),
             $second,
             $third,
-            $this->tell()
+            0
         );
     }
 
@@ -391,7 +398,9 @@ class          Hoa_File_Link_ReadWrite
     public function writeLine ( $line ) {
 
         if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
 
         return $this->write(substr($line, 0, $n), $n);
     }

@@ -45,7 +45,7 @@ import('File.Exception');
 /**
  * Hoa_File_Temporary
  */
-import('File.Link');
+import('File.Temporary');
 
 /**
  * Hoa_Stream_Io_In
@@ -55,7 +55,7 @@ import('Stream.Io.In');
 /**
  * Class Hoa_File_Temporary_Read.
  *
- * File handler.
+ * Read a temporary file.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -85,6 +85,8 @@ class          Hoa_File_Temporary_Read
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**
@@ -241,11 +243,16 @@ class          Hoa_File_Temporary_Read
         if(true === $this->isStreamResourceMustBeUsed()) {
 
             $current = $this->tell();
+
             $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
             $end     = $this->tell();
+
+            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $handle  = $this->read($end);
+
             $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
 
-            return $this->read($end - $current);
+            return $handle;
         }
 
         if(PHP_VERSION_ID < 60000)
@@ -262,7 +269,7 @@ class          Hoa_File_Temporary_Read
             $this->getStreamName(),
             $second,
             $third,
-            $this->tell()
+            0
         );
     }
 

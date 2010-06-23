@@ -45,7 +45,7 @@ import('File.Exception');
 /**
  * Hoa_File_Temporary
  */
-import('File.Link');
+import('File.Temporary');
 
 /**
  * Hoa_Stream_Io_Out
@@ -55,7 +55,7 @@ import('Stream.Io.Out');
 /**
  * Class Hoa_File_Temporary_Write.
  *
- * File handler.
+ * Write into a temporary file.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -85,6 +85,8 @@ class          Hoa_File_Temporary_Write
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**
@@ -225,7 +227,9 @@ class          Hoa_File_Temporary_Write
     public function writeLine ( $line ) {
 
         if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
 
         return $this->write(substr($line, 0, $n), $n);
     }

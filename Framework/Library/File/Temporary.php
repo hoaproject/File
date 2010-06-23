@@ -64,15 +64,30 @@ import('File.~');
 class Hoa_File_Temporary extends Hoa_File {
 
     /**
+     * Temporary file index.
+     *
+     * @var Hoa_File_Temporary int
+     */
+    private static $_i = 0;
+
+
+
+    /**
      * Open a temporary file.
      *
      * @access  public
      * @return  void
      * @throw   Hoa_Stream_Exception
      */
-    public function __construct ( ) {
+    public function __construct ( $streamName = null ) {
 
-        parent::__construct(null, null);
+        if(null === $streamName)
+            $streamName = 'hoa://Framework/Library/File/Temporary.php#' .
+                          self::$_i++;
+
+        parent::__construct($streamName, null);
+
+        return;
     }
 
     /**

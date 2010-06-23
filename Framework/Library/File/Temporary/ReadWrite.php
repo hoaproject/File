@@ -45,7 +45,7 @@ import('File.Exception');
 /**
  * Hoa_File_Temporary
  */
-import('File.Link');
+import('File.Temporary');
 
 /**
  * Hoa_Stream_Io_In
@@ -60,7 +60,7 @@ import('Stream.Io.Out');
 /**
  * Class Hoa_File_Temporary_ReadWrite.
  *
- * File handler.
+ * Read/write a temporary file.
  *
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
@@ -91,6 +91,8 @@ class          Hoa_File_Temporary_ReadWrite
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**
@@ -251,11 +253,16 @@ class          Hoa_File_Temporary_ReadWrite
         if(true === $this->isStreamResourceMustBeUsed()) {
 
             $current = $this->tell();
+
             $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
             $end     = $this->tell();
+
+            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $handle  = $this->read($end);
+
             $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
 
-            return $this->read($end - $current);
+            return $handle;
         }
 
         if(PHP_VERSION_ID < 60000)
@@ -272,7 +279,7 @@ class          Hoa_File_Temporary_ReadWrite
             $this->getStreamName(),
             $second,
             $third,
-            $this->tell()
+            0
         );
     }
 
@@ -391,7 +398,9 @@ class          Hoa_File_Temporary_ReadWrite
     public function writeLine ( $line ) {
 
         if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
 
         return $this->write(substr($line, 0, $n), $n);
     }

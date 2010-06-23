@@ -52,11 +52,6 @@ import('File.Exception.FileDoesNotExist');
 import('File.Abstract');
 
 /**
- * Hoa_Stream_Io
- */
-import('Stream.Io');
-
-/**
  * Hoa_Stream_Io_Bufferable
  */
 import('Stream.Io.Bufferable');
@@ -88,7 +83,6 @@ abstract class Hoa_File
     extends    Hoa_File_Abstract
     implements Hoa_Stream_Io_Bufferable,
                Hoa_Stream_Io_Lockable,
-               Hoa_Stream_Io_Pathable,
                Hoa_Stream_Io_Pointable {
 
     /**
@@ -180,6 +174,8 @@ abstract class Hoa_File
 
         $this->setMode($mode);
         parent::__construct($streamName, $context);
+
+        return;
     }
 
     /**

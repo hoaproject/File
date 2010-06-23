@@ -85,6 +85,8 @@ class          Hoa_File_Link_Write
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**
@@ -225,7 +227,9 @@ class          Hoa_File_Link_Write
     public function writeLine ( $line ) {
 
         if(false === $n = strpos($line, "\n"))
-            return $this->write($line, strlen($line));
+            return $this->write($line . "\n", strlen($line) + 1);
+
+        $n++;
 
         return $this->write(substr($line, 0, $n), $n);
     }

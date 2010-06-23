@@ -241,11 +241,16 @@ class          Hoa_File_Read
         if(true === $this->isStreamResourceMustBeUsed()) {
 
             $current = $this->tell();
+
             $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
             $end     = $this->tell();
+
+            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $handle  = $this->read($end);
+
             $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
 
-            return $this->read($end - $current);
+            return $handle;
         }
 
         if(PHP_VERSION_ID < 60000)
@@ -262,7 +267,7 @@ class          Hoa_File_Read
             $this->getStreamName(),
             $second,
             $third,
-            $this->tell()
+            0
         );
     }
 
