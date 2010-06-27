@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_File_Exception
@@ -131,8 +131,13 @@ class          Hoa_File_Temporary_Write
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
+     * @throw   Hoa_File_Exception
      */
     public function write ( $string, $length ) {
+
+        if($length <= 0)
+            throw new Hoa_File_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }

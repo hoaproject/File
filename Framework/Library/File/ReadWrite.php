@@ -33,9 +33,9 @@
  */
 
 /**
- * Hoa_Framework
+ * Hoa_Core
  */
-require_once 'Framework.php';
+require_once 'Core.php';
 
 /**
  * Hoa_File_Exception
@@ -48,14 +48,9 @@ import('File.Exception');
 import('File.~');
 
 /**
- * Hoa_Stream_Io_In
+ * Hoa_Stream_Io
  */
-import('Stream.Io.In');
-
-/**
- * Hoa_Stream_Io_Out
- */
-import('Stream.Io.Out');
+import('Stream.Io');
 
 /**
  * Class Hoa_File_ReadWrite.
@@ -73,8 +68,7 @@ import('Stream.Io.Out');
 
 class          Hoa_File_ReadWrite
     extends    Hoa_File
-    implements Hoa_Stream_Io_In,
-               Hoa_Stream_Io_Out {
+    implements Hoa_Stream_Io {
 
     /**
      * Open a file.
@@ -300,8 +294,13 @@ class          Hoa_File_ReadWrite
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
+     * @throw   Hoa_File_Exception
      */
     public function write ( $string, $length ) {
+
+        if($length <= 0)
+            throw new Hoa_Xml_Exception(
+                'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }
