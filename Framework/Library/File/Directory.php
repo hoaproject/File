@@ -136,7 +136,7 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
      * @throw   Hoa_File_Exception_FileDoesNotExist
      * @throw   Hoa_File_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(false === is_dir($streamName))
             if($this->getMode() == self::MODE_READ)
@@ -170,10 +170,10 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
     /**
      * Close the current stream.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      */
-    public function close ( ) {
+    protected function _close ( ) {
 
         return fclose($this->getStream());
     }

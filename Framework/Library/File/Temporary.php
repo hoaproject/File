@@ -100,7 +100,7 @@ class Hoa_File_Temporary extends Hoa_File {
      * @return  resource
      * @throw   Hoa_File_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(false === $out = @tmpfile())
             throw new Hoa_File_Exception(

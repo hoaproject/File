@@ -115,7 +115,7 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
      * @return  resource
      * @throw   Hoa_File_Exception_FileNotExists
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         $dummy = null;
 
@@ -125,10 +125,10 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
     /**
      * Close the current stream.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      */
-    public function close ( ) {
+    protected function _close ( ) {
 
         return null;
     }

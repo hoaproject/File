@@ -99,7 +99,7 @@ class          Hoa_File_Link_Write
      * @throw   Hoa_File_Exception_FileDoesNotExist
      * @throw   Hoa_File_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         static $createModes = array(
             parent::MODE_TRUNCATE_WRITE,
@@ -119,7 +119,7 @@ class          Hoa_File_Link_Write
             throw new Hoa_File_Exception_FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
 
-        $out = parent::open($streamName, $context);
+        $out = parent::_open($streamName, $context);
 
         return $out;
     }

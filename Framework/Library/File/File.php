@@ -188,7 +188,7 @@ abstract class Hoa_File
      * @throw   Hoa_File_Exception_FileDoesNotExist
      * @throw   Hoa_File_Exception
      */
-    protected function &open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
 
         if(   substr($streamName, 0, 4) == 'file'
            && false === is_dir(dirname($streamName)))
@@ -215,10 +215,10 @@ abstract class Hoa_File
     /**
      * Close the current stream.
      *
-     * @access  public
+     * @access  protected
      * @return  bool
      */
-    public function close ( ) {
+    protected function _close ( ) {
 
         return @fclose($this->getStream());
     }
