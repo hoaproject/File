@@ -214,7 +214,7 @@ class          Hoa_File_Read
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray ( $format ) {
+    public function readArray ( $format = null ) {
 
         return $this->scanf($format);
     }
