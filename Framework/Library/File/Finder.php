@@ -53,14 +53,14 @@ import('File.Exception.FileDoesNotExist');
 import('File.Undefined');
 
 /**
- * Hoa_Iterator
+ * Hoa_Iterator_Basic
  */
-import('Iterator.~');
+import('Iterator.Basic');
 
 /**
- * Hoa_Iterator_Interface_Aggregate
+ * Hoa_Iterator_Aggregate
  */
-import('Iterator.Interface.Aggregate');
+import('Iterator.Aggregate');
 
 /**
  * Class Hoa_File_Finder.
@@ -77,7 +77,7 @@ import('Iterator.Interface.Aggregate');
  * @subpackage  Hoa_File_Finder
  */
 
-class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
+class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
                                  Countable {
 
     /**
@@ -237,21 +237,21 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
     /**
      * Iterator.
      *
-     * @var Hoa_Iterator object
+     * @var Hoa_Iterator_Basic object
      */
     protected $_iterator  = null;
 
     /**
      * Type of list.
      *
-     * @var Hoa_Iterator int
+     * @var Hoa_File_Finder int
      */
     protected $_list      = self::LIST_NATURAL;
 
     /**
      * Type of sort.
      *
-     * @var Hoa_Iterator int
+     * @var Hoa_File_Finder int
      */
     protected $_sort      = self::SORT_INAME;
 
@@ -314,7 +314,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
      * Set the directory iterator.
      *
      * @access  protected
-     * @return  Hoa_Iterator
+     * @return  Hoa_Iterator_Basic
      */
     protected function setIterator ( ) {
 
@@ -351,7 +351,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
 
         $out             = $this->sort($out);
         $old             = $this->_iterator;
-        $this->_iterator = new Hoa_Iterator($out);
+        $this->_iterator = new Hoa_Iterator_Basic($out);
 
         return $old;
     }
@@ -511,7 +511,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Interface_Aggregate,
      * Get the directory iterator.
      *
      * @access  public
-     * @return  Hoa_Iterator
+     * @return  Hoa_Iterator_Basic
      */
     public function getIterator ( ) {
 
