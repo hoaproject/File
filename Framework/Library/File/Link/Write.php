@@ -115,7 +115,7 @@ class          Hoa_File_Link_Write
         preg_match('#^(\w+)://#', $streamName, $match);
 
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
-            && !file_exists($streamname))
+            && !file_exists($streamName))
             throw new Hoa_File_Exception_FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
 
