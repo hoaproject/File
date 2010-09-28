@@ -43,11 +43,6 @@ require_once 'Core.php';
 import('File.~');
 
 /**
- * Hoa_File_Upload_Extension_Exception
- */
-import('File.Exception.Upload_Extension');
-
-/**
  * Class Hoa_File_Upload.
  *
  * Manage file uploading from web forms.
