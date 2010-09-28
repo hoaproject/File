@@ -61,7 +61,7 @@ import('File.Exception.Upload_Extension');
  * @subpackage  Hoa_File_Upload
  */
 
-class Hoa_File_Upload extends Hoa_File {
+class Hoa_File_Upload /*extends Hoa_File*/ {
 
     /**
      * Upload parameters.
