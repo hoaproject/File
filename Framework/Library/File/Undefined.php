@@ -48,14 +48,14 @@ import('File.Abstract');
 import('File.~');
 
 /**
- * Hoa_File_Read
+ * Hoa_File_ReadWrite
  */
-import('File.Read');
+import('File.ReadWrite');
 
 /**
- * Hoa_File_Link_Read
+ * Hoa_File_Link_ReadWrite
  */
-import('File.Link.Read');
+import('File.Link.ReadWrite');
 
 /**
  * Hoa_File_Directory
@@ -66,11 +66,6 @@ import('File.Directory');
  * Hoa_File_Socket
  */
 import('File.Socket');
-
-/**
- * Hoa_Socket_Connection_Client
- */
-import('Socket.Connection.Client');
 
 /**
  * Class Hoa_File_Undefined.
@@ -102,6 +97,8 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
     public function __construct ( $streamName, $context = null ) {
 
         parent::__construct($streamName, $context);
+
+        return;
     }
 
     /**
@@ -138,21 +135,34 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
      * path is a file, return a Hoa_File.
      *
      * @access  public
+     * @param   string  $path       Defining with another path.
+     * @param   string  $context    Context ID (please, see the  
+     *                              Hoa_Stream_Context class).
      * @return  Hoa_File_Abstract
      * @throw   Hoa_File_Exception
      */
-    public function define ( ) {
+    public function define ( $path = null, $context = null ) {
 
-        $path    = $this->getStreamName();
-        $context = null !== $this->getStreamContext()
-                       ? $this->getStreamContext()->getCurrentId()
-                       : null;
+        if(null === $path)
+            $path = $this->getStreamName();
+
+        if(   null === $context
+           && null !== $this->getStreamContext())
+            $context = $this->getStreamContext()->getCurrentId();
 
         if(true === $this->isLink())
-            return new Hoa_File_Link_Read($path, Hoa_File::MODE_READ, $context);
+            return new Hoa_File_Link_ReadWrite(
+                $path,
+                Hoa_File::MODE_APPEND_READ_WRITE,
+                $context
+            );
 
         elseif(true === $this->isFile())
-            return new Hoa_File_Read($path, Hoa_File::MODE_READ, $context);
+            return new Hoa_File_ReadWrite(
+                $path,
+                Hoa_File::MODE_APPEND_READ_WRITE,
+                $context
+            );
 
         elseif(true === $this->isDirectory())
             return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
@@ -165,9 +175,8 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
                 $context
             );
 
-        else
-            throw new Hoa_File_Exception(
-                'Cannot find an appropriated object that matches with ' .
-                'path %s when defining it.', 0, $path);
+        throw new Hoa_File_Exception(
+            'Cannot find an appropriated object that matches with ' .
+            'path %s when defining it.', 0, $path);
     }
 }
