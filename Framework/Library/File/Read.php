@@ -85,6 +85,8 @@ class          Hoa_File_Read
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**

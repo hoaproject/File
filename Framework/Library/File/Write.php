@@ -85,6 +85,8 @@ class          Hoa_File_Write
                                   $context = null ) {
 
         parent::__construct($streamName, $mode, $context);
+
+        return;
     }
 
     /**
