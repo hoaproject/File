@@ -108,8 +108,9 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
             $flag,
             $context
         );
-
         $this->_socket->connect();
+
+        return;
     }
 
     /**
@@ -124,7 +125,7 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
     }
 
     /**
-     * Overload the getStreamName() method.
+     * Override the getStreamName() method.
      * PHP does not have a multiple inheritance. So, we wrap the
      * Hoa_Socket_Connection_Client and redirect all calls to the
      * getStreamName() method to the wrapped socket. In this way, we benefit
@@ -139,7 +140,7 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
     }
 
     /**
-     * Overload the getStream() method.
+     * Override the getStream() method.
      * PHP does not have a multiple inheritance. So, we wrap the
      * Hoa_Socket_Connection_Client and redirect all calls to the
      * getStreamName() method to the wrapped socket. In this way, we benefit
@@ -154,7 +155,7 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
     }
 
     /**
-     * Overload the getStreamContext() method.
+     * Override the getStreamContext() method.
      * PHP does not have a multiple inheritance. So, we wrap the
      * Hoa_Socket_Connection_Client and redirect all calls to the
      * getStreamName() method to the wrapped socket. In this way, we benefit
