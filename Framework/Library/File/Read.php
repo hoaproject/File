@@ -48,9 +48,9 @@ import('File.Exception');
 import('File.~');
 
 /**
- * Hoa_Stream_Io_In
+ * Hoa_Stream_Interface_In
  */
-import('Stream.Io.In');
+import('Stream.Interface.In');
 
 /**
  * Class Hoa_File_Read.
@@ -68,7 +68,7 @@ import('Stream.Io.In');
 
 class          Hoa_File_Read
     extends    Hoa_File
-    implements Hoa_Stream_Io_In {
+    implements Hoa_Stream_Interface_In {
 
     /**
      * Open a file.
@@ -244,13 +244,13 @@ class          Hoa_File_Read
 
             $current = $this->tell();
 
-            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
+            $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_END);
             $end     = $this->tell();
 
-            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
             $handle  = $this->read($end);
 
-            $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $this->seek($current, Hoa_Stream_Interface_Pointable::SEEK_SET);
 
             return $handle;
         }

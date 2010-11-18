@@ -52,19 +52,19 @@ import('File.Exception.FileDoesNotExist');
 import('File.Abstract');
 
 /**
- * Hoa_Stream_Io_Bufferable
+ * Hoa_Stream_Interface_Bufferable
  */
-import('Stream.Io.Bufferable');
+import('Stream.Interface.Bufferable');
 
 /**
- * Hoa_Stream_Io_Lockable
+ * Hoa_Stream_Interface_Lockable
  */
-import('Stream.Io.Lockable');
+import('Stream.Interface.Lockable');
 
 /**
- * Hoa_Stream_Io_Pointable
+ * Hoa_Stream_Interface_Pointable
  */
-import('Stream.Io.Pointable');
+import('Stream.Interface.Pointable');
 
 /**
  * Class Hoa_File.
@@ -81,9 +81,9 @@ import('Stream.Io.Pointable');
 
 abstract class Hoa_File
     extends    Hoa_File_Abstract
-    implements Hoa_Stream_Io_Bufferable,
-               Hoa_Stream_Io_Lockable,
-               Hoa_Stream_Io_Pointable {
+    implements Hoa_Stream_Interface_Bufferable,
+               Hoa_Stream_Interface_Lockable,
+               Hoa_Stream_Interface_Pointable {
 
     /**
      * Open for reading only; place the file pointer at the beginning of the
@@ -239,7 +239,7 @@ abstract class Hoa_File
      *
      * @access  public
      * @param   int     $operation    Operation, use the
-     *                                Hoa_Stream_Io_Lockable::LOCK_* constants.
+     *                                Hoa_Stream_Interface_Lockable::LOCK_* constants.
      * @return  bool
      */
     public function lock ( $operation ) {
@@ -264,10 +264,10 @@ abstract class Hoa_File
      * @access  public
      * @param   int     $offset    Offset (negative value should be supported).
      * @param   int     $whence    Whence, use the
-     *                             Hoa_Stream_Io_Pointable::SEEK_* constants.
+     *                             Hoa_Stream_Interface_Pointable::SEEK_* constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = Hoa_Stream_Io_Pointable::SEEK_SET ) {
+    public function seek ( $offset, $whence = Hoa_Stream_Interface_Pointable::SEEK_SET ) {
 
         return fseek($this->getStream(), $offset, $whence);
     }

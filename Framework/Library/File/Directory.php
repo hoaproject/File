@@ -185,12 +185,12 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
      * @access  public
      * @param   string  $to       Destination path.
      * @param   bool    $force    Force to copy if the file $to already exists.
-     *                            Use the Hoa_Stream_Io_Touchable::*OVERWRITE
+     *                            Use the Hoa_Stream_Interface_Touchable::*OVERWRITE
      *                            constants.
      * @return  bool
      * @throw   Hoa_File_Exception
      */
-    public function copy ( $to, $force = Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE ) {
+    public function copy ( $to, $force = Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE ) {
 
         $from   = $this->getStreamName();
         $finder = new Hoa_File_Finder(
@@ -203,7 +203,7 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
 
         foreach($finder as $key => $file) {
 
-            if(   $force === Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE
+            if(   $force === Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE
                && file_exists($to . DS . $file))
                 continue;
 

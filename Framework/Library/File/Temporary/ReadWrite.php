@@ -48,9 +48,14 @@ import('File.Exception');
 import('File.Temporary');
 
 /**
- * Hoa_Stream_Io
+ * Hoa_Stream_Interface_In
  */
-import('Stream.Io');
+import('Stream.Interface.In');
+
+/**
+ * Hoa_Stream_Interface_Out
+ */
+import('Stream.Interface.Out');
 
 /**
  * Class Hoa_File_Temporary_ReadWrite.
@@ -68,7 +73,8 @@ import('Stream.Io');
 
 class          Hoa_File_Temporary_ReadWrite
     extends    Hoa_File_Temporary
-    implements Hoa_Stream_Io {
+    implements Hoa_Stream_Interface_In,
+               Hoa_Stream_Interface_Out {
 
     /**
      * Open a file.
@@ -248,13 +254,13 @@ class          Hoa_File_Temporary_ReadWrite
 
             $current = $this->tell();
 
-            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_END);
+            $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_END);
             $end     = $this->tell();
 
-            $this->seek(0, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
             $handle  = $this->read($end);
 
-            $this->seek($current, Hoa_Stream_Io_Pointable::SEEK_SET);
+            $this->seek($current, Hoa_Stream_Interface_Pointable::SEEK_SET);
 
             return $handle;
         }

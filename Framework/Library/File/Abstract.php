@@ -48,19 +48,19 @@ import('File.Exception');
 import('Stream.~');
 
 /**
- * Hoa_Stream_Io_Pathable
+ * Hoa_Stream_Interface_Pathable
  */
-import('Stream.Io.Pathable');
+import('Stream.Interface.Pathable');
 
 /**
- * Hoa_Stream_Io_Statable
+ * Hoa_Stream_Interface_Statable
  */
-import('Stream.Io.Statable');
+import('Stream.Interface.Statable');
 
 /**
- * Hoa_Stream_Io_Touchable
+ * Hoa_Stream_Interface_Touchable
  */
-import('Stream.Io.Touchable');
+import('Stream.Interface.Touchable');
 
 /**
  * Hoa_File_Abstract
@@ -88,9 +88,9 @@ import('File.Directory');
 
 abstract class Hoa_File_Abstract
     extends    Hoa_Stream
-    implements Hoa_Stream_Io_Pathable,
-               Hoa_Stream_Io_Statable,
-               Hoa_Stream_Io_Touchable {
+    implements Hoa_Stream_Interface_Pathable,
+               Hoa_Stream_Interface_Statable,
+               Hoa_Stream_Interface_Touchable {
 
     /**
      * Mode.
@@ -355,15 +355,15 @@ abstract class Hoa_File_Abstract
      * @access  public
      * @param   string  $to       Destination path.
      * @param   bool    $force    Force to copy if the file $to already exists.
-     *                            Use the Hoa_Stream_Io_Touchable::*OVERWRITE
+     *                            Use the Hoa_Stream_Interface_Touchable::*OVERWRITE
      *                            constants.
      * @return  bool
      */
-    public function copy ( $to, $force = Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE ) {
+    public function copy ( $to, $force = Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE ) {
 
         $from = $this->getStreamName();
 
-        if(   $force === Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE
+        if(   $force === Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($to))
             return true;
 
@@ -380,23 +380,23 @@ abstract class Hoa_File_Abstract
      * @param   string  $name     New name.
      * @param   bool    $force    Force to move if the file $name already
      *                            exists.
-     *                            Use the Hoa_Stream_Io_Touchable::*OVERWRITE
+     *                            Use the Hoa_Stream_Interface_Touchable::*OVERWRITE
      *                            constants.
      * @param   bool    $mkdir    Force to make directory if does not exist.
-     *                            Use the Hoa_Stream_Io_Touchable::*DIRECTORY
+     *                            Use the Hoa_Stream_Interface_Touchable::*DIRECTORY
      *                            constants.
      * @return  bool
      */
-    public function move ( $name, $force = Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE,
-                           $mkdir = Hoa_Stream_Io_Touchable::DO_NOT_MAKE_DIRECTORY ) {
+    public function move ( $name, $force = Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE,
+                           $mkdir = Hoa_Stream_Interface_Touchable::DO_NOT_MAKE_DIRECTORY ) {
 
         $from = $this->getStreamName();
 
-        if(   $force === Hoa_Stream_Io_Touchable::DO_NOT_OVERWRITE
+        if(   $force === Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($name))
             return false;
 
-        if(Hoa_Stream_Io_Touchable::MAKE_DIRECTORY === $mkdir)
+        if(Hoa_Stream_Interface_Touchable::MAKE_DIRECTORY === $mkdir)
             Hoa_File_Directory::create(
                 dirname($name),
                 Hoa_File_Directory::MODE_CREATE_RECURSIVE

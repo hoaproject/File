@@ -48,9 +48,9 @@ import('File.Exception');
 import('File.Temporary');
 
 /**
- * Hoa_Stream_Io_Out
+ * Hoa_Stream_Interface_Out
  */
-import('Stream.Io.Out');
+import('Stream.Interface.Out');
 
 /**
  * Class Hoa_File_Temporary_Write.
@@ -68,7 +68,7 @@ import('Stream.Io.Out');
 
 class          Hoa_File_Temporary_Write
     extends    Hoa_File_Temporary
-    implements Hoa_Stream_Io_Out {
+    implements Hoa_Stream_Interface_Out {
 
     /**
      * Open a file.
