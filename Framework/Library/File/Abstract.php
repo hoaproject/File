@@ -625,7 +625,10 @@ abstract class Hoa_File_Abstract
      */
     public function getRealPath ( ) {
 
-        return realpath($this->getStreamName());
+        if(false === $out = realpath($this->getStreamName()))
+            return $this->getStreamName();
+
+        return $out;
     }
 
     /**
