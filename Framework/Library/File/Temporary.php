@@ -77,7 +77,7 @@ class Hoa_File_Temporary extends Hoa_File {
     public function __construct ( $streamName = null ) {
 
         if(null === $streamName)
-            $streamName = 'hoa://Framework/Library/File/Temporary.php#' .
+            $streamName = 'hoa://Library/File/Temporary.php#' .
                           self::$_i++;
 
         parent::__construct($streamName, null);
