@@ -302,7 +302,7 @@ class          Hoa_File_ReadWrite
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_Xml_Exception(
+            throw new Hoa_File_Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
