@@ -24,46 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Read
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File
+ * \Hoa\File\Exception
  */
-import('File.~');
+-> import('File.Exception.~')
 
 /**
- * Hoa_Stream_Interface_In
+ * \Hoa\File
  */
-import('Stream.Interface.In');
+-> import('File.~')
 
 /**
- * Class Hoa_File_Read.
+ * \Hoa\Stream\IStream\In
+ */
+-> import('Stream.I~.In');
+
+}
+
+namespace Hoa\File {
+
+/**
+ * Class \Hoa\File\Read.
  *
  * File handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_File
- * @subpackage  Hoa_File_Read
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_File_Read
-    extends    Hoa_File
-    implements Hoa_Stream_Interface_In {
+class Read extends File implements \Hoa\Stream\IStream\In {
 
     /**
      * Open a file.
@@ -72,9 +68,9 @@ class          Hoa_File_Read
      * @param   string  $streamName    Stream name.
      * @param   string  $mode          Open mode, see the self::MODE_* constants.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = parent::MODE_READ,
                                   $context = null ) {
@@ -89,19 +85,19 @@ class          Hoa_File_Read
      *
      * @access  protected
      * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_File_Exception_FileDoesNotExist
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception\FileDoesNotExist
+     * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         static $createModes = array(
             parent::MODE_READ
         );
 
         if(!in_array($this->getMode(), $createModes))
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
                 0, array($this->getMode(), implode(',', $createModes)));
 
@@ -109,7 +105,7 @@ class          Hoa_File_Read
 
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
             && !file_exists($streamName))
-            throw new Hoa_File_Exception_FileDoesNotExist(
+            throw new Exception\FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
 
         $out = parent::_open($streamName, $context);
@@ -134,12 +130,12 @@ class          Hoa_File_Read
      * @access  public
      * @param   int     $length    Length.
      * @return  string
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception
      */
     public function read ( $length ) {
 
         if($length <= 0)
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Length must be greather than 0, given %d.', 3, $length);
 
         return fread($this->getStream(), $length);
@@ -239,13 +235,13 @@ class          Hoa_File_Read
 
             $current = $this->tell();
 
-            $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_END);
+            $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
             $end     = $this->tell();
 
-            $this->seek(0, Hoa_Stream_Interface_Pointable::SEEK_SET);
+            $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
             $handle  = $this->read($end);
 
-            $this->seek($current, Hoa_Stream_Interface_Pointable::SEEK_SET);
+            $this->seek($current, \Hoa\Stream\IStream\Pointable::SEEK_SET);
 
             return $handle;
         }
@@ -279,4 +275,6 @@ class          Hoa_File_Read
 
         return fscanf($this->getStream(), $format);
     }
+}
+
 }

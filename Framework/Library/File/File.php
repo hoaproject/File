@@ -24,61 +24,61 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Exception_FileDoesNotExist
+ * \Hoa\File\Exception
  */
-import('File.Exception.FileDoesNotExist');
+-> import('File.Exception.~')
 
 /**
- * Hoa_File_Abstract
+ * \Hoa\File\Exception\FileDoesNotExist
  */
-import('File.Abstract');
+-> import('File.Exception.FileDoesNotExist')
 
 /**
- * Hoa_Stream_Interface_Bufferable
+ * \Hoa\File\Generic
  */
-import('Stream.Interface.Bufferable');
+-> import('File.Generic')
 
 /**
- * Hoa_Stream_Interface_Lockable
+ * \Hoa\Stream\IStream\Bufferable
  */
-import('Stream.Interface.Lockable');
+-> import('Stream.I~.Bufferable')
 
 /**
- * Hoa_Stream_Interface_Pointable
+ * \Hoa\Stream\IStream\Lockable
  */
-import('Stream.Interface.Pointable');
+-> import('Stream.I~.Lockable')
 
 /**
- * Class Hoa_File.
+ * \Hoa\Stream\IStream\Pointable
+ */
+-> import('Stream.I~.Pointable');
+
+}
+
+namespace Hoa\File {
+
+/**
+ * Class \Hoa\File.
  *
  * File handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_File
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_File
-    extends    Hoa_File_Abstract
-    implements Hoa_Stream_Interface_Bufferable,
-               Hoa_Stream_Interface_Lockable,
-               Hoa_Stream_Interface_Pointable {
+abstract class File
+    extends    Generic
+    implements \Hoa\Stream\IStream\Bufferable,
+               \Hoa\Stream\IStream\Lockable,
+               \Hoa\Stream\IStream\Pointable {
 
     /**
      * Open for reading only; place the file pointer at the beginning of the
@@ -161,9 +161,9 @@ abstract class Hoa_File
      * @param   string  $streamName    Stream name.
      * @param   string  $mode          Open mode, see the self::MODE_* constants.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode, $context = null ) {
 
@@ -177,31 +177,38 @@ abstract class Hoa_File
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_File_Exception_FileDoesNotExist
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception\FileDoesNotExist
+     * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(   substr($streamName, 0, 4) == 'file'
            && false === is_dir(dirname($streamName)))
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Directory %s does not exist. Could not open file %s.',
                 0, array(dirname($streamName), basename($streamName)));
 
         if(null === $context) {
 
             if(false === $out = @fopen($streamName, $this->getMode()))
-                throw new Hoa_File_Exception(
+                throw new Exception(
                     'Failed to open stream %s.', 1, $streamName);
 
             return $out;
         }
 
-        if(false === $out = @fopen($streamName, $this->getMode(), true, $context->getContext()))
-            throw new Hoa_File_Exception(
+        $out = @fopen(
+            $streamName,
+            $this->getMode(),
+            true,
+            $context->getContext()
+        );
+
+        if(false === $out)
+            throw new Exception(
                 'Failed to open stream %s.', 2, $streamName);
 
         return $out;
@@ -234,7 +241,7 @@ abstract class Hoa_File
      *
      * @access  public
      * @param   int     $operation    Operation, use the
-     *                                Hoa_Stream_Interface_Lockable::LOCK_* constants.
+     *                                \Hoa\Stream\IStream\Lockable::LOCK_* constants.
      * @return  bool
      */
     public function lock ( $operation ) {
@@ -259,10 +266,10 @@ abstract class Hoa_File
      * @access  public
      * @param   int     $offset    Offset (negative value should be supported).
      * @param   int     $whence    Whence, use the
-     *                             Hoa_Stream_Interface_Pointable::SEEK_* constants.
+     *                             \Hoa\Stream\IStream\Pointable::SEEK_* constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = Hoa_Stream_Interface_Pointable::SEEK_SET ) {
+    public function seek ( $offset, $whence = \Hoa\Stream\IStream\Pointable::SEEK_SET ) {
 
         return fseek($this->getStream(), $offset, $whence);
     }
@@ -298,4 +305,6 @@ abstract class Hoa_File
 
         return touch($name);
     }
+}
+
 }

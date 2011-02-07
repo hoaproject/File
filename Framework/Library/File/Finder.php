@@ -24,41 +24,43 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Finder
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Exception_FileDoesNotExist
+ * \Hoa\File\Exception
  */
-import('File.Exception.FileDoesNotExist');
+-> import('File.Exception.~')
 
 /**
- * Hoa_File_Undefined
+ * \Hoa\File\Exception\FileDoesNotExist
  */
-import('File.Undefined');
+-> import('File.Exception.FileDoesNotExist')
 
 /**
- * Hoa_Iterator_Basic
+ * \Hoa\File\Undefined
  */
-import('Iterator.Basic');
+-> import('File.Undefined')
 
 /**
- * Hoa_Iterator_Aggregate
+ * \Hoa\Iterator\Basic
  */
-import('Iterator.Aggregate');
+-> import('Iterator.Basic')
 
 /**
- * Class Hoa_File_Finder.
+ * \Hoa\Iterator\Aggregate
+ */
+-> import('Iterator.Aggregate');
+
+}
+
+namespace Hoa\File {
+
+/**
+ * Class \Hoa\File\Finder.
  *
  * Propose a finder to scan directory. It returns a neutral (undefined) file
  * that should be infered to a real file object.
@@ -66,14 +68,9 @@ import('Iterator.Aggregate');
  * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
  * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_File
- * @subpackage  Hoa_File_Finder
  */
 
-class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
-                                 Countable {
+class Finder implements \Hoa\Iterator\Aggregate, \Countable {
 
     /**
      * List visibles files.
@@ -218,35 +215,35 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
     /**
      * Resource to directory.
      *
-     * @var Hoa_File_Finder resource
+     * @var \Hoa\File\Finder resource
      */
     protected $_directory = null;
 
     /**
      * Current path.
      *
-     * @var Hoa_File_Finder string
+     * @var \Hoa\File\Finder string
      */
     protected $_path      = null;
 
     /**
      * Iterator.
      *
-     * @var Hoa_Iterator_Basic object
+     * @var \Hoa\Iterator\Basic object
      */
     protected $_iterator  = null;
 
     /**
      * Type of list.
      *
-     * @var Hoa_File_Finder int
+     * @var \Hoa\File\Finder int
      */
     protected $_list      = self::LIST_NATURAL;
 
     /**
      * Type of sort.
      *
-     * @var Hoa_File_Finder int
+     * @var \Hoa\File\Finder int
      */
     protected $_sort      = self::SORT_INAME;
 
@@ -279,20 +276,20 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
      * @access  protected
      * @param   string     $path    Path to directory.
      * @return  resource
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception
      */
     protected function &setDirectory ( $path ) {
 
         if(false === file_exists($path))
-            throw new Hoa_File_Exception_FileDoesNotExist(
+            throw new Exception\FileDoesNotExist(
                 'Path %s does not exist.', 0, $path);
 
         if(false === is_dir($path))
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Path %s is not a directory.', 1, $path);
 
         if(false === $foo = @opendir($path))
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Directory %s cannot be opened.', 2, $path);
 
         if(substr($path, -1) == DS)
@@ -309,7 +306,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
      * Set the directory iterator.
      *
      * @access  protected
-     * @return  Hoa_Iterator_Basic
+     * @return  \Hoa\Iterator\Basic
      */
     protected function setIterator ( ) {
 
@@ -339,14 +336,14 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
                || ($list & self::LIST_DOT       &&  $dot)
                || ($list & self::LIST_VISIBLE   &&  $visible)
                || ($list & self::LIST_HIDDEN    && !$visible))
-                $out[] = new Hoa_File_Undefined($this->getPath() . DS . $handle);
+                $out[] = new Undefined($this->getPath() . DS . $handle);
         }
 
         rewinddir($this->getDirectory());
 
         $out             = $this->sort($out);
         $old             = $this->_iterator;
-        $this->_iterator = new Hoa_Iterator_Basic($out);
+        $this->_iterator = new \Hoa\Iterator\Basic($out);
 
         return $old;
     }
@@ -416,7 +413,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
                 $r[] = strtolower($entry->__toString());
 
         if(!isset($sortFlags[$sort & ~self::SORT_REVERSE]))
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Constants sort combination is not supported, ' .
                 'excepted for reversing the sort. ' .
                 'Please, look the %s::SORT_* constants.', 0, __CLASS__);
@@ -470,7 +467,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
      * @access  public
      * @param   string  $path    Path. If null is given, use the current path of
      *                           the iterator.
-     * @return  Hoa_File_Finder
+     * @return  \Hoa\File\Finder
      */
     public function changeDirectory ( $path = null ) {
 
@@ -506,7 +503,7 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
      * Get the directory iterator.
      *
      * @access  public
-     * @return  Hoa_Iterator_Basic
+     * @return  \Hoa\Iterator\Basic
      */
     public function getIterator ( ) {
 
@@ -571,4 +568,6 @@ class Hoa_File_Finder implements Hoa_Iterator_Aggregate,
 
         return;
     }
+}
+
 }

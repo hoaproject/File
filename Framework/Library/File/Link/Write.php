@@ -24,46 +24,40 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Link_Write
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Link
+ * \Hoa\File\Exception
  */
-import('File.Link');
+-> import('File.Exception.~')
 
 /**
- * Hoa_Stream_Interface_Out
+ * \Hoa\File\Link
  */
-import('Stream.Interface.Out');
+-> import('File.Link.~')
 
 /**
- * Class Hoa_File_Link_Write.
+ * \Hoa\Stream\IStream\Out
+ */
+-> import('Stream.I~.Out');
+
+}
+
+namespace Hoa\File\Link {
+
+/**
+ * Class \Hoa\File\Link\Write.
  *
  * File handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_File
- * @subpackage  Hoa_File_Link_Write
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class          Hoa_File_Link_Write
-    extends    Hoa_File_Link
-    implements Hoa_Stream_Interface_Out {
+class Write extends Link implements \Hoa\Stream\IStream\Out {
 
     /**
      * Open a file.
@@ -72,9 +66,9 @@ class          Hoa_File_Link_Write
      * @param   string  $streamName    Stream name.
      * @param   string  $mode          Open mode, see the parent::MODE_* constants.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = parent::MODE_APPEND_WRITE,
                                   $context = null ) {
@@ -88,13 +82,13 @@ class          Hoa_File_Link_Write
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_File_Exception_FileDoesNotExist
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception\FileDoesNotExist
+     * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         static $createModes = array(
             parent::MODE_TRUNCATE_WRITE,
@@ -103,7 +97,7 @@ class          Hoa_File_Link_Write
         );
 
         if(!in_array($this->getMode(), $createModes))
-            throw new Hoa_File_Exception(
+            throw new \Hoa\File\Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
                 0, array($this->getMode(), implode(',', $createModes)));
 
@@ -111,7 +105,7 @@ class          Hoa_File_Link_Write
 
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
             && !file_exists($streamName))
-            throw new Hoa_File_Exception_FileDoesNotExist(
+            throw new \Hoa\File\Exception\FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
 
         $out = parent::_open($streamName, $context);
@@ -126,12 +120,12 @@ class          Hoa_File_Link_Write
      * @param   string  $string    String.
      * @param   int     $length    Length.
      * @return  mixed
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception
      */
     public function write ( $string, $length ) {
 
         if($length <= 0)
-            throw new Hoa_File_Exception(
+            throw new \Hoa\File\Exception(
                 'Length must be greather than 0, given %d.', 0, $length);
 
         return fwrite($this->getStream(), $string, $length);
@@ -229,7 +223,7 @@ class          Hoa_File_Link_Write
         if(false === $n = strpos($line, "\n"))
             return $this->write($line . "\n", strlen($line) + 1);
 
-        $n++;
+        ++$n;
 
         return $this->write(substr($line, 0, $n), $n);
     }
@@ -257,4 +251,6 @@ class          Hoa_File_Link_Write
 
         return ftruncate($this->getStream(), $size);
     }
+}
+
 }

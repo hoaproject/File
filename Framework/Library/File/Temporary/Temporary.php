@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Temporary
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File
+ * \Hoa\File\Exception
  */
-import('File.~');
+-> import('File.Exception.~')
 
 /**
- * Class Hoa_File_Temporary.
+ * \Hoa\File
+ */
+-> import('File.~');
+
+}
+
+namespace Hoa\File\Temporary {
+
+/**
+ * Class \Hoa\File\Temporary.
  *
  * Temporary file handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_File
- * @subpackage  Hoa_File_Temporary
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_File_Temporary extends Hoa_File {
+class Temporary extends \Hoa\File {
 
     /**
      * Temporary file index.
      *
-     * @var Hoa_File_Temporary int
+     * @var \Hoa\File\Temporary int
      */
     private static $_i = 0;
 
@@ -72,7 +70,7 @@ class Hoa_File_Temporary extends Hoa_File {
      *
      * @access  public
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName = null ) {
 
@@ -91,14 +89,14 @@ class Hoa_File_Temporary extends Hoa_File {
      * @access  protected
      * @param   string              $streamName    Stream name (here, it is
      *                                             null).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(false === $out = @tmpfile())
-            throw new Hoa_File_Exception(
+            throw new \Hoa\File\Exception(
                 'Failed to open a temporary stream.', 0);
 
         return $out;
@@ -154,4 +152,6 @@ class Hoa_File_Temporary extends Hoa_File {
 
         return DS . 'tmp' . DS;
     }
+}
+
 }

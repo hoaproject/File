@@ -24,60 +24,58 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Undefined
- *
  */
 
-/**
- * Hoa_File_Abstract
- */
-import('File.Abstract');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File
+ * \Hoa\File\Generic
  */
-import('File.~');
+-> import('File.Generic')
 
 /**
- * Hoa_File_ReadWrite
+ * \Hoa\File
  */
-import('File.ReadWrite');
+-> import('File.~')
 
 /**
- * Hoa_File_Link_ReadWrite
+ * \Hoa\File\ReadWrite
  */
-import('File.Link.ReadWrite');
+-> import('File.ReadWrite')
 
 /**
- * Hoa_File_Directory
+ * \Hoa\File\Link\ReadWrite
  */
-import('File.Directory');
+-> import('File.Link.ReadWrite')
 
 /**
- * Hoa_File_Socket
+ * \Hoa\File\Directory
  */
-import('File.Socket');
+-> import('File.Directory')
 
 /**
- * Class Hoa_File_Undefined.
+ * \Hoa\File\Socket
+ */
+-> import('File.Socket');
+
+}
+
+namespace Hoa\File {
+
+/**
+ * Class \Hoa\File\Undefined.
  *
  * Undefined file handler, i.e. accede to all abstract (super) file method even
  * if the file type is unknown.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_File
- * @subpackage  Hoa_File_Undefined
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_File_Undefined extends Hoa_File_Abstract {
+class Undefined extends Generic {
 
     /**
      * Open a file.
@@ -85,9 +83,9 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
      * @access  public
      * @param   string  $streamName    Stream name.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $context = null ) {
 
@@ -102,12 +100,11 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
      * but this class just allows us to instance parent class.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
-     * @return  resource
-     * @throw   Hoa_File_Exception_FileNotExists
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
+     * @return  void
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         $dummy = null;
 
@@ -127,14 +124,14 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
 
     /**
      * Find an appropriated object that matches with a specific path, e.g. if the
-     * path is a file, return a Hoa_File.
+     * path is a file, return a \Hoa\File.
      *
      * @access  public
      * @param   string  $path       Defining with another path.
      * @param   string  $context    Context ID (please, see the  
-     *                              Hoa_Stream_Context class).
-     * @return  Hoa_File_Abstract
-     * @throw   Hoa_File_Exception
+     *                              \Hoa\Stream\Context class).
+     * @return  \Hoa\File\Generic
+     * @throw   \Hoa\File\Exception
      */
     public function define ( $path = null, $context = null ) {
 
@@ -146,32 +143,34 @@ class Hoa_File_Undefined extends Hoa_File_Abstract {
             $context = $this->getStreamContext()->getCurrentId();
 
         if(true === $this->isLink())
-            return new Hoa_File_Link_ReadWrite(
+            return new Link\ReadWrite(
                 $path,
-                Hoa_File::MODE_APPEND_READ_WRITE,
+                File::MODE_APPEND_READ_WRITE,
                 $context
             );
 
         elseif(true === $this->isFile())
-            return new Hoa_File_ReadWrite(
+            return new ReadWrite(
                 $path,
-                Hoa_File::MODE_APPEND_READ_WRITE,
+                File::MODE_APPEND_READ_WRITE,
                 $context
             );
 
         elseif(true === $this->isDirectory())
-            return new Hoa_File_Directory($path, Hoa_File::MODE_READ, $context);
+            return new Directory($path, File::MODE_READ, $context);
 
         elseif(true === $this->isSocket())
-            return new Hoa_File_Socket(
+            return new Socket(
                 $path,
                 30,
-                Hoa_Socket_Connection_Client::CONNECT,
+                \Hoa\Socket\Connection\Client::CONNECT,
                 $context
             );
 
-        throw new Hoa_File_Exception(
+        throw new Exception(
             'Cannot find an appropriated object that matches with ' .
             'path %s when defining it.', 0, $path);
     }
+}
+
 }

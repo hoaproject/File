@@ -24,44 +24,42 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Link
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File
+ * \Hoa\File\Exception
  */
-import('File.~');
+-> import('File.Exception.~')
 
 /**
- * Hoa_File_Undefined
+ * \Hoa\File
  */
-import('File.Undefined');
+-> import('File.~')
 
 /**
- * Class Hoa_File_Link.
+ * \Hoa\File\Undefined
+ */
+-> import('File.Undefined');
+
+}
+
+namespace Hoa\File\Link {
+
+/**
+ * Class \Hoa\File\Link.
  *
  * Link handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_File
- * @subpackage  Hoa_File_Link
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_File_Link extends Hoa_File {
+class Link extends \Hoa\File {
 
     /**
      * Open a link.
@@ -71,15 +69,15 @@ class Hoa_File_Link extends Hoa_File {
      * @param   string  $mode          Open mode, see the parent::MODE_*
      *                                 constants.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_File_Exception
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\File\Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode, $context = null ) {
 
         if(!is_link($streamName))
-            throw new Hoa_File_Exception(
+            throw new \Hoa\File\Exception(
                 'File %s is not a link.', 0, $streamName);
 
         parent::__construct($streamName, $mode, $context);
@@ -135,8 +133,8 @@ class Hoa_File_Link extends Hoa_File {
      * Get the target of a symbolic link.
      *
      * @access  public
-     * @return  Hoa_File_Abstract
-     * @throw   Hoa_File_Exception
+     * @return  \Hoa\File\Abstract
+     * @throw   \Hoa\File\Exception
      */
     public function getTarget ( ) {
 
@@ -145,7 +143,7 @@ class Hoa_File_Link extends Hoa_File {
         $context   = null !== $this->getStreamContext()
                          ? $this->getStreamContext()->getCurrentId()
                          : null;
-        $undefined = new Hoa_File_Undefined($target, $context);
+        $undefined = new \Hoa\File\Undefined($target, $context);
         $defined   = $undefined->define();
 
         unset($undefined);
@@ -179,4 +177,6 @@ class Hoa_File_Link extends Hoa_File {
 
         return symlink($target, $name);
     }
+}
+
 }

@@ -24,73 +24,66 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Abstract
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_Stream
+ * \Hoa\File\Exception
  */
-import('Stream.~');
+-> import('File.Exception.~')
 
 /**
- * Hoa_Stream_Interface_Pathable
+ * \Hoa\Stream
  */
-import('Stream.Interface.Pathable');
+-> import('Stream.~')
 
 /**
- * Hoa_Stream_Interface_Statable
+ * \Hoa\Stream\IStream\Pathable
  */
-import('Stream.Interface.Statable');
+-> import('Stream.I~.Pathable')
 
 /**
- * Hoa_Stream_Interface_Touchable
+ * \Hoa\Stream\IStream\Statable
  */
-import('Stream.Interface.Touchable');
+-> import('Stream.I~.Statable')
 
 /**
- * Hoa_File_Abstract
+ * \Hoa\Stream\IStream\Touchable
  */
-import('File.Abstract');
+-> import('Stream.I~.Touchable')
 
 /**
- * Hoa_File_Directory
+ * \Hoa\File\Directory
  */
-import('File.Directory');
+-> import('File.Directory');
+
+}
+
+namespace Hoa\File {
 
 /**
- * Class Hoa_File_Abstract.
+ * Class \Hoa\File\Generic.
  *
  * Describe a super-file.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.3
- * @package     Hoa_File
- * @subpackage  Hoa_File_Abstract
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-abstract class Hoa_File_Abstract
-    extends    Hoa_Stream
-    implements Hoa_Stream_Interface_Pathable,
-               Hoa_Stream_Interface_Statable,
-               Hoa_Stream_Interface_Touchable {
+abstract class Generic
+    extends    \Hoa\Stream
+    implements \Hoa\Stream\IStream\Pathable,
+               \Hoa\Stream\IStream\Statable,
+               \Hoa\Stream\IStream\Touchable {
 
     /**
      * Mode.
      *
-     * @var Hoa_File string
+     * @var \Hoa\File string
      */
     protected $_mode = null;
 
@@ -350,15 +343,15 @@ abstract class Hoa_File_Abstract
      * @access  public
      * @param   string  $to       Destination path.
      * @param   bool    $force    Force to copy if the file $to already exists.
-     *                            Use the Hoa_Stream_Interface_Touchable::*OVERWRITE
+     *                            Use the \Hoa\Stream\IStream\Touchable::*OVERWRITE
      *                            constants.
      * @return  bool
      */
-    public function copy ( $to, $force = Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE ) {
+    public function copy ( $to, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
 
         $from = $this->getStreamName();
 
-        if(   $force === Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE
+        if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($to))
             return true;
 
@@ -375,26 +368,26 @@ abstract class Hoa_File_Abstract
      * @param   string  $name     New name.
      * @param   bool    $force    Force to move if the file $name already
      *                            exists.
-     *                            Use the Hoa_Stream_Interface_Touchable::*OVERWRITE
+     *                            Use the \Hoa\Stream\IStream\Touchable::*OVERWRITE
      *                            constants.
      * @param   bool    $mkdir    Force to make directory if does not exist.
-     *                            Use the Hoa_Stream_Interface_Touchable::*DIRECTORY
+     *                            Use the \Hoa\Stream\IStream\Touchable::*DIRECTORY
      *                            constants.
      * @return  bool
      */
-    public function move ( $name, $force = Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE,
-                           $mkdir = Hoa_Stream_Interface_Touchable::DO_NOT_MAKE_DIRECTORY ) {
+    public function move ( $name, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE,
+                           $mkdir = \Hoa\Stream\IStream\Touchable::DO_NOT_MAKE_DIRECTORY ) {
 
         $from = $this->getStreamName();
 
-        if(   $force === Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE
+        if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($name))
             return false;
 
-        if(Hoa_Stream_Interface_Touchable::MAKE_DIRECTORY === $mkdir)
-            Hoa_File_Directory::create(
+        if(\Hoa\Stream\IStream\Touchable::MAKE_DIRECTORY === $mkdir)
+            \Hoa\File\Directory::create(
                 dirname($name),
-                Hoa_File_Directory::MODE_CREATE_RECURSIVE
+                \Hoa\File\Directory::MODE_CREATE_RECURSIVE
             );
 
         if(null === $this->getStreamContext())
@@ -658,4 +651,6 @@ abstract class Hoa_File_Abstract
 
         return $file;
     }
+}
+
 }

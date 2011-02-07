@@ -24,59 +24,57 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Directory
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_Exception_FileDoesNotExist
+ * \Hoa\File\Exception
  */
-import('File.Exception.FileDoesNotExist');
+-> import('File.Exception.~')
 
 /**
- * Hoa_File_Abstract
+ * \Hoa\File\Exception\FileDoesNotExist
  */
-import('File.Abstract');
+-> import('File.Exception.FileDoesNotExist')
 
 /**
- * Hoa_File_Finder
+ * \Hoa\File\Generic
  */
-import('File.Finder');
+-> import('File.Generic')
 
 /**
- * Hoa_Stream_Exception
+ * \Hoa\File\Finder
  */
-import('Stream.Exception');
+-> import('File.Finder')
 
 /**
- * Hoa_Stream_Context
+ * \Hoa\Stream\Exception
  */
-import('Stream.Context');
+-> import('Stream.Exception')
 
 /**
- * Class Hoa_File_Directory.
+ * \Hoa\Stream\Context
+ */
+-> import('Stream.Context');
+
+}
+
+namespace Hoa\File {
+
+/**
+ * Class \Hoa\File\Directory.
  *
  * Directory handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_File
- * @subpackage  Hoa_File_Directory
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_File_Directory extends Hoa_File_Abstract {
+class Directory extends Generic {
 
     /**
      * Open for reading.
@@ -110,9 +108,9 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
      * @param   string  $streamName    Stream name.
      * @param   string  $mode          Open mode, see the self::MODE* constants.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = self::MODE_READ,
                                   $context = null ) {
@@ -125,17 +123,17 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
-     * @param   Hoa_Stream_Context  $context       Context.
+     * @param   string               $streamName    Stream name (e.g. path or URL).
+     * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   Hoa_File_Exception_FileDoesNotExist
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception\FileDoesNotExist
+     * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, Hoa_Stream_Context $context = null ) {
+    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(false === is_dir($streamName))
             if($this->getMode() == self::MODE_READ)
-                throw new Hoa_File_Exception_FileDoesNotExist(
+                throw new Exception\FileDoesNotExist(
                     'Directory %s does not exist.', 0, $streamName);
             else
                 self::create(
@@ -149,14 +147,14 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
         if(null === $context) {
 
             if(false === $out = @fopen($streamName, 'r'))
-                throw new Hoa_File_Exception(
+                throw new Exception(
                     'Failed to open stream %s.', 1, $streamName);
 
             return $out;
         }
 
         if(false === $out = @fopen($streamName, 'r', $context->getContext()))
-            throw new Hoa_File_Exception(
+            throw new Exception(
                 'Failed to open stream %s.', 2, $streamName);
 
         return $out;
@@ -180,25 +178,25 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
      * @access  public
      * @param   string  $to       Destination path.
      * @param   bool    $force    Force to copy if the file $to already exists.
-     *                            Use the Hoa_Stream_Interface_Touchable::*OVERWRITE
+     *                            Use the \Hoa\Stream\IStream\Touchable::*OVERWRITE
      *                            constants.
      * @return  bool
-     * @throw   Hoa_File_Exception
+     * @throw   \Hoa\File\Exception
      */
-    public function copy ( $to, $force = Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE ) {
+    public function copy ( $to, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
 
         $from   = $this->getStreamName();
-        $finder = new Hoa_File_Finder(
+        $finder = new Finder(
             $from,
-            Hoa_File_Finder::LIST_ALL |
-            Hoa_File_Finder::LIST_NO_DOT
+            Finder::LIST_ALL |
+            Finder::LIST_NO_DOT
         );
 
         self::create($to, self::MODE_CREATE_RECURSIVE);
 
         foreach($finder as $key => $file) {
 
-            if(   $force === Hoa_Stream_Interface_Touchable::DO_NOT_OVERWRITE
+            if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
                && file_exists($to . DS . $file))
                 continue;
 
@@ -206,7 +204,6 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
                 $to . DS . substr($file->getStreamName(), strlen($from) + 1),
                 $force
             );
-
             $file->close();
         }
 
@@ -224,10 +221,10 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
     public function delete ( ) {
 
         $from   = $this->getStreamName();
-        $finder = new Hoa_File_Finder(
+        $finder = new Finder(
             $from,
-            Hoa_File_Finder::LIST_ALL |
-            Hoa_File_Finder::LIST_NO_DOT
+            Finder::LIST_ALL |
+            Finder::LIST_NO_DOT
         );
 
         foreach($finder as $key => $file)
@@ -247,9 +244,9 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
      * @param   string  $mode       Create mode. Please, see the self::MODE_CREATE*
      *                              constants.
      * @param   string  $context    Context ID (please, see the
-     *                              Hoa_Stream_Context class).
+     *                              \Hoa\Stream\Context class).
      * @return  bool
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public static function create ( $name, $mode = self::MODE_CREATE_RECURSIVE,
                                     $context = null ) {
@@ -261,12 +258,12 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
             return false;
 
         if(null !== $context)
-            if(false === Hoa_Stream_Context::contextExists($context))
-                throw new Hoa_Stream_Exception(
+            if(false === \Hoa\Stream\Context::contextExists($context))
+                throw new \Hoa\Stream\Exception(
                     'Context %s was not previously declared, cannot retrieve ' .
                     'this context.', 3, $context);
             else
-                $context = Hoa_Stream_Context::getInstance($context);
+                $context = \Hoa\Stream\Context::getInstance($context);
 
         if(null === $context)
             return @mkdir(
@@ -282,4 +279,6 @@ class Hoa_File_Directory extends Hoa_File_Abstract {
             $context->getContext()
         );
     }
+}
+
 }

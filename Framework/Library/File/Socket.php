@@ -24,54 +24,52 @@
  * You should have received a copy of the GNU General Public License
  * along with HOA Open Accessibility; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- *
- * @category    Framework
- * @package     Hoa_File
- * @subpackage  Hoa_File_Socket
- *
  */
 
-/**
- * Hoa_File_Exception
- */
-import('File.Exception');
+namespace {
+
+from('Hoa')
 
 /**
- * Hoa_File_ReadWrite
+ * \Hoa\File\Exception
  */
-import('File.ReadWrite');
+-> import('File.Exception.~')
 
 /**
- * Hoa_Socket_Connection_Client
+ * \Hoa\File\ReadWrite
  */
-import('Socket.Connection.Client');
+-> import('File.ReadWrite')
 
 /**
- * Hoa_Socket_Unix
+ * \Hoa\Socket\Connection\Client
  */
-import('Socket.Unix');
+-> import('Socket.Connection.Client')
 
 /**
- * Class Hoa_File_Socket.
+ * \Hoa\Socket\Unix
+ */
+-> import('Socket.Unix');
+
+}
+
+namespace Hoa\File {
+
+/**
+ * Class \Hoa\File\Socket.
  *
  * Socket handler.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright (c) 2007, 2010 Ivan ENDERLIN.
- * @license     http://gnu.org/licenses/gpl.txt GNU GPL
- * @since       PHP 5
- * @version     0.1
- * @package     Hoa_File
- * @subpackage  Hoa_File_Socket
+ * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright (c) 2007, 2010 Ivan ENDERLIN.
+ * @license    http://gnu.org/licenses/gpl.txt GNU GPL
  */
 
-class Hoa_File_Socket extends Hoa_File_ReadWrite {
+class Socket extends ReadWrite {
 
     /**
      * Wrapped socket.
      *
-     * @var Hoa_Socket_Connection_Client object
+     * @var \Hoa\Socket\Connection\Client object
      */
     private $_socket = null;
 
@@ -84,21 +82,21 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
      * @param   string  $streamName    Stream name.
      * @param   int     $timeout       Timeout.
      * @param   int     $flag          Flag, see the
-     *                                 Hoa_Socket_Connection_Client::*
+     *                                 \Hoa\Socket\Connection\Client::*
      *                                 constants.
      * @param   string  $context       Context ID (please, see the
-     *                                 Hoa_Stream_Context class).
+     *                                 \Hoa\Stream\Context class).
      * @return  void
-     * @throw   Hoa_File_Exception
-     * @throw   Hoa_Stream_Exception
+     * @throw   \Hoa\File\Exception
+     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName,
                                   $timeout = 30,
-                                  $flag    = Hoa_Socket_Connection_Client::CONNECT,
+                                  $flag    = \Hoa\Socket\Connection\Client::CONNECT,
                                   $context = null ) {
 
-        $this->_socket = new Hoa_Socket_Connection_Client(
-            new Hoa_Socket_Unix($streamName, 'unix'),
+        $this->_socket = new \Hoa\Socket\Connection\Client(
+            new \Hoa\Socket\Unix($streamName, 'unix'),
             $timeout,
             $flag,
             $context
@@ -112,7 +110,7 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
      * Get the wrapped socket.
      *
      * @access  private
-     * @return  Hoa_Socket_Connection_Client
+     * @return  \Hoa\Socket\Connection\Client
      */
     private function getSocket ( ) {
 
@@ -122,9 +120,9 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
     /**
      * Override the getStreamName() method.
      * PHP does not have a multiple inheritance. So, we wrap the
-     * Hoa_Socket_Connection_Client and redirect all calls to the
+     * \Hoa\Socket\Connection\Client and redirect all calls to the
      * getStreamName() method to the wrapped socket. In this way, we benefit
-     * from all Hoa_File methods and Hoa_Socket_Connection_Client methods.
+     * from all \Hoa\File methods and \Hoa\Socket\Connection\Client methods.
      *
      * @access  protected
      * @return  string
@@ -137,9 +135,9 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
     /**
      * Override the getStream() method.
      * PHP does not have a multiple inheritance. So, we wrap the
-     * Hoa_Socket_Connection_Client and redirect all calls to the
+     * \Hoa\Socket\Connection\Client and redirect all calls to the
      * getStreamName() method to the wrapped socket. In this way, we benefit
-     * from all Hoa_File methods and Hoa_Socket_Connection_Client methods.
+     * from all \Hoa\File methods and \Hoa\Socket\Connection\Client methods.
      *
      * @access  protected
      * @return  resource
@@ -152,15 +150,17 @@ class Hoa_File_Socket extends Hoa_File_ReadWrite {
     /**
      * Override the getStreamContext() method.
      * PHP does not have a multiple inheritance. So, we wrap the
-     * Hoa_Socket_Connection_Client and redirect all calls to the
+     * \Hoa\Socket\Connection\Client and redirect all calls to the
      * getStreamName() method to the wrapped socket. In this way, we benefit
-     * from all Hoa_File methods and Hoa_Socket_Connection_Client methods.
+     * from all \Hoa\File methods and \Hoa\Socket\Connection\Client methods.
      *
      * @access  protected
-     * @return  Hoa_Stream_Context
+     * @return  \Hoa\Stream\Context
      */
     public function getStreamContext ( ) {
 
         return $this->getSocket()->getStreamContext();
     }
+}
+
 }
