@@ -126,9 +126,10 @@ class Write extends Temporary implements \Hoa\Stream\IStream\Out {
      */
     public function write ( $string, $length ) {
 
-        if($length <= 0)
+        if($length < 0)
             throw new \Hoa\File\Exception(
-                'Length must be greather than 0, given %d.', 0, $length);
+                'Length must be greather than or equal to 0, given %d.',
+                0, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }
