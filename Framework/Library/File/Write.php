@@ -106,7 +106,8 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
         preg_match('#^(\w+)://#', $streamName, $match);
 
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
-            && !file_exists($streamName))
+            && !file_exists($streamName)
+            && parent::MODE_TRUNCATE_WRITE == $this->getMode())
             throw new Exception\FileDoesNotExist(
                 'File %s does not exist.', 0, $streamName);
 
