@@ -78,8 +78,8 @@ namespace Hoa\File {
  * Undefined file handler, i.e. accede to all abstract (super) file method even
  * if the file type is unknown.
  *
- * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright  Copyright © 2007-2011 Ivan Enderlin.
  * @license    New BSD License
  */
 

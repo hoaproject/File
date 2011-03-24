@@ -73,8 +73,8 @@ namespace Hoa\File {
  * Propose a finder to scan directory. It returns a neutral (undefined) file
  * that should be infered to a real file object.
  *
- * @author      Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
- * @copyright   Copyright © 2007-2011 Ivan ENDERLIN.
+ * @author      Ivan Enderlin <ivan.enderlin@hoa-project.net>
+ * @copyright   Copyright © 2007-2011 Ivan Enderlin.
  * @license     New BSD License
  */
 
