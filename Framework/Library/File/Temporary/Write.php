@@ -64,7 +64,7 @@ namespace Hoa\File\Temporary {
  *
  * @author     Ivan ENDERLIN <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright (c) 2007, 2011 Ivan ENDERLIN.
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 class Write extends Temporary implements \Hoa\Stream\IStream\Out {

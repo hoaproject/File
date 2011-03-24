@@ -62,7 +62,7 @@ namespace Hoa\File\Link {
  *
  * File handler.
  *
- * @license    http://gnu.org/licenses/gpl.txt GNU GPL
+ * @license    New BSD License
  */
 
 class Write extends Link implements \Hoa\Stream\IStream\Out {
