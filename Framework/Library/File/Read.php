@@ -239,20 +239,8 @@ class Read extends File implements \Hoa\Stream\IStream\In {
      */
     public function readAll ( ) {
 
-        if(true === $this->isStreamResourceMustBeUsed()) {
-
-            $current = $this->tell();
-
-            $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
-            $end     = $this->tell();
-
-            $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
-            $handle  = $this->read($end);
-
-            $this->seek($current, \Hoa\Stream\IStream\Pointable::SEEK_SET);
-
-            return $handle;
-        }
+        if(true === $this->isStreamResourceMustBeUsed())
+            return stream_get_contents($this->getStream());
 
         if(PHP_VERSION_ID < 60000)
             $second = true;
