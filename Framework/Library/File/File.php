@@ -201,7 +201,7 @@ abstract class File
 
         if(null === $context) {
 
-            if(false === $out = @fopen($streamName, $this->getMode()))
+            if(false === $out = @fopen($streamName, $this->getMode(), true))
                 throw new Exception(
                     'Failed to open stream %s.', 1, $streamName);
 
