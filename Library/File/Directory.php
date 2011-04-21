@@ -152,18 +152,7 @@ class Directory extends Generic {
                         : null
                 );
 
-        if(null === $context) {
-
-            if(false === $out = @fopen($streamName, 'r'))
-                throw new Exception(
-                    'Failed to open stream %s.', 1, $streamName);
-
-            return $out;
-        }
-
-        if(false === $out = @fopen($streamName, 'r', $context->getContext()))
-            throw new Exception(
-                'Failed to open stream %s.', 2, $streamName);
+        $out = null;
 
         return $out;
     }
