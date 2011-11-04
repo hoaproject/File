@@ -234,6 +234,25 @@ abstract class File
     }
 
     /**
+     * Start a new buffer.
+     * The callable acts like a light filter.
+     *
+     * @access  public
+     * @param   mixed  $call    First callable part.
+     * @param   mixed  $able    Second callable part (if needed).
+     * @param   int    $size    Size.
+     * @return  int
+     */
+    public function newBuffer ( $call = null, $able = '', $size = null ) {
+
+        $this->setStreamBuffer($size);
+
+        //@TODO manage $call & $able as a filter?
+
+        return 1;
+    }
+
+    /**
      * Flush the output to a stream.
      *
      * @access  public
@@ -242,6 +261,39 @@ abstract class File
     public function flush ( ) {
 
         return fflush($this->getStream());
+    }
+
+    /**
+     * Delete buffer.
+     *
+     * @access  public
+     * @return  bool
+     */
+    public function deleteBuffer ( ) {
+
+        return $this->disableStreamBuffer();
+    }
+
+    /**
+     * Get bufffer level.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getBufferLevel ( ) {
+
+        return 1;
+    }
+
+    /**
+     * Get buffer size.
+     *
+     * @access  public
+     * @return  int
+     */
+    public function getBufferSize ( ) {
+
+        return $this->getStreamBufferSize();
     }
 
     /**
