@@ -176,6 +176,22 @@ abstract class File
     public function __construct ( $streamName, $mode, $context = null ) {
 
         $this->setMode($mode);
+
+        switch($streamName) {
+
+            case '0':
+                $streamName = 'php://stdin';
+              break;
+
+            case '1':
+                $streamName = 'php://stdout';
+              break;
+
+            case '2':
+                $streamName = 'php://stderr';
+              break;
+        }
+
         parent::__construct($streamName, $context);
 
         return;
