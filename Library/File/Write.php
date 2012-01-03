@@ -92,7 +92,7 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
      * Open the stream and return the associated resource.
      *
      * @access  protected
-     * @param   string              $streamName    Stream name (e.g. path or URL).
+     * @param   string               $streamName    Stream name (e.g. path or URL).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
      * @throw   \Hoa\File\Exception\FileDoesNotExist
