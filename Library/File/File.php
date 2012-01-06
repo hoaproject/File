@@ -166,7 +166,7 @@ abstract class File
      * Open a file.
      *
      * @access  public
-     * @param   string  $streamName    Stream name.
+     * @param   string  $streamName    Stream name (or file descriptor).
      * @param   string  $mode          Open mode, see the self::MODE_* constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
@@ -190,6 +190,16 @@ abstract class File
             case '2':
                 $streamName = 'php://stderr';
               break;
+
+            default:
+                if(true === ctype_digit($streamName))
+                   if(PHP_VERSION_ID >= 50306)
+                        $streamName = 'php://fd/' . $streamName;
+                    else
+                        throw new Exception(
+                            'You need PHP5.3.6 to use a file descriptor ' .
+                            'other than 0, 1 or 2 (tried %d with PHP%s).',
+                            0, array($streamName, PHP_VERSION));
         }
 
         parent::__construct($streamName, $context);
