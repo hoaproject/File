@@ -107,7 +107,7 @@ class Write extends Link implements \Hoa\Stream\IStream\Out {
         if(!in_array($this->getMode(), $createModes))
             throw new \Hoa\File\Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(',', $createModes)));
+                0, array($this->getMode(), implode(', ', $createModes)));
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
