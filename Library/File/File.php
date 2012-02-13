@@ -193,7 +193,7 @@ abstract class File
 
             default:
                 if(true === ctype_digit($streamName))
-                   if(PHP_VERSION_ID >= 50306)
+                    if(PHP_VERSION_ID >= 50306)
                         $streamName = 'php://fd/' . $streamName;
                     else
                         throw new Exception(
