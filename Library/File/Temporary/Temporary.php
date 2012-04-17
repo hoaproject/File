@@ -77,16 +77,21 @@ class Temporary extends \Hoa\File {
      * Open a temporary file.
      *
      * @access  public
+     * @param   string  $streamName    Stream name (or file descriptor).
+     * @param   string  $mode          Open mode, see the parent::MODE_*
+     *                                 constants.
+     * @param   string  $context       Context ID (please, see the
+     *                                 \Hoa\Stream\Context class).
      * @return  void
      * @throw   \Hoa\Stream\Exception
      */
-    public function __construct ( $streamName = null ) {
+    public function __construct ( $streamName, $mode, $context = null ) {
 
         if(null === $streamName)
             $streamName = 'hoa://Library/File/Temporary.php#' .
                           self::$_i++;
 
-        parent::__construct($streamName, null);
+        parent::__construct($streamName, $mode, $context);
 
         return;
     }
