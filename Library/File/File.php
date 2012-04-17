@@ -167,7 +167,8 @@ abstract class File
      *
      * @access  public
      * @param   string  $streamName    Stream name (or file descriptor).
-     * @param   string  $mode          Open mode, see the self::MODE_* constants.
+     * @param   string  $mode          Open mode, see the self::MODE_*
+     *                                 constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
      * @return  void
