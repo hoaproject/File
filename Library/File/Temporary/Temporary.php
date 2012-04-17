@@ -127,7 +127,7 @@ class Temporary extends \Hoa\File {
      *                                system's temporary directory.
      * @param   string  $prefix       Prefix of the generated temporary
      *                                filename.
-     * @return  bool
+     * @return  string
      */
     public static function create ( $directory = null, $prefix = '__hoa_' ) {
 
@@ -146,25 +146,7 @@ class Temporary extends \Hoa\File {
      */
     public static function getTemporaryDirectory ( ) {
 
-        if(PHP_VERSION_ID >= 50201)
-            return sys_get_temp_dir();
-
-        if(OS_WIN) {
-
-            if(isset($_ENV['TEMP']))          return $_ENV['TEMP'];
-            if(isset($_ENV['TMP']))           return $_ENV['TMP'] . DS;
-            if(isset($_ENV['windir']))        return $_ENV['windir'] . DS . 'temp' . DS;
-            if(isset($_ENV['SystemRoot']))    return $_ENV['SystemRoot'] . DS . 'temp' . DS;
-            if(isset($_SERVER['TEMP']))       return $_SERVER['TEMP'] . DS;
-            if(isset($_SERVER['TMP']))        return $_SERVER['TMP'] . DS;
-            if(isset($_SERVER['windir']))     return $_SERVER['windir'] . DS . 'temp' . DS;
-            if(isset($_SERVER['SystemRoot'])) return $_SERVER['SystemRoot'] . DS . 'temp' . DS;
-        }
-
-        if(isset($_ENV['TMPDIR']))            return $_ENV['TMPDIR'] . DS;
-        if(isset($_SERVER['TMPDIR']))         return $_SERVER['TMPDIR'] . DS;
-
-        return DS . 'tmp' . DS;
+        return sys_get_temp_dir();
     }
 }
 
