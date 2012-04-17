@@ -129,10 +129,11 @@ class Temporary extends \Hoa\File {
      *                                filename.
      * @return  bool
      */
-    public static function create ( $directory = '/tmp', $prefix = '__hoa_' ) {
+    public static function create ( $directory = null, $prefix = '__hoa_' ) {
 
-        if(file_exists($name))
-            return true;
+        if(   null === $directory
+          || false === is_dir($directory))
+            $directory = static::getTemporaryDirectory();
 
         return tempnam($directory, $prefix);
     }
