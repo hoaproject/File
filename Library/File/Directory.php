@@ -117,14 +117,15 @@ class Directory extends Generic {
      * @param   string  $mode          Open mode, see the self::MODE* constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = self::MODE_READ,
-                                  $context = null ) {
+                                  $context = null, $wait = false ) {
 
         $this->setMode($mode);
-        parent::__construct($streamName, $context);
+        parent::__construct($streamName, $context, $wait);
     }
 
     /**

@@ -92,12 +92,13 @@ class Undefined extends Generic {
      * @param   string  $streamName    Stream name.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\Stream\Exception
      */
-    public function __construct ( $streamName, $context = null ) {
+    public function __construct ( $streamName, $context = null, $wait = false ) {
 
-        parent::__construct($streamName, $context);
+        parent::__construct($streamName, $context, $wait);
 
         return;
     }

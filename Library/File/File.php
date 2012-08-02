@@ -171,10 +171,12 @@ abstract class File
      *                                 constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\Stream\Exception
      */
-    public function __construct ( $streamName, $mode, $context = null ) {
+    public function __construct ( $streamName, $mode, $context = null,
+                                  $wait = false ) {
 
         $this->setMode($mode);
 
@@ -203,7 +205,7 @@ abstract class File
                             0, array($streamName, PHP_VERSION));
         }
 
-        parent::__construct($streamName, $context);
+        parent::__construct($streamName, $context, $wait);
 
         return;
     }

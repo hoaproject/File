@@ -94,6 +94,7 @@ class Socket extends ReadWrite {
      *                                 constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\File\Exception
      * @throw   \Hoa\Stream\Exception
@@ -101,7 +102,8 @@ class Socket extends ReadWrite {
     public function __construct ( $streamName,
                                   $timeout = 30,
                                   $flag    = \Hoa\Socket\Connection\Client::CONNECT,
-                                  $context = null ) {
+                                  $context = null,
+                                  $wait    = false ) {
 
         $this->_socket = new \Hoa\Socket\Connection\Client(
             new \Hoa\Socket\Unix($streamName, 'unix'),

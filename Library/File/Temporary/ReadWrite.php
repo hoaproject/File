@@ -85,13 +85,14 @@ class          ReadWrite
      * @param   string  $mode          Open mode, see the parent::MODE_* constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = parent::MODE_APPEND_READ_WRITE,
-                                  $context = null ) {
+                                  $context = null, $wait = false ) {
 
-        parent::__construct($streamName, $mode, $context);
+        parent::__construct($streamName, $mode, $context, $wait);
 
         return;
     }

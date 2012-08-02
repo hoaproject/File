@@ -82,16 +82,18 @@ class Temporary extends \Hoa\File {
      *                                 constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\Stream\Exception
      */
-    public function __construct ( $streamName, $mode, $context = null ) {
+    public function __construct ( $streamName, $mode, $context = null,
+                                  $wait = false ) {
 
         if(null === $streamName)
             $streamName = 'hoa://Library/File/Temporary.php#' .
                           self::$_i++;
 
-        parent::__construct($streamName, $mode, $context);
+        parent::__construct($streamName, $mode, $context, $wait);
 
         return;
     }

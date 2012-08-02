@@ -78,17 +78,19 @@ class Link extends \Hoa\File {
      *                                 constants.
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
+     * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\File\Exception
      * @throw   \Hoa\Stream\Exception
      */
-    public function __construct ( $streamName, $mode, $context = null ) {
+    public function __construct ( $streamName, $mode, $context = null,
+                                  $wait = false ) {
 
         if(!is_link($streamName))
             throw new \Hoa\File\Exception(
                 'File %s is not a link.', 0, $streamName);
 
-        parent::__construct($streamName, $mode, $context);
+        parent::__construct($streamName, $mode, $context, $wait);
     }
 
     /**
