@@ -393,9 +393,9 @@ abstract class Generic
             return false;
 
         if(\Hoa\Stream\IStream\Touchable::MAKE_DIRECTORY === $mkdir)
-            \Hoa\File\Directory::create(
+            Directory::create(
                 dirname($name),
-                \Hoa\File\Directory::MODE_CREATE_RECURSIVE
+                Directory::MODE_CREATE_RECURSIVE
             );
 
         if(null === $this->getStreamContext())
