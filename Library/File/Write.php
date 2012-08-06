@@ -118,7 +118,7 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
             && !file_exists($streamName)
             && parent::MODE_TRUNCATE_WRITE == $this->getMode())
             throw new Exception\FileDoesNotExist(
-                'File %s does not exist.', 0, $streamName);
+                'File %s does not exist.', 1, $streamName);
 
         $out = parent::_open($streamName, $context);
 
@@ -138,8 +138,7 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
 
         if(0 > $length)
             throw new Exception(
-                'Length must be greather than or equal to 0, given %d.',
-                0, $length);
+                'Length must be greater than 0, given %d.', 2, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }

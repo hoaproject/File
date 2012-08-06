@@ -127,7 +127,7 @@ class          ReadWrite
             && !file_exists($streamName)
             && parent::MODE_READ_WRITE == $this->getMode())
             throw new Exception\FileDoesNotExist(
-                'File %s does not exist.', 0, $streamName);
+                'File %s does not exist.', 1, $streamName);
 
         $out = parent::_open($streamName, $context);
 
@@ -155,9 +155,9 @@ class          ReadWrite
      */
     public function read ( $length ) {
 
-        if($length <= 0)
+        if(0 > $length)
             throw new Exception(
-                'Length must be greather than 0, given %d.', 3, $length);
+                'Length must be greater than 0, given %d.', 2, $length);
 
         return fread($this->getStream(), $length);
     }
@@ -308,10 +308,9 @@ class          ReadWrite
      */
     public function write ( $string, $length ) {
 
-        if($length < 0)
+        if(0 > $length)
             throw new Exception(
-                'Length must be greather than or equal to 0, given %d.',
-                0, $length);
+                'Length must be greater than 0, given %d.', 3, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }

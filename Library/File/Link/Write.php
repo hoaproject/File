@@ -115,7 +115,7 @@ class Write extends Link implements \Hoa\Stream\IStream\Out {
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
             && !file_exists($streamName))
             throw new \Hoa\File\Exception\FileDoesNotExist(
-                'File %s does not exist.', 0, $streamName);
+                'File %s does not exist.', 1, $streamName);
 
         $out = parent::_open($streamName, $context);
 
@@ -133,10 +133,9 @@ class Write extends Link implements \Hoa\Stream\IStream\Out {
      */
     public function write ( $string, $length ) {
 
-        if($length < 0)
+        if(0 > $length)
             throw new \Hoa\File\Exception(
-                'Length must be greather than or equal to 0, given %d.',
-                0, $length);
+                'Length must be greater than 0, given %d.', 2, $length);
 
         return fwrite($this->getStream(), $string, $length);
     }
