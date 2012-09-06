@@ -61,12 +61,7 @@ from('Hoa')
 /**
  * \Hoa\File\Directory
  */
--> import('File.Directory')
-
-/**
- * \Hoa\File\Socket
- */
--> import('File.Socket');
+-> import('File.Directory');
 
 }
 
@@ -167,14 +162,6 @@ class Undefined extends Generic {
 
         elseif(true === $this->isDirectory())
             return new Directory($path, File::MODE_READ, $context);
-
-        elseif(true === $this->isSocket())
-            return new Socket(
-                $path,
-                30,
-                \Hoa\Socket\Connection\Client::CONNECT,
-                $context
-            );
 
         throw new Exception(
             'Cannot find an appropriated object that matches with ' .
