@@ -166,7 +166,7 @@ class Directory extends Generic {
      */
     protected function _close ( ) {
 
-        return fclose($this->getStream());
+        return true;
     }
 
     /**
