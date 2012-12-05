@@ -240,37 +240,7 @@ class Read extends Temporary implements \Hoa\Stream\IStream\In {
      */
     public function readAll ( ) {
 
-        if(true === $this->isStreamResourceMustBeUsed()) {
-
-            $current = $this->tell();
-
-            $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_END);
-            $end     = $this->tell();
-
-            $this->seek(0, \Hoa\Stream\IStream\Pointable::SEEK_SET);
-            $handle  = $this->read($end);
-
-            $this->seek($current, \Hoa\Stream\IStream\Pointable::SEEK_SET);
-
-            return $handle;
-        }
-
-        if(PHP_VERSION_ID < 60000)
-            $second = true;
-        else
-            $second = 0;
-
-        if(null === $this->getStreamContext())
-            $third  = null;
-        else
-            $third  = $this->getStreamContext()->getContext();
-
-        return file_get_contents(
-            $this->getStreamName(),
-            $second,
-            $third,
-            0
-        );
+        return stream_get_contents($this->getStream());
     }
 
     /**
