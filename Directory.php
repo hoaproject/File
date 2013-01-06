@@ -192,7 +192,7 @@ class Directory extends Generic {
 
         self::create($to, self::MODE_CREATE_RECURSIVE);
 
-        foreach($finder as $key => $file) {
+        foreach($finder as $file) {
 
             if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
                && file_exists($to . DS . $file))
@@ -225,7 +225,7 @@ class Directory extends Generic {
             Finder::LIST_NO_DOT
         );
 
-        foreach($finder as $key => $file)
+        foreach($finder as $file)
             $file->define()->delete();
 
         if(null === $this->getStreamContext())
