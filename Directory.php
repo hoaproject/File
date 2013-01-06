@@ -225,8 +225,11 @@ class Directory extends Generic {
             Finder::LIST_NO_DOT
         );
 
-        foreach($finder as $file)
+        foreach($finder as $file) {
+
             $file->define()->delete();
+            $file->close();
+        }
 
         if(null === $this->getStreamContext())
             return @rmdir($from);
