@@ -54,9 +54,9 @@ from('Hoa')
 -> import('Iterator.~~')
 
 /**
- * \Hoa\Iterator\Recursive\IteratorIterator
+ * \Hoa\Iterator\Recursive\Iterator
  */
--> import('Iterator.Recursive.IteratorIterator')
+-> import('Iterator.Recursive.Iterator')
 
 /**
  * \Hoa\Iterator\Recursive\Directory
@@ -71,7 +71,12 @@ from('Hoa')
 /**
  * \Hoa\Iterator\CallbackFilter
  */
--> import('Iterator.CallbackFilter');
+-> import('Iterator.CallbackFilter')
+
+/**
+ * \Hoa\File\SplFileInfo
+ */
+-> import('File.SplFileInfo');
 
 }
 
@@ -90,53 +95,60 @@ namespace Hoa\File {
 class Finder implements \Hoa\Iterator\Aggregate {
 
     /**
+     * SplFileInfo classname.
+     *
+     * @var \Hoa\File\Finder string
+     */
+    protected $_splFileInfo = 'Hoa\File\SplFileInfo';
+
+    /**
      * Paths where to look for.
      *
      * @var \Hoa\File\Finder array
      */
-    protected $_paths    = array();
+    protected $_paths       = array();
 
     /**
      * Max depth in recursion.
      *
      * @var \Hoa\File\Finder int
      */
-    protected $_maxDepth = -1;
+    protected $_maxDepth    = -1;
 
     /**
      * Filters.
      *
      * @var \Hoa\File\Finder array
      */
-    protected $_filters  = array();
+    protected $_filters     = array();
 
     /**
      * Flags.
      *
      * @var \Hoa\File\Finder int
      */
-    protected $_flags    = -1;
+    protected $_flags       = -1;
 
     /**
      * Types of files to handle.
      *
      * @var \Hoa\File\Finder array
      */
-    protected $_types    = array();
+    protected $_types       = array();
 
     /**
      * What comes first: parent or child?
      *
      * @var \Hoa\File\Finder int
      */
-    protected $_first    = -1;
+    protected $_first       = -1;
 
     /**
      * Sorts.
      *
      * @var \Hoa\File\Finder array
      */
-    protected $_sorts    = array();
+    protected $_sorts       = array();
 
 
 
@@ -151,7 +163,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
         $this->_flags =   \Hoa\Iterator\FileSystem::KEY_AS_PATHNAME
                         | \Hoa\Iterator\FileSystem::CURRENT_AS_FILEINFO
                         | \Hoa\Iterator\FileSystem::SKIP_DOTS;
-        $this->_first = \Hoa\Iterator\Recursive\IteratorIterator::SELF_FIRST;
+        $this->_first = \Hoa\Iterator\Recursive\Iterator::SELF_FIRST;
 
         return;
     }
@@ -624,7 +636,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
      */
     public function childFirst ( ) {
 
-        $this->_first = \Hoa\Iterator\Recursive\IteratorIterator::CHILD_FIRST;
+        $this->_first = \Hoa\Iterator\Recursive\Iterator::CHILD_FIRST;
 
         return $this;
     }
@@ -646,7 +658,8 @@ class Finder implements \Hoa\Iterator\Aggregate {
                 return in_array($current->getType(), $types);
             };
 
-        $maxDepth = $this->getMaxDepth();
+        $maxDepth    = $this->getMaxDepth();
+        $splFileInfo = $this->getSplFileInfo();
 
         foreach($this->getPaths() as $path) {
 
@@ -654,16 +667,18 @@ class Finder implements \Hoa\Iterator\Aggregate {
                 $iterator = new \Hoa\Iterator\IteratorIterator(
                     new \Hoa\Iterator\Recursive\Directory(
                         $path,
-                        $this->getFlags()
+                        $this->getFlags(),
+                        $splFileInfo
                     ),
                     $this->getFirst()
                 );
             else {
 
-                $iterator = new \Hoa\Iterator\Recursive\IteratorIterator(
+                $iterator = new \Hoa\Iterator\Recursive\Iterator(
                     new \Hoa\Iterator\Recursive\Directory(
                         $path,
-                        $this->getFlags()
+                        $this->getFlags(),
+                        $splFileInfo
                     ),
                     $this->getFirst()
                 );
@@ -692,6 +707,32 @@ class Finder implements \Hoa\Iterator\Aggregate {
             uasort($array, $sort);
 
         return new \ArrayIterator($array);
+    }
+
+    /**
+     * Set SplFileInfo classname.
+     *
+     * @access  public
+     * @param   string  $splFileInfo    SplFileInfo classname.
+     * @return  string
+     */
+    public function setSplFileInfo ( $splFileInfo ) {
+
+        $old                = $this->_splFileInfo;
+        $this->_splFileInfo = $splFileInfo;
+
+        return $old;
+    }
+
+    /**
+     * Get SplFileInfo classname.
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getSplFileInfo ( ) {
+
+        return $this->_splFileInfo;
     }
 
     /**
