@@ -91,7 +91,6 @@ class Link extends \Hoa\File {
      * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\File\Exception
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode, $context = null,
                                   $wait = false ) {
@@ -101,6 +100,8 @@ class Link extends \Hoa\File {
                 'File %s is not a link.', 0, $streamName);
 
         parent::__construct($streamName, $mode, $context, $wait);
+
+        return;
     }
 
     /**

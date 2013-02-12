@@ -87,7 +87,6 @@ class          ReadWrite
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      * @return  void
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = parent::MODE_APPEND_READ_WRITE,
                                   $context = null, $wait = false ) {

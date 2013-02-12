@@ -84,7 +84,6 @@ class Temporary extends \Hoa\File {
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      * @return  void
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode, $context = null,
                                   $wait = false ) {

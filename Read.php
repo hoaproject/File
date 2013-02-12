@@ -79,7 +79,6 @@ class Read extends File implements \Hoa\Stream\IStream\In {
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      * @return  void
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = parent::MODE_READ,
                                   $context = null, $wait = false ) {
