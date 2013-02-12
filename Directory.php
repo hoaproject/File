@@ -59,11 +59,6 @@ from('Hoa')
 -> import('File.Finder')
 
 /**
- * \Hoa\Stream\Exception
- */
--> import('Stream.Exception')
-
-/**
  * \Hoa\Stream\Context
  */
 -> import('Stream.Context');
@@ -119,13 +114,14 @@ class Directory extends Generic {
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      * @return  void
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = self::MODE_READ,
                                   $context = null, $wait = false ) {
 
         $this->setMode($mode);
         parent::__construct($streamName, $context, $wait);
+
+        return;
     }
 
     /**
@@ -183,29 +179,32 @@ class Directory extends Generic {
      */
     public function copy ( $to, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
 
-        $from   = $this->getStreamName();
-        $finder = new Finder(
-            $from,
-            Finder::LIST_ALL |
-            Finder::LIST_NO_DOT
-        );
+        if(empty($to))
+            throw new Exception(
+                'The destination path (to copy) is empty.', 1);
+
+        $from       = $this->getStreamName();
+        $fromLength = strlen($from) + 1;
+        $finder     = new Finder();
+        $finder->in($from);
 
         self::create($to, self::MODE_CREATE_RECURSIVE);
 
         foreach($finder as $file) {
 
-            if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
-               && file_exists($to . DS . $file))
-                continue;
+            $relative = substr($file->getPathname(), $fromLength);
+            $_to      = $to . DS . $relative;
 
-            $file->define()->copy(
-                $to . DS . substr($file->getStreamName(), strlen($from) + 1),
-                $force
-            );
+            if(true === $file->isDir()) {
+
+                self::create($_to, self::MODE_CREATE);
+
+                continue;
+            }
+
+            $file->open()->copy($_to, $force);
             $file->close();
         }
-
-        $finder->close();
 
         return true;
     }
@@ -219,15 +218,13 @@ class Directory extends Generic {
     public function delete ( ) {
 
         $from   = $this->getStreamName();
-        $finder = new Finder(
-            $from,
-            Finder::LIST_ALL |
-            Finder::LIST_NO_DOT
-        );
+        $finder = new Finder();
+        $finder->in($from)
+               ->childFirst();
 
-        foreach($finder as $file) {
+        foreach($finder as $k => $file) {
 
-            $file->define()->delete();
+            $file->open()->delete();
             $file->close();
         }
 
@@ -247,7 +244,7 @@ class Directory extends Generic {
      * @param   string  $context    Context ID (please, see the
      *                              \Hoa\Stream\Context class).
      * @return  bool
-     * @throw   \Hoa\Stream\Exception
+     * @throw   \Hoa\File\Exception
      */
     public static function create ( $name, $mode = self::MODE_CREATE_RECURSIVE,
                                     $context = null ) {
@@ -260,9 +257,9 @@ class Directory extends Generic {
 
         if(null !== $context)
             if(false === \Hoa\Stream\Context::contextExists($context))
-                throw new \Hoa\Stream\Exception(
+                throw new Exception(
                     'Context %s was not previously declared, cannot retrieve ' .
-                    'this context.', 3, $context);
+                    'this context.', 2, $context);
             else
                 $context = \Hoa\Stream\Context::getInstance($context);
 
@@ -270,13 +267,13 @@ class Directory extends Generic {
             return @mkdir(
                 $name,
                 0755,
-                $mode == self::MODE_CREATE_RECURSIVE
+                self::MODE_CREATE_RECURSIVE === $mode
             );
 
         return @mkdir(
             $name,
             0755,
-            $mode == self::MODE_CREATE_RECURSIVE,
+            self::MODE_CREATE_RECURSIVE === $mode,
             $context->getContext()
         );
     }
