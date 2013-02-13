@@ -49,9 +49,19 @@ from('Hoa')
 -> import('File.~')
 
 /**
- * \Hoa\File\Undefined
+ * \Hoa\File\ReadWrite
  */
--> import('File.Undefined');
+-> import('File.ReadWrite')
+
+/**
+ * \Hoa\File\Link\ReadWrite
+ */
+-> import('File.Link.ReadWrite')
+
+/**
+ * \Hoa\File\Directory
+ */
+-> import('File.Directory');
 
 }
 
@@ -81,7 +91,6 @@ class Link extends \Hoa\File {
      * @param   bool    $wait          Differ opening or not.
      * @return  void
      * @throw   \Hoa\File\Exception
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode, $context = null,
                                   $wait = false ) {
@@ -91,6 +100,8 @@ class Link extends \Hoa\File {
                 'File %s is not a link.', 0, $streamName);
 
         parent::__construct($streamName, $mode, $context, $wait);
+
+        return;
     }
 
     /**
@@ -143,7 +154,7 @@ class Link extends \Hoa\File {
      * Get the target of a symbolic link.
      *
      * @access  public
-     * @return  \Hoa\File\Abstract
+     * @return  \Hoa\File\Generic
      * @throw   \Hoa\File\Exception
      */
     public function getTarget ( ) {
@@ -153,12 +164,31 @@ class Link extends \Hoa\File {
         $context   = null !== $this->getStreamContext()
                          ? $this->getStreamContext()->getCurrentId()
                          : null;
-        $undefined = new \Hoa\File\Undefined($target, $context);
-        $defined   = $undefined->define();
 
-        unset($undefined);
+        if(true === is_link($target))
+            return new ReadWrite(
+                $target,
+                \Hoa\File::MODE_APPEND_READ_WRITE,
+                $context
+            );
 
-        return $defined;
+        elseif(true === is_file($target))
+            return new \Hoa\File\ReadWrite(
+                $target,
+                \Hoa\File::MODE_APPEND_READ_WRITE,
+                $context
+            );
+
+        elseif(true === is_dir($target))
+            return new \Hoa\File\Directory(
+                $target,
+                \Hoa\File::MODE_READ,
+                $context
+            );
+
+        throw new \Hoa\File\Exception(
+            'Cannot find an appropriated object that matches with ' .
+            'path %s when defining it.', 0, $target);
     }
 
     /**

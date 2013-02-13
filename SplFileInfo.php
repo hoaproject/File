@@ -117,6 +117,19 @@ class SplFileInfo extends \SplFileInfo {
 
         return $this->_stream->close();
     }
+
+    /**
+     * Destruct.
+     *
+     * @access  public
+     * @return  void
+     */
+    public function __destruct ( ) {
+
+        $this->close();
+
+        return;
+    }
 }
 
 }

@@ -77,7 +77,6 @@ class Write extends Link implements \Hoa\Stream\IStream\Out {
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      * @return  void
-     * @throw   \Hoa\Stream\Exception
      */
     public function __construct ( $streamName, $mode = parent::MODE_APPEND_WRITE,
                                   $context = null, $wait = false ) {
