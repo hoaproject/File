@@ -222,7 +222,7 @@ class Directory extends Generic {
         $finder->in($from)
                ->childFirst();
 
-        foreach($finder as $k => $file) {
+        foreach($finder as $file) {
 
             $file->open()->delete();
             $file->close();
