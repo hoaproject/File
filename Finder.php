@@ -74,6 +74,11 @@ from('Hoa')
 -> import('Iterator.CallbackFilter')
 
 /**
+ * \Hoa\Iterator\Map
+ */
+-> import('Iterator.Map')
+
+/**
  * \Hoa\File\SplFileInfo
  */
 -> import('File.SplFileInfo');
@@ -645,7 +650,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
      * Get the iterator.
      *
      * @access  public
-     * @return  \Iterable
+     * @return  \Traversable
      */
     public function getIterator ( ) {
 
@@ -706,7 +711,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
         foreach($sorts as $sort)
             uasort($array, $sort);
 
-        return new \ArrayIterator($array);
+        return new \Hoa\Iterator\Map($array);
     }
 
     /**
