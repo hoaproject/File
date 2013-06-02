@@ -39,6 +39,11 @@ namespace {
 from('Hoa')
 
 /**
+ * \Hoa\Iterator\SplFileInfo
+ */
+-> import('Iterator.SplFileInfo')
+
+/**
  * \Hoa\File\Exception
  */
 -> import('File.Exception')
@@ -65,94 +70,23 @@ namespace Hoa\File {
 /**
  * Class \Hoa\File\SplFileInfo.
  *
- * Link between SplFileInfo and \Hoa\File.
+ * Link between \Hoa\Iterator\SplFileInfo and \Hoa\File.
  *
  * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
  * @copyright  Copyright © 2007-2013 Ivan Enderlin.
  * @license    New BSD License
  */
 
-class SplFileInfo extends \SplFileInfo {
+class SplFileInfo extends \Hoa\Iterator\SplFileInfo {
 
     /**
      * Current stream.
      *
      * @var \Hoa\File\Generic object
      */
-    protected $_stream       = null;
-
-    /**
-     * Hash.
-     *
-     * @var \Hoa\File\SplFileInfo string
-     */
-    protected $_hash         = null;
-
-    /**
-     * Relative path.
-     *
-     * @var \Hoa\File\SplFileInfo string
-     */
-    protected $_relativePath = null;
+    protected $_stream = null;
 
 
-
-    /**
-     * Construct.
-     *
-     * @access  public
-     * @param   string  $filename        Filename.
-     * @param   string  $relativePath    Relative path.
-     * @return  void
-     */
-    public function __construct ( $filename, $relativePath = null ) {
-
-        parent::__construct($filename);
-
-        $this->_hash = md5(
-            $this->getPathname() .
-            $this->getCTime()
-        );
-        $this->_relativePath = $relativePath;
-
-        return;
-    }
-
-    /**
-     * Get the hash.
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getHash ( ) {
-
-        return $this->_hash;
-    }
-
-    /**
-     * Get relative path (if given).
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getRelativePath ( ) {
-
-        return $this->_relativePath;
-    }
-
-    /**
-     * Get relative pathname (if possible).
-     *
-     * @access  public
-     * @return  string
-     */
-    public function getRelativePathname ( ) {
-
-        if(null === $relative = $this->getRelativePath())
-            return $this->getPathname();
-
-        return substr($this->getPathname(), strlen($relative));
-    }
 
     /**
      * Open the SplFileInfo as a Hoa\File stream.
