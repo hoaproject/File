@@ -79,14 +79,21 @@ class SplFileInfo extends \SplFileInfo {
      *
      * @var \Hoa\File\Generic object
      */
-    protected $_stream = null;
+    protected $_stream       = null;
 
     /**
      * Hash.
      *
      * @var \Hoa\File\SplFileInfo string
      */
-    protected $_hash   = null;
+    protected $_hash         = null;
+
+    /**
+     * Relative path.
+     *
+     * @var \Hoa\File\SplFileInfo string
+     */
+    protected $_relativePath = null;
 
 
 
@@ -94,9 +101,11 @@ class SplFileInfo extends \SplFileInfo {
      * Construct.
      *
      * @access  public
+     * @param   string  $filename        Filename.
+     * @param   string  $relativePath    Relative path.
      * @return  void
      */
-    public function __construct ( $filename ) {
+    public function __construct ( $filename, $relativePath = null ) {
 
         parent::__construct($filename);
 
@@ -104,6 +113,7 @@ class SplFileInfo extends \SplFileInfo {
             $this->getPathname() .
             $this->getCTime()
         );
+        $this->_relativePath = $relativePath;
 
         return;
     }
@@ -117,6 +127,31 @@ class SplFileInfo extends \SplFileInfo {
     public function getHash ( ) {
 
         return $this->_hash;
+    }
+
+    /**
+     * Get relative path (if given).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getRelativePath ( ) {
+
+        return $this->_relativePath;
+    }
+
+    /**
+     * Get relative pathname (if possible).
+     *
+     * @access  public
+     * @return  string
+     */
+    public function getRelativePathname ( ) {
+
+        if(null === $relative = $this->getRelativePath())
+            return $this->getPathname();
+
+        return substr($this->getPathname(), strlen($relative));
     }
 
     /**
@@ -137,7 +172,7 @@ class SplFileInfo extends \SplFileInfo {
         elseif(true === $this->isLink())
             return $this->_stream = new Link\ReadWrite($this->getPathname());
 
-        throw new Exception('%s has a unknown type.', 0, $this->getPathname());
+        throw new Exception('%s has an unknown type.', 0, $this->getPathname());
     }
 
     /**
