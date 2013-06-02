@@ -563,11 +563,11 @@ class Finder implements \Hoa\Iterator\Aggregate {
     }
 
     /**
-     * Sort result by pathname.
+     * Sort result by name.
      * If \Collator exists (from ext/intl), the $locale argument will be used
      * for its constructor. Else, strcmp() will be used.
      * Example:
-     *     $this->sortByPathname('fr_FR');
+     *     $this->sortByName('fr_FR');
      *
      * @access  public
      * @param   string  $locale   Locale.
