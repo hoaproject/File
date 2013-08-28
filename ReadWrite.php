@@ -247,11 +247,12 @@ class          ReadWrite
      * Read all, i.e. read as much as possible.
      *
      * @access  public
+     * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll ( ) {
+    public function readAll ( $offset = 0 ) {
 
-        return stream_get_contents($this->getStream());
+        return stream_get_contents($this->getStream(), -1, $offset);
     }
 
     /**
