@@ -608,8 +608,8 @@ abstract class Generic
     public static function isCaseSensitive ( ) {
 
         return !(
-               file_exists(strtolower(__FILE__))
-            && file_exists(strtoupper(__FILE__))
+               file_exists(mb_strtolower(__FILE__))
+            && file_exists(mb_strtoupper(__FILE__))
         );
     }
 
