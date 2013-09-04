@@ -1,6 +1,6 @@
 {
     "name"       : "hoa/file",
-    "description": "The Hoa\\file library.",
+    "description": "The Hoa\\File library.",
     "type"       : "library",
     "keywords"   : ["library", "file", "directory", "finder", "link",
                     "temporary", "socket"],
