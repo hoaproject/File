@@ -396,3 +396,12 @@ abstract class File
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\File\File');
+
+}

@@ -152,3 +152,12 @@ class Temporary extends \Hoa\File {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\File\Temporary\Temporary');
+
+}

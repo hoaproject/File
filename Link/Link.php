@@ -220,3 +220,12 @@ class Link extends \Hoa\File {
 }
 
 }
+
+namespace {
+
+/**
+ * Flex entity.
+ */
+Hoa\Core\Consistency::flexEntity('Hoa\File\Link\Link');
+
+}
