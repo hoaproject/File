@@ -147,8 +147,10 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
                     continue;
                 }
 
-                if($c->getHash() === null) {
+                if(null === $c->getHash()) {
+
                     unset($current[$name]);
+
                     continue;
                 }
 
