@@ -22,11 +22,10 @@
         "source": "http://git.hoa-project.net/"
     },
     "require": {
-        "hoa/core"    : "dev-master",
-        "hoa/stream"  : "dev-master",
-        "hoa/iterator": "dev-master"
+        "hoa/core"    : "~1.0",
+        "hoa/stream"  : "~0.0",
+        "hoa/iterator": "~0.0"
     },
-    "minimum-stability": "dev",
-    "target-dir"       : "Hoa/File",
-    "autoload"         : { "psr-0": { "Hoa\\File": "." } }
+    "target-dir": "Hoa/File",
+    "autoload"  : { "psr-0": { "Hoa\\File": "." } }
 }
