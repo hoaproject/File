@@ -34,43 +34,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\Stream
- */
--> import('Stream.~')
-
-/**
- * \Hoa\Stream\IStream\Pathable
- */
--> import('Stream.I~.Pathable')
-
-/**
- * \Hoa\Stream\IStream\Statable
- */
--> import('Stream.I~.Statable')
-
-/**
- * \Hoa\Stream\IStream\Touchable
- */
--> import('Stream.I~.Touchable')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory');
-
-}
-
-namespace Hoa\File {
+namespace Hoa\File; 
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Generic.
@@ -83,10 +48,10 @@ namespace Hoa\File {
  */
 
 abstract class Generic
-    extends    \Hoa\Stream
-    implements \Hoa\Stream\IStream\Pathable,
-               \Hoa\Stream\IStream\Statable,
-               \Hoa\Stream\IStream\Touchable {
+    extends   Stream
+    implements Stream\IStream\Pathable,
+               Stream\IStream\Statable,
+               Stream\IStream\Touchable {
 
     /**
      * Mode.
@@ -355,11 +320,11 @@ abstract class Generic
      *                            constants.
      * @return  bool
      */
-    public function copy ( $to, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
+    public function copy ( $to, $force = Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
 
         $from = $this->getStreamName();
 
-        if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
+        if(   $force === Stream\IStream\Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($to))
             return true;
 
@@ -383,16 +348,16 @@ abstract class Generic
      *                            constants.
      * @return  bool
      */
-    public function move ( $name, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE,
-                           $mkdir = \Hoa\Stream\IStream\Touchable::DO_NOT_MAKE_DIRECTORY ) {
+    public function move ( $name, $force = Stream\IStream\Touchable::DO_NOT_OVERWRITE,
+                           $mkdir = Stream\IStream\Touchable::DO_NOT_MAKE_DIRECTORY ) {
 
         $from = $this->getStreamName();
 
-        if(   $force === \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE
+        if(   $force === Stream\IStream\Touchable::DO_NOT_OVERWRITE
            && true   === file_exists($name))
             return false;
 
-        if(\Hoa\Stream\IStream\Touchable::MAKE_DIRECTORY === $mkdir)
+        if(Stream\IStream\Touchable::MAKE_DIRECTORY === $mkdir)
             Directory::create(
                 dirname($name),
                 Directory::MODE_CREATE_RECURSIVE
@@ -661,4 +626,4 @@ abstract class Generic
     }
 }
 
-}
+

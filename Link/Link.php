@@ -33,39 +33,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\File\ReadWrite
- */
--> import('File.ReadWrite')
-
-/**
- * \Hoa\File\Link\ReadWrite
- */
--> import('File.Link.ReadWrite')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory');
-
-}
-
-namespace Hoa\File\Link {
+namespace Hoa\File\Link;
+use Hoa\File;
 
 /**
  * Class \Hoa\File\Link.
@@ -77,7 +46,7 @@ namespace Hoa\File\Link {
  * @license    New BSD License
  */
 
-class Link extends \Hoa\File {
+class Link extends File {
 
     /**
      * Open a link.
@@ -96,7 +65,7 @@ class Link extends \Hoa\File {
                                   $wait = false ) {
 
         if(!is_link($streamName))
-            throw new \Hoa\File\Exception(
+            throw new File\Exception(
                 'File %s is not a link.', 0, $streamName);
 
         parent::__construct($streamName, $mode, $context, $wait);
@@ -168,25 +137,25 @@ class Link extends \Hoa\File {
         if(true === is_link($target))
             return new ReadWrite(
                 $target,
-                \Hoa\File::MODE_APPEND_READ_WRITE,
+                File::MODE_APPEND_READ_WRITE,
                 $context
             );
 
         elseif(true === is_file($target))
-            return new \Hoa\File\ReadWrite(
+            return new File\ReadWrite(
                 $target,
-                \Hoa\File::MODE_APPEND_READ_WRITE,
+                File::MODE_APPEND_READ_WRITE,
                 $context
             );
 
         elseif(true === is_dir($target))
-            return new \Hoa\File\Directory(
+            return new File\Directory(
                 $target,
-                \Hoa\File::MODE_READ,
+                File::MODE_READ,
                 $context
             );
 
-        throw new \Hoa\File\Exception(
+        throw new File\Exception(
             'Cannot find an appropriated object that matches with ' .
             'path %s when defining it.', 0, $target);
     }
@@ -219,13 +188,7 @@ class Link extends \Hoa\File {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
 Hoa\Core\Consistency::flexEntity('Hoa\File\Link\Link');
-
-}

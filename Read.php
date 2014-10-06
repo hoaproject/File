@@ -33,29 +33,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In');
-
-}
-
-namespace Hoa\File {
+namespace Hoa\File;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Read.
@@ -67,7 +46,7 @@ namespace Hoa\File {
  * @license    New BSD License
  */
 
-class Read extends File implements \Hoa\Stream\IStream\In {
+class Read extends File implements Stream\IStream\In {
 
     /**
      * Open a file.
@@ -98,16 +77,16 @@ class Read extends File implements \Hoa\Stream\IStream\In {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
-        static $createModes = array(
+        static $createModes = [
             parent::MODE_READ
-        );
+        ];
 
         if(!in_array($this->getMode(), $createModes))
             throw new Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(', ', $createModes)));
+                0, [$this->getMode(), implode(', ', $createModes)]);
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
@@ -254,6 +233,4 @@ class Read extends File implements \Hoa\Stream\IStream\In {
 
         return fscanf($this->getStream(), $format);
     }
-}
-
 }

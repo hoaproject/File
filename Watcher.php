@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder');
-
-}
-
-namespace Hoa\File {
+namespace Hoa\File; 
 
 /**
  * Class \Hoa\File\Watcher.
@@ -86,11 +75,11 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
 
         parent::__construct();
 
-        $this->_on = new \Hoa\Core\Event\Listener($this, array(
+        $this->_on = new \Hoa\Core\Event\Listener($this,[
             'new',
             'modify',
             'move'
-        ));
+        ]);
 
         if(null !== $latency)
             $this->setLatency($latency);
@@ -139,9 +128,9 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
 
                     $this->_on->fire(
                         'new',
-                        new \Hoa\Core\Event\Bucket(array(
+                        new \Hoa\Core\Event\Bucket([
                             'file' => $c
-                        ))
+                        ])
                     );
 
                     continue;
@@ -157,9 +146,9 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
                 if($previous[$name]->getHash() != $c->getHash())
                     $this->_on->fire(
                         'modify',
-                        new \Hoa\Core\Event\Bucket(array(
+                        new \Hoa\Core\Event\Bucket([
                             'file' => $c
-                        ))
+                        ])
                     );
 
                 unset($previous[$name]);
@@ -168,9 +157,9 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
             foreach($previous as $p)
                 $this->_on->fire(
                     'move',
-                    new \Hoa\Core\Event\Bucket(array(
+                    new \Hoa\Core\Event\Bucket([
                         'file' => $p
-                    ))
+                    ])
                 );
 
             usleep($this->getLatency() * 1000000);
@@ -207,6 +196,4 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
 
         return $this->_latency;
     }
-}
-
 }

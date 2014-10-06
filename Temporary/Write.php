@@ -33,29 +33,9 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Temporary
- */
--> import('File.Temporary.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File\Temporary {
+namespace Hoa\File\Temporary;
+use Hoa\File;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Temporary\Write.
@@ -67,7 +47,7 @@ namespace Hoa\File\Temporary {
  * @license    New BSD License
  */
 
-class Write extends Temporary implements \Hoa\Stream\IStream\Out {
+class Write extends Temporary implements Stream\IStream\Out {
 
     /**
      * Open a file.
@@ -98,24 +78,24 @@ class Write extends Temporary implements \Hoa\Stream\IStream\Out {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
-        static $createModes = array(
+        static $createModes = [
             parent::MODE_TRUNCATE_WRITE,
             parent::MODE_APPEND_WRITE,
             parent::MODE_CREATE_WRITE
-        );
+        ];
 
         if(!in_array($this->getMode(), $createModes))
-            throw new \Hoa\File\Exception(
+            throw new File\Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(', ', $createModes)));
+                0, [$this->getMode(), implode(', ', $createModes)]);
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
             && !file_exists($streamName))
-            throw new \Hoa\File\Exception\FileDoesNotExist(
+            throw new File\Exception\FileDoesNotExist(
                 'File %s does not exist.', 1, $streamName);
 
         $out = parent::_open($streamName, $context);
@@ -135,7 +115,7 @@ class Write extends Temporary implements \Hoa\Stream\IStream\Out {
     public function write ( $string, $length ) {
 
         if(0 > $length)
-            throw new \Hoa\File\Exception(
+            throw new File\Exception(
                 'Length must be greater than 0, given %d.', 2, $length);
 
         return fwrite($this->getStream(), $string, $length);
@@ -261,6 +241,4 @@ class Write extends Temporary implements \Hoa\Stream\IStream\Out {
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }

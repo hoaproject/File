@@ -34,18 +34,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
-
-from('Hoa')
-
-/**
- * Hoa_File_Exception
- */
--> import('File.Exception.~');
-
-}
-
-namespace Hoa\File\Exception {
+namespace Hoa\File\Exception;
 
 /**
  * Class \Hoa\File\Exception\FileDoesNotExist.
@@ -59,4 +48,3 @@ namespace Hoa\File\Exception {
 
 class FileDoesNotExist extends Exception { }
 
-}

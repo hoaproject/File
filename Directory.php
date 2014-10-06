@@ -34,40 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
+use Hoa\Stream\Context;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Exception\FileDoesNotExist
- */
--> import('File.Exception.FileDoesNotExist')
-
-/**
- * \Hoa\File\Generic
- */
--> import('File.Generic')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder')
-
-/**
- * \Hoa\Stream\Context
- */
--> import('Stream.Context');
-
-}
-
-namespace Hoa\File {
-
-/**
+/*
  * Class \Hoa\File\Directory.
  *
  * Directory handler.
@@ -134,7 +104,7 @@ class Directory extends Generic {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Context $context = null ) {
 
         if(false === is_dir($streamName))
             if($this->getMode() == self::MODE_READ)
@@ -256,12 +226,12 @@ class Directory extends Generic {
             return false;
 
         if(null !== $context)
-            if(false === \Hoa\Stream\Context::contextExists($context))
+            if(false === Context::contextExists($context))
                 throw new Exception(
                     'Context %s was not previously declared, cannot retrieve ' .
                     'this context.', 2, $context);
             else
-                $context = \Hoa\Stream\Context::getInstance($context);
+                $context = Context::getInstance($context);
 
         if(null === $context)
             return @mkdir(
@@ -279,4 +249,4 @@ class Directory extends Generic {
     }
 }
 
-}
+
