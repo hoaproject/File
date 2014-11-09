@@ -24,7 +24,7 @@
     "require": {
         "hoa/core"    : "~2.0",
         "hoa/stream"  : "~0.0",
-        "hoa/iterator": "~0.0"
+        "hoa/iterator": "~1.0"
     },
     "target-dir": "Hoa/File",
     "autoload"  : { "psr-0": { "Hoa\\File": "." } },
