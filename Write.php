@@ -33,29 +33,8 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-
-namespace {
-
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File {
+namespace Hoa\File; 
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Write.
@@ -67,7 +46,7 @@ namespace Hoa\File {
  * @license    New BSD License
  */
 
-class Write extends File implements \Hoa\Stream\IStream\Out {
+class Write extends File implements Stream\IStream\Out {
 
     /**
      * Open a file.
@@ -98,18 +77,18 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
-        static $createModes = array(
+        static $createModes =[ 
             parent::MODE_TRUNCATE_WRITE,
             parent::MODE_APPEND_WRITE,
             parent::MODE_CREATE_WRITE
-        );
+        ];
 
         if(!in_array($this->getMode(), $createModes))
             throw new Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(', ', $createModes)));
+                0, [$this->getMode(), implode(', ', $createModes)]);
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
@@ -262,6 +241,4 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }
