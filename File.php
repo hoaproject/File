@@ -34,43 +34,14 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Exception\FileDoesNotExist
- */
--> import('File.Exception.FileDoesNotExist')
-
-/**
- * \Hoa\File\Generic
- */
--> import('File.Generic')
-
-/**
- * \Hoa\Stream\IStream\Bufferable
- */
--> import('Stream.I~.Bufferable')
-
-/**
- * \Hoa\Stream\IStream\Lockable
- */
--> import('Stream.I~.Lockable')
-
-/**
- * \Hoa\Stream\IStream\Pointable
- */
--> import('Stream.I~.Pointable');
-
-}
-
-namespace Hoa\File {
+use Hoa\File\Exception;
+use Hoa\File\Exception\FileDoesNotExist;
+use Hoa\File\Generic;
+use Hoa\Stream\IStream\Bufferable;
+use Hoa\Stream\IStream\Lockable;
+use Hoa\Stream\IStream\Pointable;
 
 /**
  * Class \Hoa\File.
@@ -393,15 +364,4 @@ abstract class File
 
         return touch($name);
     }
-}
-
-}
-
-namespace {
-
-/**
- * Flex entity.
- */
-Hoa\Core\Consistency::flexEntity('Hoa\File\File');
-
 }

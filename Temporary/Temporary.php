@@ -34,23 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
 
-from('Hoa')
 
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
+namespace Hoa\File\Temporary;
 
-/**
- * \Hoa\File
- */
--> import('File.~');
-
-}
-
-namespace Hoa\File\Temporary {
+use Hoa\File\Exception;
 
 /**
  * Class \Hoa\File\Temporary.
@@ -149,15 +137,4 @@ class Temporary extends \Hoa\File {
 
         return sys_get_temp_dir();
     }
-}
-
-}
-
-namespace {
-
-/**
- * Flex entity.
- */
-Hoa\Core\Consistency::flexEntity('Hoa\File\Temporary\Temporary');
-
 }

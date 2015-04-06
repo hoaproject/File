@@ -34,33 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Temporary;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Temporary
- */
--> import('File.Temporary.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File\Temporary {
+use Hoa\File\Exception;
+use Hoa\File\Temporary;
+use Hoa\Stream\IStream\In;
+use Hoa\Stream\IStream\Out;
 
 /**
  * Class \Hoa\File\Temporary\ReadWrite.
@@ -405,6 +384,4 @@ class          ReadWrite
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }

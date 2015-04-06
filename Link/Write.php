@@ -34,28 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Link;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Link
- */
--> import('File.Link.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File\Link {
+use Hoa\File\Exception;
+use Hoa\File\Link;
+use Hoa\Stream\IStream\Out;
 
 /**
  * Class \Hoa\File\Link\Write.
@@ -259,6 +242,4 @@ class Write extends Link implements \Hoa\Stream\IStream\Out {
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }

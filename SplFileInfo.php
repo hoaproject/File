@@ -34,38 +34,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\Iterator\SplFileInfo
- */
--> import('Iterator.SplFileInfo')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception')
-
-/**
- * \Hoa\File\ReadWrite
- */
--> import('File.ReadWrite')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory')
-
-/**
- * \Hoa\File\Link\ReadWrite
- */
--> import('File.Link.ReadWrite');
-
-}
-
-namespace Hoa\File {
+// use Hoa\Iterator\SplFileInfo;
+use Hoa\File\Exception;
+use Hoa\File\ReadWrite as FileReadWrite;
+use Hoa\File\Directory;
+use Hoa\File\Link\ReadWrite as LinkReadWrite;
 
 /**
  * Class \Hoa\File\SplFileInfo.
@@ -98,13 +73,13 @@ class SplFileInfo extends \Hoa\Iterator\SplFileInfo {
     public function open ( ) {
 
         if(true === $this->isFile())
-            return $this->_stream = new ReadWrite($this->getPathname());
+            return $this->_stream = new FileReadWrite($this->getPathname());
 
         elseif(true === $this->isDir())
             return $this->_stream = new Directory($this->getPathname());
 
         elseif(true === $this->isLink())
-            return $this->_stream = new Link\ReadWrite($this->getPathname());
+            return $this->_stream = new LinkReadWrite($this->getPathname());
 
         throw new Exception('%s has an unknown type.', 0, $this->getPathname());
     }
@@ -135,6 +110,4 @@ class SplFileInfo extends \Hoa\Iterator\SplFileInfo {
 
         return;
     }
-}
-
 }

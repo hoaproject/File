@@ -34,43 +34,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\Stream
- */
--> import('Stream.~')
-
-/**
- * \Hoa\Stream\IStream\Pathable
- */
--> import('Stream.I~.Pathable')
-
-/**
- * \Hoa\Stream\IStream\Statable
- */
--> import('Stream.I~.Statable')
-
-/**
- * \Hoa\Stream\IStream\Touchable
- */
--> import('Stream.I~.Touchable')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory');
-
-}
-
-namespace Hoa\File {
+use Hoa\File\Exception;
+use Hoa\Stream\IStream\Pathable;
+use Hoa\Stream\IStream\Statable;
+use Hoa\Stream\IStream\Touchable;
+use Hoa\File\Directory;
 
 /**
  * Class \Hoa\File\Generic.
@@ -659,6 +629,4 @@ abstract class Generic
 
         return $file;
     }
-}
-
 }
