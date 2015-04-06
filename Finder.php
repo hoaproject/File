@@ -34,58 +34,17 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\Iterator\Aggregate
- */
--> import('Iterator.Aggregate')
-
-/**
- * \Hoa\Iterator\Append
- */
--> import('Iterator.Append')
-
-/**
- * \Hoa\Iterator\IteratorIterator
- */
--> import('Iterator.~~')
-
-/**
- * \Hoa\Iterator\Recursive\Iterator
- */
--> import('Iterator.Recursive.Iterator')
-
-/**
- * \Hoa\Iterator\Recursive\Directory
- */
--> import('Iterator.Recursive.Directory')
-
-/**
- * \Hoa\Iterator\FileSystem
- */
--> import('Iterator.FileSystem')
-
-/**
- * \Hoa\Iterator\CallbackFilter
- */
--> import('Iterator.CallbackFilter')
-
-/**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map')
-
-/**
- * \Hoa\File\SplFileInfo
- */
--> import('File.SplFileInfo');
-
-}
-
-namespace Hoa\File {
+use Hoa\Iterator\Aggregate;
+use Hoa\Iterator\Append;
+use Hoa\Iterator\IteratorIterator;
+use Hoa\Iterator\Recursive\Iterator;
+use Hoa\Iterator\Recursive\Directory;
+use Hoa\Iterator\FileSystem;
+use Hoa\Iterator\CallbackFilter;
+use Hoa\Iterator\Map;
+use Hoa\File\SplFileInfo;
 
 /**
  * Class \Hoa\File\Finder.
@@ -827,6 +786,4 @@ class Finder implements \Hoa\Iterator\Aggregate {
 
         return $this->_first;
     }
-}
-
 }

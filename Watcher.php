@@ -34,18 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder');
-
-}
-
-namespace Hoa\File {
+use Hoa\File\Finder;
 
 /**
  * Class \Hoa\File\Watcher.
@@ -207,6 +198,4 @@ class Watcher extends Finder implements \Hoa\Core\Event\Listenable {
 
         return $this->_latency;
     }
-}
-
 }

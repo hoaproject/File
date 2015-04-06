@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In');
-
-}
-
-namespace Hoa\File {
+use Hoa\File\Exception;
+use Hoa\Stream\IStream\In;
 
 /**
  * Class \Hoa\File\Read.
@@ -254,6 +236,4 @@ class Read extends File implements \Hoa\Stream\IStream\In {
 
         return fscanf($this->getStream(), $format);
     }
-}
-
 }

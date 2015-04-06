@@ -34,33 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Link;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Link
- */
--> import('File.Link.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File\Link {
+use Hoa\File\Exception;
+use Hoa\File\Link;
+use Hoa\Stream\IStream\In;
+use Hoa\Stream\IStream\Out;
 
 /**
  * Class \Hoa\File\Link\ReadWrite.
@@ -405,6 +384,4 @@ class          ReadWrite
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }

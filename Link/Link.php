@@ -34,38 +34,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Link;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\File\ReadWrite
- */
--> import('File.ReadWrite')
-
-/**
- * \Hoa\File\Link\ReadWrite
- */
--> import('File.Link.ReadWrite')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory');
-
-}
-
-namespace Hoa\File\Link {
+use Hoa\File\Exception;
+use Hoa\File\ReadWrite as FileReadWrite;
+use Hoa\File\Link\ReadWrite as LinkReadWrite;
+use Hoa\File\Directory;
 
 /**
  * Class \Hoa\File\Link.
@@ -166,14 +140,14 @@ class Link extends \Hoa\File {
                          : null;
 
         if(true === is_link($target))
-            return new ReadWrite(
+            return new LinkReadWrite(
                 $target,
                 \Hoa\File::MODE_APPEND_READ_WRITE,
                 $context
             );
 
         elseif(true === is_file($target))
-            return new \Hoa\File\ReadWrite(
+            return new FileReadWrite(
                 $target,
                 \Hoa\File::MODE_APPEND_READ_WRITE,
                 $context
@@ -217,15 +191,4 @@ class Link extends \Hoa\File {
 
         return symlink($target, $name);
     }
-}
-
-}
-
-namespace {
-
-/**
- * Flex entity.
- */
-Hoa\Core\Consistency::flexEntity('Hoa\File\Link\Link');
-
 }

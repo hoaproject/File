@@ -34,38 +34,13 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Exception\FileDoesNotExist
- */
--> import('File.Exception.FileDoesNotExist')
-
-/**
- * \Hoa\File\Generic
- */
--> import('File.Generic')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder')
-
-/**
- * \Hoa\Stream\Context
- */
--> import('Stream.Context');
-
-}
-
-namespace Hoa\File {
+use Hoa\File\Exception;
+use Hoa\File\Exception\FileDoesNotExist;
+use Hoa\File\Generic;
+use Hoa\File\Finder;
+use Hoa\Stream\Context;
 
 /**
  * Class \Hoa\File\Directory.
@@ -277,6 +252,4 @@ class Directory extends Generic {
             $context->getContext()
         );
     }
-}
-
 }

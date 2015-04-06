@@ -34,28 +34,11 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Temporary;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Temporary
- */
--> import('File.Temporary.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In');
-
-}
-
-namespace Hoa\File\Temporary {
+use Hoa\File\Exception;
+use Hoa\File\Temporary;
+use Hoa\Stream\IStream\In;
 
 /**
  * Class \Hoa\File\Temporary\Read.
@@ -254,6 +237,4 @@ class Read extends Temporary implements \Hoa\Stream\IStream\In {
 
         return fscanf($this->getStream(), $format);
     }
-}
-
 }
