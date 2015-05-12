@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\File;
  *
  * Temporary file handler.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
-class Temporary extends File {
-
+class Temporary extends File
+{
     /**
      * Temporary file index.
      *
-     * @var \Hoa\File\Temporary int
+     * @var int
      */
     private static $_i = 0;
 
@@ -63,7 +61,6 @@ class Temporary extends File {
     /**
      * Open a temporary file.
      *
-     * @access  public
      * @param   string  $streamName    Stream name (or file descriptor).
      * @param   string  $mode          Open mode, see the parent::MODE_*
      *                                 constants.
@@ -78,10 +75,9 @@ class Temporary extends File {
         $context = null,
         $wait    = false
     ) {
-
-        if(null === $streamName)
-            $streamName = 'hoa://Library/File/Temporary.php#' .
-                          self::$_i++;
+        if (null === $streamName) {
+            $streamName = 'hoa://Library/File/Temporary.php#' . self::$_i++;
+        }
 
         parent::__construct($streamName, $mode, $context, $wait);
 
@@ -91,20 +87,20 @@ class Temporary extends File {
     /**
      * Open the stream and return the associated resource.
      *
-     * @access  protected
      * @param   string              $streamName    Stream name (here, it is
      *                                             null).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\File\Exception
+     * @throws  \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
-
-        if(false === $out = @tmpfile())
+    protected function &_open($streamName, \Hoa\Stream\Context $context = null)
+    {
+        if (false === $out = @tmpfile()) {
             throw new File\Exception(
                 'Failed to open a temporary stream.',
                 0
             );
+        }
 
         return $out;
     }
@@ -114,7 +110,6 @@ class Temporary extends File {
      * different of calling $this->__construct() that will create a temporary
      * file that will be destroy when calling the $this->close() method.
      *
-     * @access  public
      * @param   string  $directory    Directory where the temporary filename
      *                                will be created. If the directory does not
      *                                exist, it may generate a file in the
@@ -123,11 +118,12 @@ class Temporary extends File {
      *                                filename.
      * @return  string
      */
-    public static function create ( $directory = null, $prefix = '__hoa_' ) {
-
-        if(   null === $directory
-          || false === is_dir($directory))
+    public static function create($directory = null, $prefix = '__hoa_')
+    {
+        if (null  === $directory ||
+            false === is_dir($directory)) {
             $directory = static::getTemporaryDirectory();
+        }
 
         return tempnam($directory, $prefix);
     }
@@ -135,11 +131,10 @@ class Temporary extends File {
     /**
      * Get the directory path used for temporary files.
      *
-     * @access  public
      * @return  string
      */
-    public static function getTemporaryDirectory ( ) {
-
+    public static function getTemporaryDirectory()
+    {
         return sys_get_temp_dir();
     }
 }

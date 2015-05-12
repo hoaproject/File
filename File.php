@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -44,17 +44,15 @@ use Hoa\Stream;
  *
  * File handler.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class File
     extends    Generic
     implements Stream\IStream\Bufferable,
                Stream\IStream\Lockable,
-               Stream\IStream\Pointable {
-
+               Stream\IStream\Pointable
+{
     /**
      * Open for reading only; place the file pointer at the beginning of the
      * file.
@@ -132,7 +130,6 @@ abstract class File
     /**
      * Open a file.
      *
-     * @access  public
      * @param   string  $streamName    Stream name (or file descriptor).
      * @param   string  $mode          Open mode, see the self::MODE_*
      *                                 constants.
@@ -140,42 +137,46 @@ abstract class File
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
      * @return  void
-     * @throw   \Hoa\File\Exception
+     * @throws  \Hoa\File\Exception
      */
-    public function __construct (
+    public function __construct(
         $streamName,
         $mode,
         $context = null,
-        $wait = false
+        $wait    = false
     ) {
-
         $this->setMode($mode);
 
-        switch($streamName) {
+        switch ($streamName) {
 
             case '0':
                 $streamName = 'php://stdin';
-              break;
+
+                break;
 
             case '1':
                 $streamName = 'php://stdout';
-              break;
+
+                break;
 
             case '2':
                 $streamName = 'php://stderr';
-              break;
+
+                break;
 
             default:
-                if(true === ctype_digit($streamName))
-                    if(PHP_VERSION_ID >= 50306)
+                if (true === ctype_digit($streamName)) {
+                    if (PHP_VERSION_ID >= 50306) {
                         $streamName = 'php://fd/' . $streamName;
-                    else
+                    } else {
                         throw new Exception(
                             'You need PHP5.3.6 to use a file descriptor ' .
                             'other than 0, 1 or 2 (tried %d with PHP%s).',
                             0,
-                            array($streamName, PHP_VERSION)
+                            [$streamName, PHP_VERSION]
                         );
+                    }
+                }
         }
 
         parent::__construct($streamName, $context, $wait);
@@ -186,31 +187,31 @@ abstract class File
     /**
      * Open the stream and return the associated resource.
      *
-     * @access  protected
      * @param   string               $streamName    Stream name (e.g. path or URL).
      * @param   \Hoa\Stream\Context  $context       Context.
      * @return  resource
-     * @throw   \Hoa\File\Exception\FileDoesNotExist
-     * @throw   \Hoa\File\Exception
+     * @throws  \Hoa\File\Exception\FileDoesNotExist
+     * @throws  \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, Stream\Context $context = null ) {
-
-        if(   substr($streamName, 0, 4) == 'file'
-           && false === is_dir(dirname($streamName)))
+    protected function &_open($streamName, Stream\Context $context = null)
+    {
+        if (substr($streamName, 0, 4) == 'file' &&
+            false === is_dir(dirname($streamName))) {
             throw new Exception(
                 'Directory %s does not exist. Could not open file %s.',
                 1,
-                array(dirname($streamName), basename($streamName))
+                [dirname($streamName), basename($streamName)]
             );
+        }
 
-        if(null === $context) {
-
-            if(false === $out = @fopen($streamName, $this->getMode(), true))
+        if (null === $context) {
+            if (false === $out = @fopen($streamName, $this->getMode(), true)) {
                 throw new Exception(
                     'Failed to open stream %s.',
                     2,
                     $streamName
                 );
+            }
 
             return $out;
         }
@@ -222,12 +223,13 @@ abstract class File
             $context->getContext()
         );
 
-        if(false === $out)
+        if (false === $out) {
             throw new Exception(
                 'Failed to open stream %s.',
                 3,
                 $streamName
             );
+        }
 
         return $out;
     }
@@ -235,11 +237,10 @@ abstract class File
     /**
      * Close the current stream.
      *
-     * @access  protected
      * @return  bool
      */
-    protected function _close ( ) {
-
+    protected function _close()
+    {
         return @fclose($this->getStream());
     }
 
@@ -247,13 +248,12 @@ abstract class File
      * Start a new buffer.
      * The callable acts like a light filter.
      *
-     * @access  public
      * @param   mixed   $callable    Callable.
      * @param   int     $size        Size.
      * @return  int
      */
-    public function newBuffer ( $callable = null, $size = null ) {
-
+    public function newBuffer($callable = null, $size = null)
+    {
         $this->setStreamBuffer($size);
 
         //@TODO manage $callable as a filter?
@@ -264,97 +264,90 @@ abstract class File
     /**
      * Flush the output to a stream.
      *
-     * @access  public
      * @return  bool
      */
-    public function flush ( ) {
-
+    public function flush()
+    {
         return fflush($this->getStream());
     }
 
     /**
      * Delete buffer.
      *
-     * @access  public
      * @return  bool
      */
-    public function deleteBuffer ( ) {
-
+    public function deleteBuffer()
+    {
         return $this->disableStreamBuffer();
     }
 
     /**
      * Get bufffer level.
      *
-     * @access  public
      * @return  int
      */
-    public function getBufferLevel ( ) {
-
+    public function getBufferLevel()
+    {
         return 1;
     }
 
     /**
      * Get buffer size.
      *
-     * @access  public
      * @return  int
      */
-    public function getBufferSize ( ) {
-
+    public function getBufferSize()
+    {
         return $this->getStreamBufferSize();
     }
 
     /**
      * Portable advisory locking.
      *
-     * @access  public
      * @param   int     $operation    Operation, use the
      *                                \Hoa\Stream\IStream\Lockable::LOCK_* constants.
      * @return  bool
      */
-    public function lock ( $operation ) {
-
+    public function lock($operation)
+    {
         return flock($this->getStream(), $operation);
     }
 
     /**
      * Rewind the position of a stream pointer.
      *
-     * @access  public
      * @return  bool
      */
-    public function rewind ( ) {
-
+    public function rewind()
+    {
         return rewind($this->getStream());
     }
 
     /**
      * Seek on a stream pointer.
      *
-     * @access  public
      * @param   int     $offset    Offset (negative value should be supported).
      * @param   int     $whence    Whence, use the
      *                             \Hoa\Stream\IStream\Pointable::SEEK_* constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = Stream\IStream\Pointable::SEEK_SET ) {
-
+    public function seek($offset, $whence = Stream\IStream\Pointable::SEEK_SET)
+    {
         return fseek($this->getStream(), $offset, $whence);
     }
 
     /**
      * Get the current position of the stream pointer.
      *
-     * @access  public
      * @return  int
      */
-    public function tell ( ) {
-
+    public function tell()
+    {
         $stream = $this->getStream();
 
-        if(null === $stream)
+        if (null === $stream) {
             return 0;
+        }
 
         return ftell($stream);
     }
@@ -362,15 +355,15 @@ abstract class File
     /**
      * Create a file.
      *
-     * @access  public
      * @param   string  $name     File name.
      * @param   mixed   $dummy    To be compatible with childs.
      * @return  bool
      */
-    public static function create ( $name, $dummy ) {
-
-        if(file_exists($name))
+    public static function create($name, $dummy)
+    {
+        if (file_exists($name)) {
             return true;
+        }
 
         return touch($name);
     }

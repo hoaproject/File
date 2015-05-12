@@ -8,7 +8,7 @@
  *
  * New BSD License
  *
- * Copyright © 2007-2015, Ivan Enderlin. All rights reserved.
+ * Copyright © 2007-2015, Hoa community. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -43,21 +43,19 @@ use Hoa\Stream;
  *
  * Describe a super-file.
  *
- * @author     Ivan Enderlin <ivan.enderlin@hoa-project.net>
- * @copyright  Copyright © 2007-2015 Ivan Enderlin.
+ * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-
 abstract class Generic
     extends    Stream
     implements Stream\IStream\Pathable,
                Stream\IStream\Statable,
-               Stream\IStream\Touchable {
-
+               Stream\IStream\Touchable
+{
     /**
      * Mode.
      *
-     * @var \Hoa\File string
+     * @var string
      */
     protected $_mode = null;
 
@@ -66,110 +64,100 @@ abstract class Generic
     /**
      * Get filename component of path.
      *
-     * @access  public
      * @return  string
      */
-    public function getBasename ( ) {
-
+    public function getBasename()
+    {
         return basename($this->getStreamName());
     }
 
     /**
      * Get directory name component of path.
      *
-     * @access  public
      * @return  string
      */
-    public function getDirname ( ) {
-
+    public function getDirname()
+    {
         return dirname($this->getStreamName());
     }
 
     /**
      * Get size.
      *
-     * @access  public
      * @return  int
      */
-    public function getSize ( ) {
-
+    public function getSize()
+    {
         return filesize($this->getStreamName());
     }
 
     /**
      * Get informations about a file.
      *
-     * @access  public
      * @return  array
      */
-    public function getStatistic ( ) {
-
+    public function getStatistic()
+    {
         return stat($this->getStreamName());
     }
 
     /**
      * Get last access time of file.
      *
-     * @access  public
      * @return  int
      */
-    public function getATime ( ) {
-
+    public function getATime()
+    {
         return fileatime($this->getStreamName());
     }
 
     /**
      * Get inode change time of file.
      *
-     * @access  public
      * @return  int
      */
-    public function getCTime ( ) {
-
+    public function getCTime()
+    {
         return filectime($this->getStreamName());
     }
 
     /**
      * Get file modification time.
      *
-     * @access  public
      * @return  int
      */
-    public function getMTime ( ) {
-
+    public function getMTime()
+    {
         return filemtime($this->getStreamName());
     }
 
     /**
      * Get file group.
      *
-     * @access  public
      * @return  int
      */
-    public function getGroup ( ) {
-
+    public function getGroup()
+    {
         return filegroup($this->getStreamName());
     }
 
     /**
      * Get file owner.
      *
-     * @access  public
      * @return  int
      */
-    public function getOwner ( ) {
-
+    public function getOwner()
+    {
         return fileowner($this->getStreamName());
     }
 
     /**
      * Get file permissions.
      *
-     * @access  public
      * @return  int
      */
-    public function getPermissions ( ) {
-
+    public function getPermissions()
+    {
         return fileperms($this->getStreamName());
     }
 
@@ -185,45 +173,46 @@ abstract class Generic
      *     * p: FIFO pipe;
      *     * u: unknown.
      *
-     * @access  public
      * @return  string
      */
-    public function getReadablePermissions ( ) {
-
+    public function getReadablePermissions()
+    {
         $p = $this->getPermissions();
 
-        if(($p & 0xC000) == 0xC000)
+        if (($p & 0xC000) == 0xC000) {
             $out = 's';
-        elseif(($p & 0xA000) == 0xA000)
+        } elseif (($p & 0xA000) == 0xA000) {
             $out = 'l';
-        elseif(($p & 0x8000) == 0x8000)
+        } elseif (($p & 0x8000) == 0x8000) {
             $out = '-';
-        elseif(($p & 0x6000) == 0x6000)
+        } elseif (($p & 0x6000) == 0x6000) {
             $out = 'b';
-        elseif(($p & 0x4000) == 0x4000)
+        } elseif (($p & 0x4000) == 0x4000) {
             $out = 'd';
-        elseif(($p & 0x2000) == 0x2000)
+        } elseif (($p & 0x2000) == 0x2000) {
             $out = 'c';
-        elseif(($p & 0x1000) == 0x1000)
+        } elseif (($p & 0x1000) == 0x1000) {
             $out = 'p';
-        else
+        } else {
             $out = 'u';
+        }
 
-        $out .= (($p & 0x0100) ? 'r' : '-')  .
-                (($p & 0x0080) ? 'w' : '-')  .
-                (($p & 0x0040) ?
-                (($p & 0x0800) ? 's' : 'x')  :
-                (($p & 0x0800) ? 'S' : '-')) .
-                (($p & 0x0020) ? 'r' : '-')  .
-                (($p & 0x0010) ? 'w' : '-')  .
-                (($p & 0x0008) ?
-                (($p & 0x0400) ? 's' : 'x')  :
-                (($p & 0x0400) ? 'S' : '-')) .
-                (($p & 0x0004) ? 'r' : '-')  .
-                (($p & 0x0002) ? 'w' : '-')  .
-                (($p & 0x0001) ?
-                (($p & 0x0200) ? 't' : 'x')  :
-                (($p & 0x0200) ? 'T' : '-'));
+        $out .=
+            (($p & 0x0100) ? 'r' : '-')  .
+            (($p & 0x0080) ? 'w' : '-')  .
+            (($p & 0x0040) ?
+            (($p & 0x0800) ? 's' : 'x')  :
+            (($p & 0x0800) ? 'S' : '-')) .
+            (($p & 0x0020) ? 'r' : '-')  .
+            (($p & 0x0010) ? 'w' : '-')  .
+            (($p & 0x0008) ?
+            (($p & 0x0400) ? 's' : 'x')  :
+            (($p & 0x0400) ? 'S' : '-')) .
+            (($p & 0x0004) ? 'r' : '-')  .
+            (($p & 0x0002) ? 'w' : '-')  .
+            (($p & 0x0001) ?
+            (($p & 0x0200) ? 't' : 'x')  :
+            (($p & 0x0200) ? 'T' : '-'));
 
         return $out;
     }
@@ -231,48 +220,41 @@ abstract class Generic
     /**
      * Check if the file is readable.
      *
-     * @access  public
      * @return  bool
      */
-    public function isReadable ( ) {
-
+    public function isReadable()
+    {
         return is_readable($this->getStreamName());
     }
 
     /**
      * Check if the file is writable.
      *
-     * @access  public
      * @return  bool
      */
-    public function isWritable ( ) {
-
+    public function isWritable()
+    {
         return is_writable($this->getStreamName());
     }
 
     /**
      * Check if the file is executable.
      *
-     * @access  public
      * @return  bool
      */
-    public function isExecutable ( ) {
-
+    public function isExecutable()
+    {
         return is_executable($this->getStreamName());
     }
 
     /**
      * Clear file status cache.
      *
-     * @access  public
      * @return  void
      */
-    public function clearStatisticCache ( ) {
-
-        if(PHP_VERSION_ID >= 50300)
-            clearstatcache(true, $this->getStreamName());
-        else
-            clearstatcache();
+    public function clearStatisticCache()
+    {
+        clearstatcache(true, $this->getStreamName());
 
         return;
     }
@@ -280,11 +262,10 @@ abstract class Generic
     /**
      * Clear all files status cache.
      *
-     * @access  public
      * @return  void
      */
-    public static function clearAllStatisticCaches ( ) {
-
+    public static function clearAllStatisticCaches()
+    {
         clearstatcache();
 
         return;
@@ -293,19 +274,20 @@ abstract class Generic
     /**
      * Set access and modification time of file.
      *
-     * @access  public
      * @param   int     $time     Time. If equals to -1, time() should be used.
      * @param   int     $atime    Access time. If equals to -1, $time should be
      *                            used.
      * @return  bool
      */
-    public function touch ( $time = -1, $atime = -1 ) {
-
-        if($time == -1)
+    public function touch($time = -1, $atime = -1)
+    {
+        if ($time == -1) {
             $time  = time();
+        }
 
-        if($atime == -1)
+        if ($atime == -1) {
             $atime = $time;
+        }
 
         return touch($this->getStreamName(), $time, $atime);
     }
@@ -314,23 +296,24 @@ abstract class Generic
      * Copy file.
      * Return the destination file path if succeed, false otherwise.
      *
-     * @access  public
      * @param   string  $to       Destination path.
      * @param   bool    $force    Force to copy if the file $to already exists.
      *                            Use the \Hoa\Stream\IStream\Touchable::*OVERWRITE
      *                            constants.
      * @return  bool
      */
-    public function copy ( $to, $force = Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
-
+    public function copy($to, $force = Stream\IStream\Touchable::DO_NOT_OVERWRITE)
+    {
         $from = $this->getStreamName();
 
-        if(   $force === Stream\IStream\Touchable::DO_NOT_OVERWRITE
-           && true   === file_exists($to))
+        if ($force === Stream\IStream\Touchable::DO_NOT_OVERWRITE &&
+            true   === file_exists($to)) {
             return true;
+        }
 
-        if(null === $this->getStreamContext())
+        if (null === $this->getStreamContext()) {
             return @copy($from, $to);
+        }
 
         return @copy($from, $to, $this->getStreamContext()->getContext());
     }
@@ -338,7 +321,6 @@ abstract class Generic
     /**
      * Move a file.
      *
-     * @access  public
      * @param   string  $name     New name.
      * @param   bool    $force    Force to move if the file $name already
      *                            exists.
@@ -349,26 +331,28 @@ abstract class Generic
      *                            constants.
      * @return  bool
      */
-    public function move (
+    public function move(
         $name,
         $force = Stream\IStream\Touchable::DO_NOT_OVERWRITE,
         $mkdir = Stream\IStream\Touchable::DO_NOT_MAKE_DIRECTORY
     ) {
-
         $from = $this->getStreamName();
 
-        if(   $force === Stream\IStream\Touchable::DO_NOT_OVERWRITE
-           && true   === file_exists($name))
+        if ($force === Stream\IStream\Touchable::DO_NOT_OVERWRITE &&
+            true   === file_exists($name)) {
             return false;
+        }
 
-        if(Stream\IStream\Touchable::MAKE_DIRECTORY === $mkdir)
+        if (Stream\IStream\Touchable::MAKE_DIRECTORY === $mkdir) {
             Directory::create(
                 dirname($name),
                 Directory::MODE_CREATE_RECURSIVE
             );
+        }
 
-        if(null === $this->getStreamContext())
+        if (null === $this->getStreamContext()) {
             return @rename($from, $name);
+        }
 
         return @rename($from, $name, $this->getStreamContext()->getContext());
     }
@@ -376,13 +360,13 @@ abstract class Generic
     /**
      * Delete a file.
      *
-     * @access  public
      * @return  bool
      */
-    public function delete ( ) {
-
-        if(null === $this->getStreamContext())
+    public function delete()
+    {
+        if (null === $this->getStreamContext()) {
             return @unlink($this->getStreamName());
+        }
 
         return @unlink(
             $this->getStreamName(),
@@ -393,51 +377,48 @@ abstract class Generic
     /**
      * Change file group.
      *
-     * @access  public
      * @param   mixed   $group    Group name or number.
      * @return  bool
      */
-    public function changeGroup ( $group ) {
-
+    public function changeGroup($group)
+    {
         return chgrp($this->getStreamName(), $group);
     }
 
     /**
      * Change file mode.
      *
-     * @access  public
      * @param   int     $mode    Mode (in octal!).
      * @return  bool
      */
-    public function changeMode ( $mode ) {
-
+    public function changeMode($mode)
+    {
         return chmod($this->getStreamName(), $mode);
     }
 
     /**
      * Change file owner.
      *
-     * @access  public
      * @param   mixed   $user    User.
      * @return  bool
      */
-    public function changeOwner ( $user ) {
-
+    public function changeOwner($user)
+    {
         return chown($this->getStreamName(), $user);
     }
 
     /**
      * Change the current umask.
      *
-     * @access  public
      * @param   int     $umask    Umask (in octal!). If null, given the current
      *                            umask value.
      * @return  int
      */
-    public static function umask ( $umask = null ) {
-
-        if(null === $umask)
+    public static function umask($umask = null)
+    {
+        if (null === $umask) {
             return umask();
+        }
 
         return umask($umask);
     }
@@ -445,101 +426,92 @@ abstract class Generic
     /**
      * Check if it is a file.
      *
-     * @access  public
      * @return  bool
      */
-    public function isFile ( ) {
-
+    public function isFile()
+    {
         return is_file($this->getStreamName());
     }
 
     /**
      * Check if it is a link.
      *
-     * @access  public
      * @return  bool
      */
-    public function isLink ( ) {
-
+    public function isLink()
+    {
         return is_link($this->getStreamName());
     }
 
     /**
      * Check if it is a directory.
      *
-     * @access  public
      * @return  bool
      */
-    public function isDirectory ( ) {
-
+    public function isDirectory()
+    {
         return is_dir($this->getStreamName());
     }
 
     /**
      * Check if it is a socket.
      *
-     * @access  public
      * @return  bool
      */
-    public function isSocket ( ) {
-
+    public function isSocket()
+    {
         return filetype($this->getStreamName()) == 'socket';
     }
 
     /**
      * Check if it is a FIFO pipe.
      *
-     * @access  public
      * @return  bool
      */
-    public function isFIFOPipe ( ) {
-
+    public function isFIFOPipe()
+    {
         return filetype($this->getStreamName()) == 'fifo';
     }
 
     /**
      * Check if it is character special file.
      *
-     * @access  public
      * @return  bool
      */
-    public function isCharacterSpecial ( ) {
-
+    public function isCharacterSpecial()
+    {
         return filetype($this->getStreamName()) == 'char';
     }
 
     /**
      * Check if it is block special.
      *
-     * @access  public
      * @return  bool
      */
-    public function isBlockSpecial ( ) {
-
+    public function isBlockSpecial()
+    {
         return filetype($this->getStreamName()) == 'block';
     }
 
     /**
      * Check if it is an unknown type.
      *
-     * @access  public
      * @return  bool
      */
-    public function isUnknown ( ) {
-
+    public function isUnknown()
+    {
         return filetype($this->getStreamName()) == 'unknown';
     }
 
     /**
      * Set the open mode.
      *
-     * @access  protected
      * @param   string     $mode    Open mode. Please, see the child::MODE_*
      *                              constants.
      * @return  string
      */
-    protected function setMode ( $mode ) {
-
+    protected function setMode($mode)
+    {
         $old         = $this->_mode;
         $this->_mode = $mode;
 
@@ -549,49 +521,46 @@ abstract class Generic
     /**
      * Get the open mode.
      *
-     * @access  public
      * @return  string
      */
-    public function getMode ( ) {
-
+    public function getMode()
+    {
         return $this->_mode;
     }
 
     /**
      * Get inode.
      *
-     * @access  public
      * @return  int
      */
-    public function getINode ( ) {
-
+    public function getINode()
+    {
         return fileinode($this->getStreamName());
     }
 
     /**
      * Check if the system is case sensitive or not.
      *
-     * @access  public
      * @return  bool
      */
-    public static function isCaseSensitive ( ) {
-
+    public static function isCaseSensitive()
+    {
         return !(
-               file_exists(mb_strtolower(__FILE__))
-            && file_exists(mb_strtoupper(__FILE__))
+            file_exists(mb_strtolower(__FILE__)) &&
+            file_exists(mb_strtoupper(__FILE__))
         );
     }
 
     /**
      * Get a canonicalized absolute pathname.
      *
-     * @access  public
      * @return  string
      */
-    public function getRealPath ( ) {
-
-        if(false === $out = realpath($this->getStreamName()))
+    public function getRealPath()
+    {
+        if (false === $out = realpath($this->getStreamName())) {
             return $this->getStreamName();
+        }
 
         return $out;
     }
@@ -599,11 +568,10 @@ abstract class Generic
     /**
      * Get file extension (if exists).
      *
-     * @access  public
      * @return  string
      */
-    public function getExtension ( ) {
-
+    public function getExtension()
+    {
         return pathinfo(
             $this->getStreamName(),
             PATHINFO_EXTENSION
@@ -613,18 +581,19 @@ abstract class Generic
     /**
      * Get filename without extension.
      *
-     * @access  public
      * @return  string
      */
-    public function getFilename ( ) {
-
+    public function getFilename()
+    {
         $file = basename($this->getStreamName());
 
-        if(defined('PATHINFO_FILENAME'))
+        if (defined('PATHINFO_FILENAME')) {
             return pathinfo($file, PATHINFO_FILENAME);
+        }
 
-        if(strstr($file, '.'))
+        if (strstr($file, '.')) {
             return substr($file, 0, strrpos($file, '.'));
+        }
 
         return $file;
     }
