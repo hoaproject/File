@@ -34,28 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Write.
@@ -67,7 +48,7 @@ namespace Hoa\File {
  * @license    New BSD License
  */
 
-class Write extends File implements \Hoa\Stream\IStream\Out {
+class Write extends File implements Stream\IStream\Out {
 
     /**
      * Open a file.
@@ -80,8 +61,12 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
      * @param   bool    $wait          Differ opening or not.
      * @return  void
      */
-    public function __construct ( $streamName, $mode = parent::MODE_APPEND_WRITE,
-                                  $context = null, $wait = false ) {
+    public function __construct (
+        $streamName,
+        $mode    = parent::MODE_APPEND_WRITE,
+        $context = null,
+        $wait    = false
+    ) {
 
         parent::__construct($streamName, $mode, $context, $wait);
 
@@ -98,7 +83,7 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         static $createModes = array(
             parent::MODE_TRUNCATE_WRITE,
@@ -109,7 +94,9 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
         if(!in_array($this->getMode(), $createModes))
             throw new Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(', ', $createModes)));
+                0,
+                array($this->getMode(), implode(', ', $createModes))
+            );
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
@@ -117,7 +104,10 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
             && !file_exists($streamName)
             && parent::MODE_TRUNCATE_WRITE == $this->getMode())
             throw new Exception\FileDoesNotExist(
-                'File %s does not exist.', 1, $streamName);
+                'File %s does not exist.',
+                1,
+                $streamName
+            );
 
         $out = parent::_open($streamName, $context);
 
@@ -137,7 +127,10 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
 
         if(0 > $length)
             throw new Exception(
-                'Length must be greater than 0, given %d.', 2, $length);
+                'Length must be greater than 0, given %d.',
+                2,
+                $length
+            );
 
         return fwrite($this->getStream(), $string, $length);
     }
@@ -262,6 +255,4 @@ class Write extends File implements \Hoa\Stream\IStream\Out {
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }

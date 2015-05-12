@@ -34,38 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\Iterator\SplFileInfo
- */
--> import('Iterator.SplFileInfo')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception')
-
-/**
- * \Hoa\File\ReadWrite
- */
--> import('File.ReadWrite')
-
-/**
- * \Hoa\File\Directory
- */
--> import('File.Directory')
-
-/**
- * \Hoa\File\Link\ReadWrite
- */
--> import('File.Link.ReadWrite');
-
-}
-
-namespace Hoa\File {
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\File\SplFileInfo.
@@ -77,7 +48,7 @@ namespace Hoa\File {
  * @license    New BSD License
  */
 
-class SplFileInfo extends \Hoa\Iterator\SplFileInfo {
+class SplFileInfo extends Iterator\SplFileInfo {
 
     /**
      * Current stream.
@@ -135,6 +106,4 @@ class SplFileInfo extends \Hoa\Iterator\SplFileInfo {
 
         return;
     }
-}
-
 }

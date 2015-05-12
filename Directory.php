@@ -34,38 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Exception\FileDoesNotExist
- */
--> import('File.Exception.FileDoesNotExist')
-
-/**
- * \Hoa\File\Generic
- */
--> import('File.Generic')
-
-/**
- * \Hoa\File\Finder
- */
--> import('File.Finder')
-
-/**
- * \Hoa\Stream\Context
- */
--> import('Stream.Context');
-
-}
-
-namespace Hoa\File {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Directory.
@@ -115,9 +86,12 @@ class Directory extends Generic {
      * @param   bool    $wait          Differ opening or not.
      * @return  void
      */
-    public function __construct ( $streamName, $mode = self::MODE_READ,
-                                  $context = null, $wait = false ) {
-
+    public function __construct(
+        $streamName,
+        $mode = self::MODE_READ,
+        $context = null,
+        $wait = false
+    ) {
         $this->setMode($mode);
         parent::__construct($streamName, $context, $wait);
 
@@ -134,12 +108,15 @@ class Directory extends Generic {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         if(false === is_dir($streamName))
             if($this->getMode() == self::MODE_READ)
                 throw new Exception\FileDoesNotExist(
-                    'Directory %s does not exist.', 0, $streamName);
+                    'Directory %s does not exist.',
+                    0,
+                    $streamName
+                );
             else
                 self::create(
                     $streamName,
@@ -177,11 +154,13 @@ class Directory extends Generic {
      * @return  bool
      * @throw   \Hoa\File\Exception
      */
-    public function copy ( $to, $force = \Hoa\Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
+    public function copy ( $to, $force = Stream\IStream\Touchable::DO_NOT_OVERWRITE ) {
 
         if(empty($to))
             throw new Exception(
-                'The destination path (to copy) is empty.', 1);
+                'The destination path (to copy) is empty.',
+                1
+            );
 
         $from       = $this->getStreamName();
         $fromLength = strlen($from) + 1;
@@ -256,12 +235,15 @@ class Directory extends Generic {
             return false;
 
         if(null !== $context)
-            if(false === \Hoa\Stream\Context::contextExists($context))
+            if(false === Stream\Context::contextExists($context))
                 throw new Exception(
                     'Context %s was not previously declared, cannot retrieve ' .
-                    'this context.', 2, $context);
+                    'this context.',
+                    2,
+                    $context
+                );
             else
-                $context = \Hoa\Stream\Context::getInstance($context);
+                $context = Stream\Context::getInstance($context);
 
         if(null === $context)
             return @mkdir(
@@ -277,6 +259,4 @@ class Directory extends Generic {
             $context->getContext()
         );
     }
-}
-
 }

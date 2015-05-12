@@ -34,7 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace Hoa\File\Exception {
+namespace Hoa\File\Exception;
+
+use Hoa\Core;
 
 /**
  * Class \Hoa\File\Exception.
@@ -46,15 +48,9 @@ namespace Hoa\File\Exception {
  * @license    New BSD License
  */
 
-class Exception extends \Hoa\Core\Exception { }
-
-}
-
-namespace {
+class Exception extends Core\Exception { }
 
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\File\Exception\Exception');
-
-}
+Core\Consistency::flexEntity('Hoa\File\Exception\Exception');

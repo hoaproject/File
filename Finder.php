@@ -34,58 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\Iterator\Aggregate
- */
--> import('Iterator.Aggregate')
-
-/**
- * \Hoa\Iterator\Append
- */
--> import('Iterator.Append')
-
-/**
- * \Hoa\Iterator\IteratorIterator
- */
--> import('Iterator.~~')
-
-/**
- * \Hoa\Iterator\Recursive\Iterator
- */
--> import('Iterator.Recursive.Iterator')
-
-/**
- * \Hoa\Iterator\Recursive\Directory
- */
--> import('Iterator.Recursive.Directory')
-
-/**
- * \Hoa\Iterator\FileSystem
- */
--> import('Iterator.FileSystem')
-
-/**
- * \Hoa\Iterator\CallbackFilter
- */
--> import('Iterator.CallbackFilter')
-
-/**
- * \Hoa\Iterator\Map
- */
--> import('Iterator.Map')
-
-/**
- * \Hoa\File\SplFileInfo
- */
--> import('File.SplFileInfo');
-
-}
-
-namespace Hoa\File {
+use Hoa\Iterator;
 
 /**
  * Class \Hoa\File\Finder.
@@ -97,7 +48,7 @@ namespace Hoa\File {
  * @license    New BSD License
  */
 
-class Finder implements \Hoa\Iterator\Aggregate {
+class Finder implements Iterator\Aggregate {
 
     /**
      * SplFileInfo classname.
@@ -165,10 +116,10 @@ class Finder implements \Hoa\Iterator\Aggregate {
      */
     public function __construct ( ) {
 
-        $this->_flags =   \Hoa\Iterator\FileSystem::KEY_AS_PATHNAME
-                        | \Hoa\Iterator\FileSystem::CURRENT_AS_FILEINFO
-                        | \Hoa\Iterator\FileSystem::SKIP_DOTS;
-        $this->_first = \Hoa\Iterator\Recursive\Iterator::SELF_FIRST;
+        $this->_flags =   Iterator\FileSystem::KEY_AS_PATHNAME
+                        | Iterator\FileSystem::CURRENT_AS_FILEINFO
+                        | Iterator\FileSystem::SKIP_DOTS;
+        $this->_first = Iterator\Recursive\Iterator::SELF_FIRST;
 
         return;
     }
@@ -254,9 +205,9 @@ class Finder implements \Hoa\Iterator\Aggregate {
     public function followSymlinks ( $flag = true ) {
 
         if(true === $flag)
-            $this->_flags ^= \Hoa\Iterator\FileSystem::FOLLOW_SYMLINKS;
+            $this->_flags ^= Iterator\FileSystem::FOLLOW_SYMLINKS;
         else
-            $this->_flags |= \Hoa\Iterator\FileSystem::FOLLOW_SYMLINKS;
+            $this->_flags |= Iterator\FileSystem::FOLLOW_SYMLINKS;
 
         return $this;
     }
@@ -426,9 +377,9 @@ class Finder implements \Hoa\Iterator\Aggregate {
     public function dots ( $flag = true ) {
 
         if(true === $flag)
-            $this->_flags ^= \Hoa\Iterator\FileSystem::SKIP_DOTS;
+            $this->_flags ^= Iterator\FileSystem::SKIP_DOTS;
         else
-            $this->_flags |= \Hoa\Iterator\FileSystem::SKIP_DOTS;
+            $this->_flags |= Iterator\FileSystem::SKIP_DOTS;
 
         return $this;
     }
@@ -641,7 +592,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
      */
     public function childFirst ( ) {
 
-        $this->_first = \Hoa\Iterator\Recursive\Iterator::CHILD_FIRST;
+        $this->_first = Iterator\Recursive\Iterator::CHILD_FIRST;
 
         return $this;
     }
@@ -654,7 +605,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
      */
     public function getIterator ( ) {
 
-        $_iterator = new \Hoa\Iterator\Append();
+        $_iterator = new Iterator\Append();
         $types     = $this->getTypes();
 
         if(!empty($types))
@@ -669,8 +620,8 @@ class Finder implements \Hoa\Iterator\Aggregate {
         foreach($this->getPaths() as $path) {
 
             if(1 == $maxDepth)
-                $iterator = new \Hoa\Iterator\IteratorIterator(
-                    new \Hoa\Iterator\Recursive\Directory(
+                $iterator = new Iterator\IteratorIterator(
+                    new Iterator\Recursive\Directory(
                         $path,
                         $this->getFlags(),
                         $splFileInfo
@@ -679,8 +630,8 @@ class Finder implements \Hoa\Iterator\Aggregate {
                 );
             else {
 
-                $iterator = new \Hoa\Iterator\Recursive\Iterator(
-                    new \Hoa\Iterator\Recursive\Directory(
+                $iterator = new Iterator\Recursive\Iterator(
+                    new Iterator\Recursive\Directory(
                         $path,
                         $this->getFlags(),
                         $splFileInfo
@@ -696,7 +647,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
         }
 
         foreach($this->getFilters() as $filter)
-            $_iterator = new \Hoa\Iterator\CallbackFilter(
+            $_iterator = new Iterator\CallbackFilter(
                 $_iterator,
                 $filter
             );
@@ -711,7 +662,7 @@ class Finder implements \Hoa\Iterator\Aggregate {
         foreach($sorts as $sort)
             uasort($array, $sort);
 
-        return new \Hoa\Iterator\Map($array);
+        return new Iterator\Map($array);
     }
 
     /**
@@ -827,6 +778,4 @@ class Finder implements \Hoa\Iterator\Aggregate {
 
         return $this->_first;
     }
-}
-
 }

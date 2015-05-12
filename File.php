@@ -34,43 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Exception\FileDoesNotExist
- */
--> import('File.Exception.FileDoesNotExist')
-
-/**
- * \Hoa\File\Generic
- */
--> import('File.Generic')
-
-/**
- * \Hoa\Stream\IStream\Bufferable
- */
--> import('Stream.I~.Bufferable')
-
-/**
- * \Hoa\Stream\IStream\Lockable
- */
--> import('Stream.I~.Lockable')
-
-/**
- * \Hoa\Stream\IStream\Pointable
- */
--> import('Stream.I~.Pointable');
-
-}
-
-namespace Hoa\File {
+use Hoa\Core;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File.
@@ -84,9 +51,9 @@ namespace Hoa\File {
 
 abstract class File
     extends    Generic
-    implements \Hoa\Stream\IStream\Bufferable,
-               \Hoa\Stream\IStream\Lockable,
-               \Hoa\Stream\IStream\Pointable {
+    implements Stream\IStream\Bufferable,
+               Stream\IStream\Lockable,
+               Stream\IStream\Pointable {
 
     /**
      * Open for reading only; place the file pointer at the beginning of the
@@ -175,8 +142,12 @@ abstract class File
      * @return  void
      * @throw   \Hoa\File\Exception
      */
-    public function __construct ( $streamName, $mode, $context = null,
-                                  $wait = false ) {
+    public function __construct (
+        $streamName,
+        $mode,
+        $context = null,
+        $wait = false
+    ) {
 
         $this->setMode($mode);
 
@@ -202,7 +173,9 @@ abstract class File
                         throw new Exception(
                             'You need PHP5.3.6 to use a file descriptor ' .
                             'other than 0, 1 or 2 (tried %d with PHP%s).',
-                            0, array($streamName, PHP_VERSION));
+                            0,
+                            array($streamName, PHP_VERSION)
+                        );
         }
 
         parent::__construct($streamName, $context, $wait);
@@ -220,19 +193,24 @@ abstract class File
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         if(   substr($streamName, 0, 4) == 'file'
            && false === is_dir(dirname($streamName)))
             throw new Exception(
                 'Directory %s does not exist. Could not open file %s.',
-                0, array(dirname($streamName), basename($streamName)));
+                1,
+                array(dirname($streamName), basename($streamName))
+            );
 
         if(null === $context) {
 
             if(false === $out = @fopen($streamName, $this->getMode(), true))
                 throw new Exception(
-                    'Failed to open stream %s.', 1, $streamName);
+                    'Failed to open stream %s.',
+                    2,
+                    $streamName
+                );
 
             return $out;
         }
@@ -246,7 +224,10 @@ abstract class File
 
         if(false === $out)
             throw new Exception(
-                'Failed to open stream %s.', 2, $streamName);
+                'Failed to open stream %s.',
+                3,
+                $streamName
+            );
 
         return $out;
     }
@@ -357,7 +338,7 @@ abstract class File
      *                             \Hoa\Stream\IStream\Pointable::SEEK_* constants.
      * @return  int
      */
-    public function seek ( $offset, $whence = \Hoa\Stream\IStream\Pointable::SEEK_SET ) {
+    public function seek ( $offset, $whence = Stream\IStream\Pointable::SEEK_SET ) {
 
         return fseek($this->getStream(), $offset, $whence);
     }
@@ -395,13 +376,7 @@ abstract class File
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\File\File');
-
-}
+Core\Consistency::flexEntity('Hoa\File\File');

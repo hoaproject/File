@@ -34,23 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Temporary;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~');
-
-}
-
-namespace Hoa\File\Temporary {
+use Hoa\Core;
+use Hoa\File;
 
 /**
  * Class \Hoa\File\Temporary.
@@ -62,7 +49,7 @@ namespace Hoa\File\Temporary {
  * @license    New BSD License
  */
 
-class Temporary extends \Hoa\File {
+class Temporary extends File {
 
     /**
      * Temporary file index.
@@ -85,8 +72,12 @@ class Temporary extends \Hoa\File {
      * @param   bool    $wait          Differ opening or not.
      * @return  void
      */
-    public function __construct ( $streamName, $mode, $context = null,
-                                  $wait = false ) {
+    public function __construct(
+        $streamName,
+        $mode,
+        $context = null,
+        $wait    = false
+    ) {
 
         if(null === $streamName)
             $streamName = 'hoa://Library/File/Temporary.php#' .
@@ -110,8 +101,10 @@ class Temporary extends \Hoa\File {
     protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
 
         if(false === $out = @tmpfile())
-            throw new \Hoa\File\Exception(
-                'Failed to open a temporary stream.', 0);
+            throw new File\Exception(
+                'Failed to open a temporary stream.',
+                0
+            );
 
         return $out;
     }
@@ -151,13 +144,7 @@ class Temporary extends \Hoa\File {
     }
 }
 
-}
-
-namespace {
-
 /**
  * Flex entity.
  */
-Hoa\Core\Consistency::flexEntity('Hoa\File\Temporary\Temporary');
-
-}
+Core\Consistency::flexEntity('Hoa\File\Temporary\Temporary');

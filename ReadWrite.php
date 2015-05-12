@@ -34,33 +34,9 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File
- */
--> import('File.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In')
-
-/**
- * \Hoa\Stream\IStream\Out
- */
--> import('Stream.I~.Out');
-
-}
-
-namespace Hoa\File {
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\ReadWrite.
@@ -74,8 +50,8 @@ namespace Hoa\File {
 
 class          ReadWrite
     extends    File
-    implements \Hoa\Stream\IStream\In,
-               \Hoa\Stream\IStream\Out {
+    implements Stream\IStream\In,
+               Stream\IStream\Out {
 
     /**
      * Open a file.
@@ -88,8 +64,12 @@ class          ReadWrite
      * @param   bool    $wait          Differ opening or not.
      * @return  void
      */
-    public function __construct ( $streamName, $mode = parent::MODE_APPEND_READ_WRITE,
-                                  $context = null, $wait = false ) {
+    public function __construct (
+        $streamName,
+        $mode = parent::MODE_APPEND_READ_WRITE,
+        $context = null,
+        $wait = false
+    ) {
 
         parent::__construct($streamName, $mode, $context, $wait);
 
@@ -106,7 +86,7 @@ class          ReadWrite
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         static $createModes = array(
             parent::MODE_READ_WRITE,
@@ -118,7 +98,9 @@ class          ReadWrite
         if(!in_array($this->getMode(), $createModes))
             throw new Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(', ', $createModes)));
+                0,
+                array($this->getMode(), implode(', ', $createModes))
+            );
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
@@ -126,7 +108,10 @@ class          ReadWrite
             && !file_exists($streamName)
             && parent::MODE_READ_WRITE == $this->getMode())
             throw new Exception\FileDoesNotExist(
-                'File %s does not exist.', 1, $streamName);
+                'File %s does not exist.',
+                1,
+                $streamName
+            );
 
         $out = parent::_open($streamName, $context);
 
@@ -156,7 +141,10 @@ class          ReadWrite
 
         if(0 > $length)
             throw new Exception(
-                'Length must be greater than 0, given %d.', 2, $length);
+                'Length must be greater than 0, given %d.',
+                2,
+                $length
+            );
 
         return fread($this->getStream(), $length);
     }
@@ -280,7 +268,10 @@ class          ReadWrite
 
         if(0 > $length)
             throw new Exception(
-                'Length must be greater than 0, given %d.', 3, $length);
+                'Length must be greater than 0, given %d.',
+                3,
+                $length
+            );
 
         return fwrite($this->getStream(), $string, $length);
     }
@@ -405,6 +396,4 @@ class          ReadWrite
 
         return ftruncate($this->getStream(), $size);
     }
-}
-
 }

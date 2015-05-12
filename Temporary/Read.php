@@ -34,28 +34,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-namespace {
+namespace Hoa\File\Temporary;
 
-from('Hoa')
-
-/**
- * \Hoa\File\Exception
- */
--> import('File.Exception.~')
-
-/**
- * \Hoa\File\Temporary
- */
--> import('File.Temporary.~')
-
-/**
- * \Hoa\Stream\IStream\In
- */
--> import('Stream.I~.In');
-
-}
-
-namespace Hoa\File\Temporary {
+use Hoa\File;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Temporary\Read.
@@ -67,7 +49,7 @@ namespace Hoa\File\Temporary {
  * @license    New BSD License
  */
 
-class Read extends Temporary implements \Hoa\Stream\IStream\In {
+class Read extends Temporary implements Stream\IStream\In {
 
     /**
      * Open a file.
@@ -98,23 +80,28 @@ class Read extends Temporary implements \Hoa\Stream\IStream\In {
      * @throw   \Hoa\File\Exception\FileDoesNotExist
      * @throw   \Hoa\File\Exception
      */
-    protected function &_open ( $streamName, \Hoa\Stream\Context $context = null ) {
+    protected function &_open ( $streamName, Stream\Context $context = null ) {
 
         static $createModes = array(
             parent::MODE_READ
         );
 
         if(!in_array($this->getMode(), $createModes))
-            throw new \Hoa\File\Exception(
+            throw new File\Exception(
                 'Open mode are not supported; given %d. Only %s are supported.',
-                0, array($this->getMode(), implode(', ', $createModes)));
+                0,
+                array($this->getMode(), implode(', ', $createModes))
+            );
 
         preg_match('#^(\w+)://#', $streamName, $match);
 
         if((   (isset($match[1]) && $match[1] == 'file') || !isset($match[1]))
             && !file_exists($streamName))
-            throw new \Hoa\File\Exception\FileDoesNotExist(
-                'File %s does not exist.', 1, $streamName);
+            throw new File\Exception\FileDoesNotExist(
+                'File %s does not exist.',
+                1,
+                $streamName
+            );
 
         $out = parent::_open($streamName, $context);
 
@@ -143,8 +130,11 @@ class Read extends Temporary implements \Hoa\Stream\IStream\In {
     public function read ( $length ) {
 
         if(0 > $length)
-            throw new \Hoa\File\Exception(
-                'Length must be greater than 0, given %d.', 2, $length);
+            throw new File\Exception(
+                'Length must be greater than 0, given %d.',
+                2,
+                $length
+            );
 
         return fread($this->getStream(), $length);
     }
@@ -254,6 +244,4 @@ class Read extends Temporary implements \Hoa\Stream\IStream\In {
 
         return fscanf($this->getStream(), $format);
     }
-}
-
 }
