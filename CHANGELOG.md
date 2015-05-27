@@ -1,3 +1,8 @@
+# 0.15.05.27
+
+  * `getSize` returns `false` if stream is unstatable. (Ivan Enderlin, 2015-05-27T11:05:46+02:00)
+  * `getStatistic` works on the stream pointer. (Ivan Enderlin, 2015-05-27T11:04:26+02:00)
+
 # 0.15.05.12
 
   * Move to PSR-1 and PSR-2. (Ivan Enderlin, 2015-05-12T10:23:01+02:00)
