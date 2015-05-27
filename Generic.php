@@ -98,7 +98,7 @@ abstract class Generic
      */
     public function getStatistic()
     {
-        return stat($this->getStreamName());
+        return fstat($this->getStream());
     }
 
     /**
