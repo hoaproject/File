@@ -145,7 +145,7 @@ class Link extends File
         } elseif (true === is_file($target)) {
             return new File\ReadWrite(
                 $target,
-                \Hoa\File::MODE_APPEND_READ_WRITE,
+                File::MODE_APPEND_READ_WRITE,
                 $context
             );
         } elseif (true === is_dir($target)) {

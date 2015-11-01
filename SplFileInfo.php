@@ -79,7 +79,7 @@ class SplFileInfo extends Iterator\SplFileInfo
     /**
      * Close the opened stream.
      *
-     * @return  mixed
+     * @return  void
      */
     public function close()
     {
