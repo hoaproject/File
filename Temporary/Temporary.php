@@ -38,6 +38,7 @@ namespace Hoa\File\Temporary;
 
 use Hoa\Core;
 use Hoa\File;
+use Hoa\Stream;
 
 /**
  * Class \Hoa\File\Temporary.
@@ -93,7 +94,7 @@ class Temporary extends File
      * @return  resource
      * @throws  \Hoa\File\Exception
      */
-    protected function &_open($streamName, \Hoa\Stream\Context $context = null)
+    protected function &_open($streamName, Stream\Context $context = null)
     {
         if (false === $out = @tmpfile()) {
             throw new File\Exception(

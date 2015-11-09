@@ -211,11 +211,12 @@ class Finder implements Iterator\Aggregate
      * Example:
      *     $this->name('#\.php$#');
      *
+     * @param   string  $regex    Regex.
      * @return  \Hoa\File\Finder
      */
     public function name($regex)
     {
-        $this->_filters[] = function ($current) use ($regex) {
+        $this->_filters[] = function (\SplFileInfo $current) use ($regex) {
             return 0 !== preg_match($regex, $current->getBasename());
         };
 
@@ -227,11 +228,12 @@ class Finder implements Iterator\Aggregate
      * Example:
      *      $this->notIn('#^\.(git|hg)$#');
      *
+     * @param   string  $regex    Regex.
      * @return  \Hoa\File\Finder
      */
     public function notIn($regex)
     {
-        $this->_filters[] = function ($current) use ($regex) {
+        $this->_filters[] = function (\SplFileInfo $current) use ($regex) {
             foreach (explode(DS, $current->getPathname()) as $part) {
                 if (0 !== preg_match($regex, $part)) {
                     return false;
@@ -327,35 +329,35 @@ class Finder implements Iterator\Aggregate
         switch ($operator) {
 
             case '<':
-                $filter = function ($current, $key, $iterator) use ($number) {
+                $filter = function (\SplFileInfo $current) use ($number) {
                     return $current->getSize() < $number;
                 };
 
                 break;
 
             case '<=':
-                $filter = function ($current, $key, $iterator) use ($number) {
+                $filter = function (\SplFileInfo $current) use ($number) {
                     return $current->getSize() <= $number;
                 };
 
                 break;
 
             case '>':
-                $filter = function ($current, $key, $iterator) use ($number) {
+                $filter = function (\SplFileInfo $current) use ($number) {
                     return $current->getSize() > $number;
                 };
 
                 break;
 
             case '>=':
-                $filter = function ($current, $key, $iterator) use ($number) {
+                $filter = function (\SplFileInfo $current) use ($number) {
                     return $current->getSize() >= $number;
                 };
 
                 break;
 
             case '=':
-                $filter = function ($current, $key, $iterator) use ($number) {
+                $filter = function (\SplFileInfo $current) use ($number) {
                     return $current->getSize() === $number;
                 };
 
@@ -392,7 +394,7 @@ class Finder implements Iterator\Aggregate
      */
     public function owner($owner)
     {
-        $this->_filters[] = function ($current) use ($owner) {
+        $this->_filters[] = function (\SplFileInfo $current) use ($owner) {
 
             return $current->getOwner() === $owner;
         };
@@ -416,7 +418,6 @@ class Finder implements Iterator\Aggregate
      */
     protected function formatDate($date, &$operator)
     {
-        $time     =  0;
         $operator = -1;
 
         if (0 === preg_match('#\bago\b#', $date)) {
@@ -449,11 +450,11 @@ class Finder implements Iterator\Aggregate
         $time = $this->formatDate($date, $operator);
 
         if (-1 === $operator) {
-            $this->_filters[] = function ($current) use ($time) {
+            $this->_filters[] = function (\SplFileInfo $current) use ($time) {
                 return $current->getCTime() >= $time;
             };
         } else {
-            $this->_filters[] = function ($current) use ($time) {
+            $this->_filters[] = function (\SplFileInfo $current) use ($time) {
                 return $current->getCTime() < $time;
             };
         }
@@ -474,11 +475,11 @@ class Finder implements Iterator\Aggregate
         $time = $this->formatDate($date, $operator);
 
         if (-1 === $operator) {
-            $this->_filters[] = function ($current) use ($time) {
+            $this->_filters[] = function (\SplFileInfo $current) use ($time) {
                 return $current->getMTime() >= $time;
             };
         } else {
-            $this->_filters[] = function ($current) use ($time) {
+            $this->_filters[] = function (\SplFileInfo $current) use ($time) {
                 return $current->getMTime() < $time;
             };
         }
@@ -521,11 +522,11 @@ class Finder implements Iterator\Aggregate
         if (true === class_exists('Collator', false)) {
             $collator = new \Collator($locale);
 
-            $this->_sorts[] = function ($a, $b) use ($collator) {
+            $this->_sorts[] = function (\SplFileInfo $a, \SplFileInfo $b) use ($collator) {
                 return $collator->compare($a->getPathname(), $b->getPathname());
             };
         } else {
-            $this->_sorts[] = function ($a, $b) {
+            $this->_sorts[] = function (\SplFileInfo $a, \SplFileInfo $b) {
                 return strcmp($a->getPathname(), $b->getPathname());
             };
         }
@@ -542,7 +543,7 @@ class Finder implements Iterator\Aggregate
      */
     public function sortBySize()
     {
-        $this->_sorts[] = function ($a, $b) {
+        $this->_sorts[] = function (\SplFileInfo $a, \SplFileInfo $b) {
             return $a->getSize() < $b->getSize();
         };
 
@@ -559,7 +560,7 @@ class Finder implements Iterator\Aggregate
      *         return $a->getMTime() < $b->getMTime();
      *     });
      *
-     * @param   callable  $callback    Callback
+     * @param   callable  $callable    Callback.
      * @return  \Hoa\File\Finder
      */
     public function sort($callable)
@@ -592,7 +593,7 @@ class Finder implements Iterator\Aggregate
         $types     = $this->getTypes();
 
         if (!empty($types)) {
-            $this->_filters[] = function ($current) use ($types) {
+            $this->_filters[] = function (\SplFileInfo $current) use ($types) {
                 return in_array($current->getType(), $types);
             };
         }
@@ -702,16 +703,6 @@ class Finder implements Iterator\Aggregate
     public function getTypes()
     {
         return $this->_types;
-    }
-
-    /**
-     * Get name.
-     *
-     * @return  string
-     */
-    public function getName()
-    {
-        return $this->_name;
     }
 
     /**
