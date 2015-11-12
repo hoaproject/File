@@ -134,7 +134,20 @@ class Finder implements Iterator\Aggregate
         }
 
         foreach ($path as $p) {
-            $this->_paths[] = $p;
+            if (1 === preg_match('/[\*\?\[\]]/', $p)) {
+                $iterator = new Iterator\CallbackFilter(
+                    new Iterator\Glob(rtrim($p, DS)),
+                    function ($current) {
+                        return $current->isDir();
+                    }
+                );
+
+                foreach ($iterator as $path => $_fileInfo) {
+                    $this->_paths[] = $path;
+                }
+            } else {
+                $this->_paths[] = $p;
+            }
         }
 
         return $this;
