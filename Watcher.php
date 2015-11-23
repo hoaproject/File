@@ -36,7 +36,7 @@
 
 namespace Hoa\File;
 
-use Hoa\Core;
+use Hoa\Event;
 
 /**
  * Class \Hoa\File\Watcher.
@@ -46,14 +46,9 @@ use Hoa\Core;
  * @copyright  Copyright © 2007-2015 Hoa community
  * @license    New BSD License
  */
-class Watcher extends Finder implements Core\Event\Listenable
+class Watcher extends Finder implements Event\Listenable
 {
-    /**
-     * Listeners.
-     *
-     * @var \Hoa\Core\Event\Listener
-     */
-    protected $_on      = null;
+    use Event\Listens;
 
     /**
      * Latency.
@@ -74,13 +69,15 @@ class Watcher extends Finder implements Core\Event\Listenable
     {
         parent::__construct();
 
-        $this->_on = new Core\Event\Listener(
-            $this,
-            [
-                'new',
-                'modify',
-                'move'
-            ]
+        $this->setListener(
+            new Event\Listener(
+                $this,
+                [
+                    'new',
+                    'modify',
+                    'move'
+                ]
+            )
         );
 
         if (null !== $latency) {
@@ -88,21 +85,6 @@ class Watcher extends Finder implements Core\Event\Listenable
         }
 
         return;
-    }
-
-    /**
-     * Attach a callable to this listenable object.
-     *
-     * @param   string  $listenerId    Listener ID.
-     * @param   mixed   $callable      Callable.
-     * @return  \Hoa\Stream
-     * @return  \Hoa\Core\Exception
-     */
-    public function on($listenerId, $callable)
-    {
-        $this->_on->attach($listenerId, $callable);
-
-        return $this;
     }
 
     /**
@@ -124,9 +106,9 @@ class Watcher extends Finder implements Core\Event\Listenable
         while (true) {
             foreach ($current as $name => $c) {
                 if (!isset($previous[$name])) {
-                    $this->_on->fire(
+                    $this->getListener()->fire(
                         'new',
-                        new Core\Event\Bucket([
+                        new Event\Bucket([
                             'file' => $c
                         ])
                     );
@@ -141,9 +123,9 @@ class Watcher extends Finder implements Core\Event\Listenable
                 }
 
                 if ($previous[$name]->getHash() != $c->getHash()) {
-                    $this->_on->fire(
+                    $this->getListener()->fire(
                         'modify',
-                        new Core\Event\Bucket([
+                        new Event\Bucket([
                             'file' => $c
                         ])
                     );
@@ -153,9 +135,9 @@ class Watcher extends Finder implements Core\Event\Listenable
             }
 
             foreach ($previous as $p) {
-                $this->_on->fire(
+                $this->getListener()->fire(
                     'move',
-                    new Core\Event\Bucket([
+                    new Event\Bucket([
                         'file' => $p
                     ])
                 );
