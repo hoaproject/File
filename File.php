@@ -36,7 +36,7 @@
 
 namespace Hoa\File;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\Stream;
 
 /**
@@ -372,4 +372,4 @@ abstract class File
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\File\File');
+Consistency::flexEntity('Hoa\File\File');

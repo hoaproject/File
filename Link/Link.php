@@ -36,7 +36,7 @@
 
 namespace Hoa\File\Link;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\File;
 
 /**
@@ -194,4 +194,4 @@ class Link extends File
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\File\Link\Link');
+Consistency::flexEntity('Hoa\File\Link\Link');

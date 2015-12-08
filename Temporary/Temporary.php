@@ -36,7 +36,7 @@
 
 namespace Hoa\File\Temporary;
 
-use Hoa\Core;
+use Hoa\Consistency;
 use Hoa\File;
 use Hoa\Stream;
 
@@ -143,4 +143,4 @@ class Temporary extends File
 /**
  * Flex entity.
  */
-Core\Consistency::flexEntity('Hoa\File\Temporary\Temporary');
+Consistency::flexEntity('Hoa\File\Temporary\Temporary');
