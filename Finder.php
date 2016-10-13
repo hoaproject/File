@@ -142,8 +142,8 @@ class Finder implements Iterator\Aggregate
                     }
                 );
 
-                foreach ($iterator as $path => $_fileInfo) {
-                    $this->_paths[] = $path;
+                foreach ($iterator as $fileInfo) {
+                    $this->_paths[] = $_fileInfo->getPathname();
                 }
             } else {
                 $this->_paths[] = $p;
