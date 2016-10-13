@@ -68,7 +68,6 @@ class Temporary extends File
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
-     * @return  void
      */
     public function __construct(
         $streamName,

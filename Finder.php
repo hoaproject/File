@@ -109,7 +109,6 @@ class Finder implements Iterator\Aggregate
     /**
      * Initialize.
      *
-     * @return  void
      */
     public function __construct()
     {
@@ -408,7 +407,6 @@ class Finder implements Iterator\Aggregate
     public function owner($owner)
     {
         $this->_filters[] = function (\SplFileInfo $current) use ($owner) {
-
             return $current->getOwner() === $owner;
         };
 

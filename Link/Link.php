@@ -58,7 +58,6 @@ class Link extends File
      * @param   string  $context       Context ID (please, see the
      *                                 \Hoa\Stream\Context class).
      * @param   bool    $wait          Differ opening or not.
-     * @return  void
      * @throws  \Hoa\File\Exception
      */
     public function __construct(

@@ -63,7 +63,6 @@ class Watcher extends Finder implements Event\Listenable
      * Constructor.
      *
      * @param   int  $latency    Latency (in seconds).
-     * @return  void
      */
     public function __construct($latency = null)
     {
