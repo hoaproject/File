@@ -1,3 +1,13 @@
+# 1.17.01.13
+
+  * Quality: Happy new year! (Alexis von Glasow, 2017-01-10T12:56:03+01:00)
+  * Quality: Fix CS. (Ivan Enderlin, 2016-10-13T22:51:31+02:00)
+  * Finder: Better variable semantics in `in`. (Ivan Enderlin, 2016-10-13T22:47:37+02:00)
+  * Finder: Reduce error vulnerability. (Ivan Enderlin, 2016-10-13T22:43:03+02:00)
+  * Add Glob pattern handling in the `Finder` (Stéphane HULARD, 2015-11-12T22:28:20+01:00)
+  * Documentation: Update `support` properties. (Ivan Enderlin, 2016-10-05T20:43:22+02:00)
+  * Composer: New stable library. (Ivan Enderlin, 2016-01-14T21:55:56+01:00)
+
 # 1.16.01.15
 
   * Composer: New stable library. (Ivan Enderlin, 2016-01-14T21:54:42+01:00)
