@@ -339,7 +339,6 @@ class Finder implements Iterator\Aggregate
         $filter = null;
 
         switch ($operator) {
-
             case '<':
                 $filter = function (\SplFileInfo $current) use ($number) {
                     return $current->getSize() < $number;
