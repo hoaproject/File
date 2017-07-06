@@ -175,8 +175,25 @@ class Directory extends Generic
                 continue;
             }
 
-            $file->open()->copy($_to, $force);
-            $file->close();
+            // This is not possible to do `$file->open()->copy();
+            // $file->close();` because the file will be opened in read and
+            // write mode. In a PHAR for instance, this operation is
+            // forbidden. So a special care must be taken to open file in read
+            // only mode.
+            $handle = null;
+
+            if (true === $file->isFile()) {
+                $handle = new Read($file->getPathname());
+            } elseif (true === $file->isDir()) {
+                $handle = new Directory($file->getPathName());
+            } elseif (true === $file->isLink()) {
+                $handle = new Link\Read($file->getPathName());
+            }
+
+            if (null !== $handle) {
+                $handle->copy($_to, $force);
+                $handle->close();
+            }
         }
 
         return true;
