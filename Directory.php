@@ -139,8 +139,7 @@ class Directory extends Generic
     }
 
     /**
-     * Copy file.
-     * Return the destination directory path if succeed, false otherwise.
+     * Recursive copy of a directory.
      *
      * @param   string  $to       Destination path.
      * @param   bool    $force    Force to copy if the file $to already exists.
