@@ -1,3 +1,9 @@
+# 1.17.07.11
+
+  * doc(api) Rewrite `copy` definition. (Ivan Enderlin, 2017-07-11T09:35:10+02:00)
+  * fix(directory) Use read-only mode when copying. (Ivan Enderlin, 2017-07-06T13:34:16+02:00)
+  * chore(cs) Remove an empty line. (Ivan Enderlin, 2017-07-06T13:32:34+02:00)
+
 # 1.17.01.13
 
   * Quality: Happy new year! (Alexis von Glasow, 2017-01-10T12:56:03+01:00)
