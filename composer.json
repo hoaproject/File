@@ -24,6 +24,7 @@
         "source": "https://central.hoa-project.net/Resource/Library/File"
     },
     "require": {
+        "php"            : ">=7.1",
         "hoa/consistency": "~1.0",
         "hoa/event"      : "~1.0",
         "hoa/exception"  : "~1.0",
@@ -35,7 +36,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Hoa\\File\\": "."
+            "Hoa\\File\\": "Source"
         }
     },
     "extra": {
