@@ -94,7 +94,7 @@ class Temporary extends File
      * different of calling $this->__construct() that will create a temporary
      * file that will be destroy when calling the $this->close() method.
      */
-    public static function create(string $directory = null, string $prefix = '__hoa_'): string
+    public static function create(string $directory = null, string $prefix = '__hoa_')
     {
         if (null === $directory ||
             false === is_dir($directory)) {

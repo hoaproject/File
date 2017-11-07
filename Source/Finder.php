@@ -374,7 +374,7 @@ class Finder implements Iterator\Aggregate
      * Example: “42 hours” is equivalent to “since 42 hours” which is equivalent
      * to “since 42 hours ago”.
      */
-    protected function formatDate(string $date, int &$operator): int
+    protected function formatDate(string $date, ?int &$operator): int
     {
         $operator = -1;
 

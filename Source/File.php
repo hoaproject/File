@@ -291,7 +291,7 @@ abstract class File extends Generic implements Stream\IStream\Bufferable, Stream
     /**
      * Create a file.
      */
-    public static function create(string $name, $dummy): bool
+    public static function create(string $name)
     {
         if (file_exists($name)) {
             return true;
