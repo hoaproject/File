@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -42,9 +44,6 @@ use Hoa\Event;
  * Class \Hoa\File\Watcher.
  *
  * A naive file system watcher that fires three events: new, move and modify.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Watcher extends Finder implements Event\Listenable
 {
@@ -52,8 +51,6 @@ class Watcher extends Finder implements Event\Listenable
 
     /**
      * Latency.
-     *
-     * @var int
      */
     protected $_latency = 1;
 
@@ -61,10 +58,8 @@ class Watcher extends Finder implements Event\Listenable
 
     /**
      * Constructor.
-     *
-     * @param   int  $latency    Latency (in seconds).
      */
-    public function __construct($latency = null)
+    public function __construct(int $latency = null)
     {
         parent::__construct();
 
@@ -93,10 +88,8 @@ class Watcher extends Finder implements Event\Listenable
      *     • new, when a file is new, i.e. found by the finder;
      *     • modify, when a file has been modified;
      *     • move, when a file has moved, i.e. no longer found by the finder.
-     *
-     * @return  void
      */
-    public function run()
+    public function run(): void
     {
         $iterator = $this->getIterator();
         $previous = iterator_to_array($iterator);
@@ -153,11 +146,8 @@ class Watcher extends Finder implements Event\Listenable
 
     /**
      * Set latency.
-     *
-     * @param   int  $latency    Latency (in seconds).
-     * @return  int
      */
-    public function setLatency($latency)
+    public function setLatency(int $latency): int
     {
         $old            = $this->_latency;
         $this->_latency = $latency;
@@ -167,10 +157,8 @@ class Watcher extends Finder implements Event\Listenable
 
     /**
      * Get latency.
-     *
-     * @return  int
      */
-    public function getLatency()
+    public function getLatency(): int
     {
         return $this->_latency;
     }

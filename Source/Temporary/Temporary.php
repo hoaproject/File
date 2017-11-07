@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,16 +46,11 @@ use Hoa\Stream;
  * Class \Hoa\File\Temporary.
  *
  * Temporary file handler.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class Temporary extends File
 {
     /**
      * Temporary file index.
-     *
-     * @var int
      */
     private static $_i = 0;
 
@@ -61,19 +58,12 @@ class Temporary extends File
 
     /**
      * Open a temporary file.
-     *
-     * @param   string  $streamName    Stream name (or file descriptor).
-     * @param   string  $mode          Open mode, see the parent::MODE_*
-     *                                 constants.
-     * @param   string  $context       Context ID (please, see the
-     *                                 \Hoa\Stream\Context class).
-     * @param   bool    $wait          Differ opening or not.
      */
     public function __construct(
-        $streamName,
-        $mode,
-        $context = null,
-        $wait    = false
+        string $streamName,
+        string $mode,
+        string $context = null,
+        bool $wait      = false
     ) {
         if (null === $streamName) {
             $streamName = 'hoa://Library/File/Temporary.php#' . self::$_i++;
@@ -86,14 +76,8 @@ class Temporary extends File
 
     /**
      * Open the stream and return the associated resource.
-     *
-     * @param   string              $streamName    Stream name (here, it is
-     *                                             null).
-     * @param   \Hoa\Stream\Context  $context       Context.
-     * @return  resource
-     * @throws  \Hoa\File\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null)
     {
         if (false === $out = @tmpfile()) {
             throw new File\Exception(
@@ -109,18 +93,10 @@ class Temporary extends File
      * Create a unique temporary file, i.e. a file with a unique filename. It is
      * different of calling $this->__construct() that will create a temporary
      * file that will be destroy when calling the $this->close() method.
-     *
-     * @param   string  $directory    Directory where the temporary filename
-     *                                will be created. If the directory does not
-     *                                exist, it may generate a file in the
-     *                                system's temporary directory.
-     * @param   string  $prefix       Prefix of the generated temporary
-     *                                filename.
-     * @return  string
      */
-    public static function create($directory = null, $prefix = '__hoa_')
+    public static function create(string $directory = null, string $prefix = '__hoa_'): string
     {
-        if (null  === $directory ||
+        if (null === $directory ||
             false === is_dir($directory)) {
             $directory = static::getTemporaryDirectory();
         }
@@ -130,10 +106,8 @@ class Temporary extends File
 
     /**
      * Get the directory path used for temporary files.
-     *
-     * @return  string
      */
-    public static function getTemporaryDirectory()
+    public static function getTemporaryDirectory(): string
     {
         return sys_get_temp_dir();
     }
@@ -142,4 +116,4 @@ class Temporary extends File
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\File\Temporary\Temporary');
+Consistency::flexEntity(Temporary::class);

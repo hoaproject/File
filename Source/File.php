@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -43,65 +45,46 @@ use Hoa\Stream;
  * Class \Hoa\File.
  *
  * File handler.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
-abstract class File
-    extends    Generic
-    implements Stream\IStream\Bufferable,
-               Stream\IStream\Lockable,
-               Stream\IStream\Pointable
+abstract class File extends Generic implements Stream\IStream\Bufferable, Stream\IStream\Lockable, Stream\IStream\Pointable
 {
     /**
      * Open for reading only; place the file pointer at the beginning of the
      * file.
-     *
-     * @const string
      */
-    const MODE_READ                = 'rb';
+    public const MODE_READ                = 'rb';
 
     /**
      * Open for reading and writing; place the file pointer at the beginning of
      * the file.
-     *
-     * @const string
      */
-    const MODE_READ_WRITE          = 'r+b';
+    public const MODE_READ_WRITE          = 'r+b';
 
     /**
      * Open for writing only; place the file pointer at the beginning of the
      * file and truncate the file to zero length. If the file does not exist,
      * attempt to create it.
-     *
-     * @const string
      */
-    const MODE_TRUNCATE_WRITE      = 'wb';
+    public const MODE_TRUNCATE_WRITE      = 'wb';
 
     /**
      * Open for reading and writing; place the file pointer at the beginning of
      * the file and truncate the file to zero length. If the file does not
      * exist, attempt to create it.
-     *
-     * @const string
      */
-    const MODE_TRUNCATE_READ_WRITE = 'w+b';
+    public const MODE_TRUNCATE_READ_WRITE = 'w+b';
 
     /**
      * Open for writing only; place the file pointer at the end of the file. If
      * the file does not exist, attempt to create it.
-     *
-     * @const string
      */
-    const MODE_APPEND_WRITE        = 'ab';
+    public const MODE_APPEND_WRITE        = 'ab';
 
     /**
      * Open for reading and writing; place the file pointer at the end of the
      * file. If the file does not exist, attempt to create it.
-     *
-     * @const string
      */
-    const MODE_APPEND_READ_WRITE   = 'a+b';
+    public const MODE_APPEND_READ_WRITE   = 'a+b';
 
     /**
      * Create and open for writing only; place the file pointer at the beginning
@@ -109,10 +92,8 @@ abstract class File
      * returning false and generating an error of level E_WARNING. If the file
      * does not exist, attempt to create it. This is equivalent to specifying
      * O_EXCL | O_CREAT flags for the underlying open(2) system call.
-     *
-     * @const string
      */
-    const MODE_CREATE_WRITE        = 'xb';
+    public const MODE_CREATE_WRITE        = 'xb';
 
     /**
      * Create and open for reading and writing; place the file pointer at the
@@ -120,34 +101,23 @@ abstract class File
      * fail by returning false and generating an error of level E_WARNING. If
      * the file does not exist, attempt to create it. This is equivalent to
      * specifying O_EXCL | O_CREAT flags for the underlying open(2) system call.
-     *
-     * @const string
      */
-    const MODE_CREATE_READ_WRITE   = 'x+b';
+    public const MODE_CREATE_READ_WRITE   = 'x+b';
 
 
 
     /**
      * Open a file.
-     *
-     * @param   string  $streamName    Stream name (or file descriptor).
-     * @param   string  $mode          Open mode, see the self::MODE_*
-     *                                 constants.
-     * @param   string  $context       Context ID (please, see the
-     *                                 \Hoa\Stream\Context class).
-     * @param   bool    $wait          Differ opening or not.
-     * @throws  \Hoa\File\Exception
      */
     public function __construct(
-        $streamName,
-        $mode,
-        $context = null,
-        $wait    = false
+        string $streamName,
+        string $mode,
+        string $context = null,
+        bool $wait      = false
     ) {
         $this->setMode($mode);
 
         switch ($streamName) {
-
             case '0':
                 $streamName = 'php://stdin';
 
@@ -185,14 +155,8 @@ abstract class File
 
     /**
      * Open the stream and return the associated resource.
-     *
-     * @param   string               $streamName    Stream name (e.g. path or URL).
-     * @param   \Hoa\Stream\Context  $context       Context.
-     * @return  resource
-     * @throws  \Hoa\File\Exception\FileDoesNotExist
-     * @throws  \Hoa\File\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null)
     {
         if (substr($streamName, 0, 4) == 'file' &&
             false === is_dir(dirname($streamName))) {
@@ -235,10 +199,8 @@ abstract class File
 
     /**
      * Close the current stream.
-     *
-     * @return  bool
      */
-    protected function _close()
+    protected function _close(): bool
     {
         return @fclose($this->getStream());
     }
@@ -246,12 +208,8 @@ abstract class File
     /**
      * Start a new buffer.
      * The callable acts like a light filter.
-     *
-     * @param   mixed   $callable    Callable.
-     * @param   int     $size        Size.
-     * @return  int
      */
-    public function newBuffer($callable = null, $size = null)
+    public function newBuffer(callable $callable = null, int $size = null): int
     {
         $this->setStreamBuffer($size);
 
@@ -262,85 +220,64 @@ abstract class File
 
     /**
      * Flush the output to a stream.
-     *
-     * @return  bool
      */
-    public function flush()
+    public function flush(): bool
     {
         return fflush($this->getStream());
     }
 
     /**
      * Delete buffer.
-     *
-     * @return  bool
      */
-    public function deleteBuffer()
+    public function deleteBuffer(): bool
     {
         return $this->disableStreamBuffer();
     }
 
     /**
      * Get bufffer level.
-     *
-     * @return  int
      */
-    public function getBufferLevel()
+    public function getBufferLevel(): int
     {
         return 1;
     }
 
     /**
      * Get buffer size.
-     *
-     * @return  int
      */
-    public function getBufferSize()
+    public function getBufferSize(): int
     {
         return $this->getStreamBufferSize();
     }
 
     /**
      * Portable advisory locking.
-     *
-     * @param   int     $operation    Operation, use the
-     *                                \Hoa\Stream\IStream\Lockable::LOCK_* constants.
-     * @return  bool
      */
-    public function lock($operation)
+    public function lock(int $operation): bool
     {
         return flock($this->getStream(), $operation);
     }
 
     /**
      * Rewind the position of a stream pointer.
-     *
-     * @return  bool
      */
-    public function rewind()
+    public function rewind(): bool
     {
         return rewind($this->getStream());
     }
 
     /**
      * Seek on a stream pointer.
-     *
-     * @param   int     $offset    Offset (negative value should be supported).
-     * @param   int     $whence    Whence, use the
-     *                             \Hoa\Stream\IStream\Pointable::SEEK_* constants.
-     * @return  int
      */
-    public function seek($offset, $whence = Stream\IStream\Pointable::SEEK_SET)
+    public function seek(int $offset, int $whence = Stream\IStream\Pointable::SEEK_SET): int
     {
         return fseek($this->getStream(), $offset, $whence);
     }
 
     /**
      * Get the current position of the stream pointer.
-     *
-     * @return  int
      */
-    public function tell()
+    public function tell(): int
     {
         $stream = $this->getStream();
 
@@ -353,12 +290,8 @@ abstract class File
 
     /**
      * Create a file.
-     *
-     * @param   string  $name     File name.
-     * @param   mixed   $dummy    To be compatible with childs.
-     * @return  bool
      */
-    public static function create($name, $dummy)
+    public static function create(string $name, $dummy): bool
     {
         if (file_exists($name)) {
             return true;
@@ -371,4 +304,4 @@ abstract class File
 /**
  * Flex entity.
  */
-Consistency::flexEntity('Hoa\File\File');
+Consistency::flexEntity(File::class);

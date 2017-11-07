@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -44,7 +46,6 @@ use Hoa\Stream;
  *
  * File handler.
  *
- * @copyright  Copyright © 2007-2017 Hoa community
  * @license    New BSD License
  */
 class Read extends Link implements Stream\IStream\In
@@ -59,10 +60,10 @@ class Read extends Link implements Stream\IStream\In
      * @param   bool    $wait          Differ opening or not.
      */
     public function __construct(
-        $streamName,
-        $mode    = parent::MODE_READ,
-        $context = null,
-        $wait    = false
+        string $streamName,
+        string $mode    = parent::MODE_READ,
+        string $context = null,
+        bool $wait    = false
     ) {
         parent::__construct($streamName, $mode, $context, $wait);
 
@@ -78,7 +79,7 @@ class Read extends Link implements Stream\IStream\In
      * @throws  \Hoa\File\Exception\FileDoesNotExist
      * @throws  \Hoa\File\Exception
      */
-    protected function &_open($streamName, Stream\Context $context = null)
+    protected function &_open(string $streamName, Stream\Context $context = null): resource
     {
         static $createModes = [
             parent::MODE_READ
@@ -113,7 +114,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  bool
      */
-    public function eof()
+    public function eof(): bool
     {
         return feof($this->getStream());
     }
@@ -125,7 +126,7 @@ class Read extends Link implements Stream\IStream\In
      * @return  string
      * @throws  \Hoa\File\Exception
      */
-    public function read($length)
+    public function read(int $length): string
     {
         if (0 > $length) {
             throw new File\Exception(
@@ -144,7 +145,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString($length)
+    public function readString(int $length): string
     {
         return $this->read($length);
     }
@@ -154,7 +155,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  string
      */
-    public function readCharacter()
+    public function readCharacter(): string
     {
         return fgetc($this->getStream());
     }
@@ -164,7 +165,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  bool
      */
-    public function readBoolean()
+    public function readBoolean(): bool
     {
         return (bool) $this->read(1);
     }
@@ -175,7 +176,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger($length = 1)
+    public function readInteger(int $length = 1): int
     {
         return (int) $this->read($length);
     }
@@ -186,7 +187,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat($length = 1)
+    public function readFloat(int $length = 1): float
     {
         return (float) $this->read($length);
     }
@@ -198,7 +199,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray($format = null)
+    public function readArray(string $format = null): array
     {
         return $this->scanf($format);
     }
@@ -208,7 +209,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  string
      */
-    public function readLine()
+    public function readLine(): string
     {
         return fgets($this->getStream());
     }
@@ -219,7 +220,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll($offset = 0)
+    public function readAll(int $offset = 0): string
     {
         return stream_get_contents($this->getStream(), -1, $offset);
     }
@@ -230,7 +231,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function scanf($format)
+    public function scanf(string $format): array
     {
         return fscanf($this->getStream(), $format);
     }

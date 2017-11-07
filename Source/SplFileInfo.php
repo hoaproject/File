@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Hoa
  *
@@ -42,16 +44,11 @@ use Hoa\Iterator;
  * Class \Hoa\File\SplFileInfo.
  *
  * Link between \Hoa\Iterator\SplFileInfo and \Hoa\File.
- *
- * @copyright  Copyright © 2007-2017 Hoa community
- * @license    New BSD License
  */
 class SplFileInfo extends Iterator\SplFileInfo
 {
     /**
      * Current stream.
-     *
-     * @var \Hoa\File\Generic
      */
     protected $_stream = null;
 
@@ -59,11 +56,8 @@ class SplFileInfo extends Iterator\SplFileInfo
 
     /**
      * Open the SplFileInfo as a Hoa\File stream.
-     *
-     * @return  \Hoa\File\Generic
-     * @throws  \Hoa\File\Exception
      */
-    public function open()
+    public function open(): Generic
     {
         if (true === $this->isFile()) {
             return $this->_stream = new ReadWrite($this->getPathname());
@@ -78,8 +72,6 @@ class SplFileInfo extends Iterator\SplFileInfo
 
     /**
      * Close the opened stream.
-     *
-     * @return  void
      */
     public function close()
     {
@@ -92,8 +84,6 @@ class SplFileInfo extends Iterator\SplFileInfo
 
     /**
      * Destruct.
-     *
-     * @return  void
      */
     public function __destruct()
     {
