@@ -106,7 +106,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read n characters.
      */
-    public function read(int $length): string
+    public function read(int $length)
     {
         if (0 > $length) {
             throw new File\Exception(
@@ -122,7 +122,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Alias of $this->read().
      */
-    public function readString(int $length): string
+    public function readString(int $length)
     {
         return $this->read($length);
     }
@@ -130,7 +130,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read a character.
      */
-    public function readCharacter(): string
+    public function readCharacter()
     {
         return fgetc($this->getStream());
     }
@@ -138,7 +138,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read a boolean.
      */
-    public function readBoolean(): bool
+    public function readBoolean()
     {
         return (bool) $this->read(1);
     }
@@ -146,7 +146,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read an integer.
      */
-    public function readInteger(int $length = 1): int
+    public function readInteger(int $length = 1)
     {
         return (int) $this->read($length);
     }
@@ -154,7 +154,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read a float.
      */
-    public function readFloat(int $length = 1): float
+    public function readFloat(int $length = 1)
     {
         return (float) $this->read($length);
     }
@@ -163,7 +163,7 @@ class Read extends Temporary implements Stream\IStream\In
      * Read an array.
      * Alias of the $this->scanf() method.
      */
-    public function readArray(string $format = null): array
+    public function readArray(string $format = null)
     {
         return $this->scanf($format);
     }
@@ -171,7 +171,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read a line.
      */
-    public function readLine(): string
+    public function readLine()
     {
         return fgets($this->getStream());
     }
@@ -179,7 +179,7 @@ class Read extends Temporary implements Stream\IStream\In
     /**
      * Read all, i.e. read as much as possible.
      */
-    public function readAll(int $offset = 0): string
+    public function readAll(int $offset = 0)
     {
         return stream_get_contents($this->getStream(), -1, $offset);
     }

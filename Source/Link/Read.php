@@ -126,7 +126,7 @@ class Read extends Link implements Stream\IStream\In
      * @return  string
      * @throws  \Hoa\File\Exception
      */
-    public function read(int $length): string
+    public function read(int $length)
     {
         if (0 > $length) {
             throw new File\Exception(
@@ -145,7 +145,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int     $length    Length.
      * @return  string
      */
-    public function readString(int $length): string
+    public function readString(int $length)
     {
         return $this->read($length);
     }
@@ -155,7 +155,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  string
      */
-    public function readCharacter(): string
+    public function readCharacter()
     {
         return fgetc($this->getStream());
     }
@@ -165,7 +165,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  bool
      */
-    public function readBoolean(): bool
+    public function readBoolean()
     {
         return (bool) $this->read(1);
     }
@@ -176,7 +176,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int     $length    Length.
      * @return  int
      */
-    public function readInteger(int $length = 1): int
+    public function readInteger(int $length = 1)
     {
         return (int) $this->read($length);
     }
@@ -187,7 +187,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int     $length    Length.
      * @return  float
      */
-    public function readFloat(int $length = 1): float
+    public function readFloat(int $length = 1)
     {
         return (float) $this->read($length);
     }
@@ -199,7 +199,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   string  $format    Format (see printf's formats).
      * @return  array
      */
-    public function readArray(string $format = null): array
+    public function readArray(string $format = null)
     {
         return $this->scanf($format);
     }
@@ -209,7 +209,7 @@ class Read extends Link implements Stream\IStream\In
      *
      * @return  string
      */
-    public function readLine(): string
+    public function readLine()
     {
         return fgets($this->getStream());
     }
@@ -220,7 +220,7 @@ class Read extends Link implements Stream\IStream\In
      * @param   int  $offset    Offset.
      * @return  string
      */
-    public function readAll(int $offset = 0): string
+    public function readAll(int $offset = 0)
     {
         return stream_get_contents($this->getStream(), -1, $offset);
     }
